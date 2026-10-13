@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://www.tei-c.org/Vault/P5/4.12.0/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="ko">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title type="main">[제목 미상 / Untitled]</title>
+        <respStmt xml:id="teiagent">
+          <resp>Automatic TEI encoding (LLM-assisted), subject to human review</resp>
+          <name>TEI-Agent 0.1.0 with DeepSeek-V4.1-Flash (API model deepseek-flash)</name>
+        </respStmt>
+      </titleStmt>
+      <extent>
+        <measure unit="chars" quantity="3290">3290 chars</measure>
+        <measure unit="words" quantity="1187">1187 words</measure>
+      </extent>
+      <publicationStmt>
+        <publisher>[발행처 미상]</publisher>
+        <date when="2026-10-13">2026-10-13</date>
+      </publicationStmt>
+      <sourceDesc>
+        <p>Born-digital transcription supplied by the user; source not yet described.</p>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p>Encoded according to the TEI P5 Guidelines 4.12.0 (tei_all) with LLM-assisted tagging and interactive human refinement.</p>
+      </projectDesc>
+      <editorialDecl>
+        <normalization>
+          <p>Original orthography and punctuation preserved; no silent normalisation.</p>
+        </normalization>
+        <quotation>
+          <p>Quotation marks retained in the text, outside &lt;said&gt;/&lt;q&gt;.</p>
+        </quotation>
+      </editorialDecl>
+      <tagsDecl>
+        <namespace name="http://www.tei-c.org/ns/1.0">
+          <tagUsage gi="rs" occurs="78"/>
+          <tagUsage gi="p" occurs="49"/>
+          <tagUsage gi="persName" occurs="36"/>
+          <tagUsage gi="said" occurs="24"/>
+          <tagUsage gi="placeName" occurs="23"/>
+          <tagUsage gi="date" occurs="12"/>
+          <tagUsage gi="head" occurs="6"/>
+          <tagUsage gi="measure" occurs="6"/>
+          <tagUsage gi="time" occurs="1"/>
+          <tagUsage gi="foreign" occurs="1"/>
+          <tagUsage gi="orgName" occurs="1"/>
+          <tagUsage gi="body" occurs="1"/>
+          <tagUsage gi="text" occurs="1"/>
+        </namespace>
+      </tagsDecl>
+      <appInfo>
+        <application ident="TEI-Agent" version="0.1.0" when="2026-10-13" xml:id="app-teiagent">
+          <label>TEI-Agent (LLM: DeepSeek-V4.1-Flash (API model deepseek-flash); schema: tei_all 4.12.0)</label>
+        </application>
+      </appInfo>
+    </encodingDesc>
+    <profileDesc>
+      <creation>
+        <date>1919</date>
+      </creation>
+      <langUsage>
+        <language ident="ko" usage="100">한국어</language>
+      </langUsage>
+      <textClass>
+        <keywords scheme="#teiagent-genre">
+          <term>Prose fiction</term>
+        </keywords>
+      </textClass>
+      <particDesc>
+        <listPerson>
+          <person xml:id="Narrator" role="protagonist" sex="M">
+            <persName xml:lang="ko">나</persName>
+            <persName type="variant">내</persName>
+            <persName type="variant">나의</persName>
+            <persName type="variant">이 사람</persName>
+            <persName type="variant">자네</persName>
+            <note>고향을 떠나 타관에서 사는 1인칭 화자이자 주인공</note>
+          </person>
+          <person xml:id="KWY" role="protagonist" sex="M">
+            <persName xml:lang="ko">김우영</persName>
+            <persName type="variant">김우영 군</persName>
+            <persName type="variant">우영 군</persName>
+            <persName type="variant">우영이</persName>
+            <persName type="variant">김군</persName>
+            <persName type="variant">군</persName>
+            <note>화자의 가장 사랑하는 벗으로 고향을 떠나 해외를 떠도는 인물</note>
+          </person>
+          <person xml:id="KWYMother" role="minor" sex="F">
+            <persName xml:lang="ko">우영 군의 어머니</persName>
+            <persName type="variant">그의 늙은 어머니</persName>
+            <persName type="variant">그 어머니</persName>
+            <persName type="variant">그의 어머니</persName>
+            <note>김우영의 어머니로 아들의 소식을 기다리다 죽음</note>
+          </person>
+          <person xml:id="KWYWife" role="minor" sex="F">
+            <persName xml:lang="ko">우영 군의 아내</persName>
+            <persName type="variant">그의 아내</persName>
+            <note>김우영의 아내로 독감 유행 때 죽음</note>
+          </person>
+          <person xml:id="NarratorMother" role="minor" sex="F">
+            <persName xml:lang="ko">나의 어머니</persName>
+            <persName type="variant">내 사랑하던 어머니</persName>
+            <persName type="variant">어머니</persName>
+            <note>화자가 집을 떠난 오 년 사이에 돌아가신 어머니</note>
+          </person>
+          <person xml:id="NarratorWife" role="minor" sex="F">
+            <persName xml:lang="ko">나의 아내</persName>
+            <persName type="variant">내 사랑하던 아내</persName>
+            <persName type="variant">아내</persName>
+            <note>화자의 아내로 화자가 집을 떠난 뒤 죽음</note>
+          </person>
+          <person xml:id="NarratorChild" role="minor" sex="U">
+            <persName xml:lang="ko">어린것</persName>
+            <note>화자의 어린 자식으로 화자가 집을 떠난 사이에 죽음</note>
+          </person>
+          <person xml:id="Police" role="antagonist" sex="M">
+            <persName xml:lang="ko">순사</persName>
+            <persName type="variant">순사놈들</persName>
+            <persName type="variant">경관들</persName>
+            <persName type="variant">그놈들</persName>
+            <note>눈을 치우라고 강요하고 김우영을 구둣발로 차고 뺨을 때린 일제 경찰</note>
+          </person>
+          <person xml:id="LeeUC" role="addressee" sex="M">
+            <persName xml:lang="ko">이우춘</persName>
+            <persName type="variant">이우춘 군</persName>
+            <note>김우영이 마지막 편지를 보낸 수신인</note>
+          </person>
+        </listPerson>
+      </particDesc>
+    </profileDesc>
+    <revisionDesc>
+      <change when="2026-10-13" who="#teiagent">Automatic TEI encoding generated; awaiting human review.</change>
+    </revisionDesc>
+  </teiHeader>
+  <standOff>
+    <listPlace>
+      <place xml:id="Manchuria" type="district">
+        <placeName>만주</placeName>
+        <note>김우영이 돈을 벌러 떠난 중국 동북 지역</note>
+      </place>
+      <place xml:id="Siberia" type="district">
+        <placeName>시베리아</placeName>
+        <note>김우영이 떠돌아다닌 러시아 지역</note>
+      </place>
+      <place xml:id="Gando" type="district">
+        <placeName>간도</placeName>
+        <note>김우영이 가려 한 만주와 조선 접경 지역</note>
+      </place>
+      <place xml:id="HaeSamWi" type="city">
+        <placeName>해삼위</placeName>
+        <note>김우영이 가려 한 연해주 블라디보스토크의 옛 이름</note>
+      </place>
+      <place xml:id="Kyonghung" type="district">
+        <placeName>경흥</placeName>
+        <note>김우영이 웅기에 왔다는 편지가 온 함경북도 지역</note>
+      </place>
+      <place xml:id="Unggi" type="city">
+        <placeName>웅기</placeName>
+        <note>김우영이 오년 만에 왔다는 곳</note>
+      </place>
+      <place xml:id="HomeVillage" type="district">
+        <placeName>고향</placeName>
+        <note>화자와 김우영이 그리워하는 고향</note>
+      </place>
+    </listPlace>
+    <listOrg>
+      <org xml:id="XX" type="political">
+        <orgName>모스크 XX회</orgName>
+        <note>김우영이 모스크바에서 활동한다는 단체</note>
+      </org>
+    </listOrg>
+  </standOff>
+  <text>
+    <body>
+      <div type="chapter" n="1">
+        <head>1</head>
+        <p>먼 <rs type="place" subtype="mountain">산</rs>은 푸른 안개에 윤곽이 아른하고 담 밑에 <time>저녁</time>연기가 솔솔자자 흐를 때였다. 추근한 땅 위에 부드럽게 내리는 <date type="season">이른 봄</date> 궂은비는 고독한 <rs type="person">나그네</rs>의 수심을 한껏 돋운다.</p>
+        <p>전등도 켜지 않은 방 미닫이를 반쯤 열어 놓고 컴컴한 황혼 속에 내리는 빗소리를 듣는 <rs type="person" ref="#Narrator">나</rs>의 몸과 마음은 농후한 자줏빛 안개 속으로 점점 스러져 들어가는 듯하였다. <rs type="person" ref="#Narrator">나</rs>는 눈을 감고 머리를 숙였다. 기름을 붓는 듯이 미끄럽게 들리는 빗소리, 삼라만상을 소리 없이 싸고 도는 으슥한 빛, 모든 것은 끝없는 솜같이 부드러운 설움을 휩싸서 여지없는 듯하다. 그 설움은 <rs type="person" ref="#Narrator">내</rs> 옷을 추근히 적시고 온 모공(<foreign xml:lang="ko-Hani">毛孔</foreign>)으로 살금살금 기어 들어서 혈관을 뚫고 붉은 피를 푸르게 물들여서 <rs type="person" ref="#Narrator">내</rs> 온몸을 안팎 할것없이 속속이 싸고 도는 듯이 안타깝고 아쉽고 그리워 무어라 형용할 수 없는 애수를 가슴에 부어 넣는다.</p>
+        <p>아아 감개무량한 날이요, 감개무량한 황혼이다. <rs type="person" ref="#Narrator">나</rs>는 <date type="season">이 봄</date>을 당할 때마다 <date when="0000" cert="low">칠년 전</date> 옛 봄을 생각한다. 한 번 간 후로 소식이 묘연한 <persName ref="#KWY">김군</persName>을 생각지 않을 수 없게 된다.</p>
+      </div>
+      <div type="chapter" n="2">
+        <head>2</head>
+        <p>때는 <date when="1911-03-25">일구일구년 삼월 이십오 일</date>이었다.</p>
+        <p><rs type="person" ref="#Narrator">나</rs>는 <rs type="person" ref="#Narrator">나</rs>의 가장 사랑하는 친구 <persName ref="#KWY">김우영</persName> 군께서 그가 <placeName ref="#HomeVillage">고국</placeName>을 떠난다는 마지막 편지를 받은 날이다. 그것은 <rs type="person" ref="#Narrator">내</rs>가 그에게 써 보낸 편지의 회답이었다.</p>
+        <p><persName ref="#KWY">김우영</persName>의 회답 군의 편지는 어저께 받았다. <rs type="person" ref="#Narrator">나</rs>는 가슴이 미어지는 듯하여 무어라 하면 좋을지 모른다. 꿈같기도 하고 거짓 같기도 하다. 그러나 또렷한 군의 필적이거니 이제 무엇을 다시 의심하랴? <rs type="person" ref="#Narrator">나</rs>는 밤새껏 가슴을 쥐어뜯으면서 울었다. 울기는 벌써 때가 지난 줄 <rs type="person" ref="#Narrator">내</rs> 모르는 것이 아니건만 나오는 눈물을 어찌하랴? <rs type="place" ref="#HomeVillage">집</rs> 떠난 지 <measure type="duration" quantity="5" unit="year">오 년</measure> 사이에 <rs type="person" ref="#NarratorMother">내 사랑하던 어머니</rs>가 돌아가시고 <rs type="person" ref="#NarratorChild">어린것</rs>이 죽고 이제 남았던 <rs type="person" ref="#NarratorWife">아내</rs>까지 죽었으니 아아 무슨 바람과 무슨 면목으로 이제 다시 <placeName ref="#HomeVillage">고향</placeName>을 밟으랴? 올해는 어떨까 명년에는 어떨까 하여 해가 갈 때마다 <rs type="place" ref="#HomeVillage">집</rs>으로 돌아가기를 맹세하고 바랐으나 몸은 점점 괴로울 뿐이고 모든 것은 뜻같이 되지 않아서 <placeName ref="#HomeVillage">고향</placeName>으로 못 돌아갔다. 이리하여 세월도 <rs type="person" ref="#Narrator">나</rs>를 속였거니와 <rs type="person" ref="#Narrator">나</rs>도 세월을 속였으며 <rs type="person" ref="#Narrator">내</rs> 사랑하던 식구까지 속였구나. <date>작년 가을</date>에 이곳으로 온 것은 이역상설에 너무도 <placeName ref="#HomeVillage">고향</placeName>이 그리워서 <placeName ref="#HomeVillage">고국 땅</placeName>이라도 밟아서 한걸음이라도 <placeName ref="#HomeVillage">고향</placeName> 가까이 있어 보려는 진정으로 온 것이다. 그러나 이곳에 와서도 노동자의 무리에서 비지땀을 짜게 됨에 역시 낭탁이 비었다. 가난에 우는 처자를 버리고 떠나서 한 푼 없이 어찌 돌아가랴. 그네들은 죽는 때에 눈을 못 감았으리라. 아아 이 무정한 <rs type="person" ref="#Narrator">나</rs>를 얼마나 바라고 기다렸으랴. <rs type="person" ref="#Narrator">나</rs>도 목석이 아니거니 어찌 그것을 모르랴. 생각할수록 가슴이 터지는 듯하다. <rs type="person" ref="#Narrator">나</rs>는 가련다. 저즘께 차 버렸던 <placeName ref="#Manchuria">만주</placeName>나 <placeName ref="#Siberia">시베리아</placeName>로 가련다. 그러나 <rs type="person" ref="#Narrator">나</rs>는 <placeName ref="#HomeVillage">고국</placeName>에 많은 애착을 두고 간다. 이 몸이 떠나는 때 그 자국자국에 괴일 눈물의 뜻을 군은 알 것이다. 죽어서 만약 영혼이 있다 하면 <rs type="person" ref="#Narrator">나</rs>는 <placeName ref="#HomeVillage">고향</placeName>으로 가련다. 부모처자의 영혼을 따라 <placeName ref="#HomeVillage">고향</placeName> 가서 이 가슴의 설움을 끝까지 아뢰고자 한다. 잘 있거라. 그러나 군의 목숨이 붙어 있는 때까지 이 세상에는 <persName ref="#KWY">김우영</persName>이라는 친구가 있었더라는 것을 잊지 말아 다오. <date when="0000-03-23" cert="low">삼월 이십삼 일</date> <persName ref="#KWY">김우영</persName> 씀. <persName ref="#LeeUC">이우춘</persName> 군.</p>
+        <p>그날도 이렇게 비가 뿌렸다. 사랑하는 벗의 쓰라린 편지를 고즈넉한 <date type="season">봄비</date> 속에서 읽을 때 <rs type="person" ref="#Narrator">나</rs>는 무어라고 형언할 수 없는 감개의 가슴을 만졌다.</p>
+      </div>
+      <div type="chapter" n="3">
+        <head>3</head>
+        <p><persName ref="#KWY">김우영</persName> 군이 <placeName ref="#HomeVillage">고향</placeName> 있을 때 일이다. 하루는 그리 몹시 불던 바람이 자더니 곧 검은 구름이 하늘을 가리었다. 우중충한 날이 반나절이나 계속되다가 해 넘어 갈 때부터 함박꽃 같은 눈이 펄펄 내렸다. 눈은 밤새껏 퍼 부어서 온 거리에 솜같이 쌓인 위로 새벽부터 바람이 건너기 시작하였다.</p>
+        <p>해 오를 임박에는 바람 형세가 맹렬하였다. 노한 바다 소리같이 우―하고 서북으로부터 쏠려 내려올 때면 지진 난 것처럼 집까지 흔들흔들하는 듯하였다. 눈가루가 창문을 치는 때면 모래를 뿌리는 듯이 쏴―하며 뚫어진 구멍으로 막 뿌려들었다. 울타리 말장이 부러지는지 뉘 집 지붕이 떠나가는지 우지끈 뚝딱 덩그렁 철썩 하는 소리는 온 생령으로 하여금 점점 몸을 옹송그리게 한다.</p>
+        <p>식전부터 <persName ref="#Police">순사</persName>들은 돌아다니면서 눈을 치우라고 야단이다. 그러나 쓸어 놓으면 또 뿌려 오고 낯을 들면 눈이 뿌려서 옴짝할 수 없었다. 그러나 <persName ref="#Police">경관</persName>들은 칼 소리를 내고 돌아다니면서 못 견디게 굴었다.</p>
+        <p><rs type="person" ref="#Narrator">나</rs>는 화로를 끼고 앉았다가 하는 수 없이 밖에 나섰다. 천지는 뿌여서 눈안개 속에 잠기고 칼 같은 바람은 뺨을 후린다. <rs type="person" ref="#Narrator">나</rs>는 바로 <rs type="place" ref="#HomeVillage">우리 집</rs> 앞에 있는 <persName ref="#KWY">우영</persName> 군 집으로 갔다. 둘이 협력하여서 눈을 치워 보려고 생각한 까닭이다. <persName ref="#KWY">우영</persName> 군 집 마당에 들어서니 그 집 온 식구들은 벌써 밖에 나왔다. <persName ref="#KWY">우영</persName> 군의 <persName ref="#KWYWife">아내</persName>는 맨발에 떨어진 짚세기를 끌고 낯이 파랗게 질려서 흙마루에 뿌린 눈을 쓸고 있다. 그리고 <persName ref="#KWY">우영</persName> 군은 차디찬 눈 뿌린 툇마루를 짚고 앉아서 흑흑 느껴 가면서 눈물을 떨어뜨린다. <rs type="person" ref="#Narrator">나</rs>는 웬일인가 하여 눈이 둥그레서,</p>
+        <p>“<said who="#Narrator" direct="true" aloud="true"> <rs type="person" ref="#KWY">자네</rs> 왜 우나? 응?</said>”</p>
+        <p>하고 물었다. 그러나 <persName ref="#KWY">우영</persName> 군은 아무 대답이 없고 마루 밑에 떨어진 짚세기를 찾고 있던 <rs type="person" ref="#KWY">그</rs>의 늙은 <persName ref="#KWYMother">어머니</persName>가 머리를 돌려 <rs type="person" ref="#Narrator">나</rs>를 보면서,</p>
+        <p>“<said who="#KWYMother" direct="true" aloud="true"> <rs type="person" ref="#Narrator">자네</rs> 왔나?</said>”</p>
+        <p>하고 어색한 소리로 말한다.</p>
+        <p>“<said who="#Narrator" direct="true" aloud="true">네! 안녕히 주무셨습니까? 그런데 <persName ref="#KWY">우영</persName> 군이 왜 저러고 앉았어요?</said>”</p>
+        <p>“<said who="#KWYMother" direct="true" aloud="true">응 그 급살을 맞을 놈들이 <rs type="person" ref="#KWY">그 애</rs>를 때렸네! 에구 <rs type="person" ref="#KWY">그</rs> 언 뺨을 <persName ref="#Police">그놈들</persName>이 사정없이도 때리데.</said>”</p>
+        <p>“<said who="#Narrator" direct="true" aloud="true">누가 때려요?</said>”</p>
+        <p>“<said who="#KWYMother" direct="true" aloud="true"> <persName ref="#Police">순사놈들</persName>이 때리지 누가 때리겠나!</said>”</p>
+        <p>“<said who="#Narrator" direct="true" aloud="true"> <persName ref="#Police">순사</persName>가 왜 때려요?</said>”</p>
+        <p>“<said who="#KWYMother" direct="true" aloud="true">눈치라 얼른 나오잖는다구 <rs type="person" ref="#Police">그</rs> 구둣발로 차고 그것도 부족해서 뺨까지 때렸다네! 에구 망할 놈의 세상두…….</said>”</p>
+        <p><persName ref="#KWYMother">그 어머니</persName>는 눈물이 글썽글썽해서 <persName ref="#KWY">우영</persName> 군을 본다. <rs type="person" ref="#Narrator">나</rs>도 보았다. 팔뚝이 빠진 헌 양복저고리를 입고 울던 <persName ref="#KWY">우영</persName> 군은,</p>
+        <p>“<said who="#KWY" direct="true" aloud="true"> <rs type="person" ref="#Narrator">내</rs>가 아무 때든지 이 설치를 해야지.</said>”</p>
+        <p>하며 마루를 꽝 때린다.</p>
+        <p>“<said who="#Narrator" direct="true" aloud="true">이 사람아! 울 것 있나?</said>”</p>
+        <p>“<said who="#KWY" direct="true" aloud="true">너무도 억울해서 그러네! 이놈의 사회가 언제까지 이 모양으로 갈는지?</said>”</p>
+      </div>
+      <div type="chapter" n="4">
+        <head>4</head>
+        <p><persName ref="#KWY">우영</persName> 군과 <rs type="person" ref="#Narrator">나</rs>는 들채에다 눈을 담아서는 앞개울로 내다 버렸다. 그런데 <persName ref="#KWY">우영</persName> 군은 우리 노동자 가운데서는 꽤 든든한 편인데 이날 아침에는 숨이 차서 헐떡헐떡하며 이마에 땀이 내돋아서 서리가 뿌―옇다. 그리고 몇 걸음 걷다가는 휭 하고 자빠지거나 비틀비틀 하고 잘 걷지도 못한다.</p>
+        <p>“<said who="#Narrator" direct="true" aloud="true">이 사람이 <date type="relative">오늘 아침</date>에는 왜 이리 자빠지나? 허허!</said>”</p>
+        <p><rs type="person" ref="#Narrator">나</rs>는 농담을 하면서 들채를 들다가 쓰러지는 <rs type="person" ref="#KWY">그</rs>를 보고서 웃었다.</p>
+        <p>“<said who="#KWYMother" direct="true" aloud="true">에구! 벌써 <measure type="count" quantity="3" unit="끼">세 끼</measure>나 굶었으니 무슨 기운이 나겠나!</said>”</p>
+        <p>마루에 서서 <rs type="person" ref="#Narrator">우리</rs>를 보던 <persName ref="#KWY">우영</persName> 군의 <persName ref="#KWYMother">어머니</persName>는 탄식처럼 뇌인다. 그 소리를 들은 <rs type="person" ref="#Narrator">나</rs>는 그만 맥이 풀렸다. <rs type="person" ref="#Narrator">나</rs>는 겨죽이나마 배불리 먹고 굶은 <rs type="person" ref="#KWY">그네들</rs> 앞에 선 것이 죄송스럽기도 하고 고생을 죽도록 해도 근근히 생명을 이어 가는 <rs type="person" ref="#Narrator">우리</rs>네 팔자가 너무도 억울하였다.</p>
+      </div>
+      <div type="chapter" n="5">
+        <head>5</head>
+        <p>그 후 며칠을 지났었다. 하루는 <persName ref="#KWY">우영</persName> 군이 <rs type="person" ref="#Narrator">나</rs>를 찾아와서,</p>
+        <p>“<said who="#KWY" direct="true" aloud="true"> <rs type="person" ref="#Narrator">나</rs>는 떠나려네!</said>”</p>
+        <p>“<said who="#Narrator" direct="true" aloud="true">응, 어디로?</said>”</p>
+        <p>“<said who="#KWY" direct="true" aloud="true"> <placeName ref="#Gando">간도</placeName>나 <placeName ref="#HaeSamWi">해삼위</placeName>로 가려네!</said>”</p>
+        <p>“<said who="#Narrator" direct="true" aloud="true">거기는 가서?</said>”</p>
+        <p>“<said who="#KWY" direct="true" aloud="true">암만해도 이 상태로는 늘 이 꼴이 되겠으니 어느 금광이나 탄광에 가서 좀 벌어 보겠네.</said>”</p>
+        <p>“<said who="#Narrator" direct="true" aloud="true">이 사람아, 식구들은 어찌할 작정인가?</said>”</p>
+        <p>“<said who="#KWY" direct="true" aloud="true">어쩌다니? 방책이 없지!</said>”</p>
+        <p>“<said who="#Narrator" direct="true" aloud="true">괜히 고생만 더하게 되기 쉬우니 잘 생각하게나!</said>”</p>
+        <p>“ <said who="#KWY" direct="true" aloud="true">자네 아직도 못 깨달았나? <rs ref="#Narrator">우리</rs>가 여기서 고생을 더하면 얼마나 더하겠나! <rs ref="#KWY">나</rs>는 <rs ref="#KWY">내</rs> 일생에 고생을 피하거나 벗으려고 하지 않네. 글쎄 그러면 그것은 마음만 상하지 쓸데 있나. <rs ref="#KWY">나</rs>는 어떤 고통이든지 지긋지긋 밟고 나가서 그것을 이기려고 하네. 어쨌든지 살아 보려고 하네. <rs ref="#KWY">내</rs>가 떠나는 것은 좀 웬만하면 식구들을 배나 주리지 않게 할까 함일세. <rs ref="#KWY">내</rs>가 굶은들 상관 있나마는 식구들 굶는 꼴은 참 못 보겠네. 어디 가 보아서 좋으면 <measure type="duration" unit="month" atLeast="2" atMost="3">몇 달</measure>에 <rs type="object">얼마</rs>씩이라도 보내게 될 터이지.</said>”</p>
+        <p>“<said who="#Narrator" direct="true" aloud="true">글쎄 그렇다면 모르거니와 참 딱하네.</said>”</p>
+      </div>
+      <div type="chapter" n="6">
+        <head>6</head>
+        <p>그 후로 <rs ref="#KWY">그</rs>는 <placeName ref="#Siberia">시베리아</placeName>로 <placeName ref="#Manchuria">북만주</placeName>로 찬비와 쓰린 눈을 무릅쓰고 돌아다녔다. 그러나 <rs type="place" ref="#HomeVillage">집</rs>에는 돈 <measure type="currency" unit="pun" quantity="1">한 푼</measure> 못 보내었다. <rs ref="#KWY">그의</rs> 식구는 <measure type="duration" unit="day" quantity="10">열흘</measure>이면 <measure type="duration" unit="day" quantity="6">엿새</measure>는 굶었다. 그 후 <date>오년 만에</date> <persName ref="#KWY">우영</persName> 군은 <placeName ref="#Kyonghung">경흥</placeName> <placeName ref="#Unggi">웅기</placeName>에 왔다는 편지가 있었다. 그 편지를 받던 후로 <rs ref="#KWY">그의</rs> 식구들은 <rs ref="#KWY">그의</rs> 오기를 더욱 기다렸다. <persName ref="#KWYMother">그 어머니</persName>는 늘 이런 편지를 <rs ref="#KWY">그에게</rs> 부쳤다.</p>
+        <p>그러자 <date>그 이듬해 봄</date>에 독감이 유행하여 <rs ref="#KWY">그의</rs> 식구들은 하나 남지 않고 죽었다.</p>
+        <p>“ <said who="#KWYMother" direct="true" aloud="true"><rs ref="#Narrator">우리</rs> <persName ref="#KWY">우영</persName>이는 어째 안 오는가? 응! <persName ref="#KWY">우영</persName>이 왔나?</said>”</p>
+        <p><persName ref="#KWYMother">그 어머니</persName>는 죽을 때에 곁에 앉은 <rs ref="#Narrator">나</rs>를 보고 여러 번 물었다.</p>
+        <p>이 식구들의 죽은 소식을 들은 <persName ref="#KWY">김우영</persName> 군은 마지막 편지를 <rs ref="#Narrator">나</rs>에게 주고 <placeName ref="#Unggi">웅기</placeName>를 떠나서 또 해외로 갔다. 그것이 벌써 <date>칠 년 전</date> 옛일이다.</p>
+        <p><persName ref="#KWY">김우영</persName> 군은 지금 어디에 있는지? <rs ref="#Narrator">나</rs>도 그 후로 <placeName ref="#HomeVillage">고향</placeName>을 떠나서 타관에 유리표박하게 되면서부터 다년 생활에 몰려서 어떤 때면 <rs ref="#KWY">그를</rs> 잊다시피 생각지 않는다. 그러나 이 봄을 만나고 더욱 궂은 봄비 뿌리는 때면 <rs ref="#KWY">그가</rs> 그립고 <placeName ref="#HomeVillage">고향</placeName>이 그립다. <date>작년</date>인가 풍편에 들으니 <persName ref="#KWY">김우영</persName> 군은 <orgName ref="#XX">모스크 XX회</orgName>에서 활동한다 하나 자세한 소식은 못 된다.</p>
+        <p><rs ref="#Narrator">내</rs>가 살아 있는 것처럼 <rs ref="#KWY">그</rs>도 살아 있다 하면 <rs ref="#Narrator">내</rs>가 <rs ref="#KWY">그를</rs> 생각하는 이만치 <rs ref="#KWY">그</rs>도 <rs ref="#Narrator">나</rs>를 생각할 것이며 <rs ref="#Narrator">내</rs>가 <placeName ref="#HomeVillage">고향</placeName>을 그리는 것처럼 <rs ref="#KWY">그</rs>도 <placeName ref="#HomeVillage">고향</placeName>을 그릴 것이다. 천리에 방랑하는 두 혼의 가슴에 타는 애수는 언제나 언제나 스러질까? 인생이 있는 동안에는 이 설움은 늘 있을 것이다. 창 앞에 빗소리는 그저 그치지 않았다.</p>
+      </div>
+    </body>
+  </text>
+</TEI>

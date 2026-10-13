@@ -1,0 +1,348 @@
+{
+ "file": "18_Bang Jeong-hwan_For Our Friends.xml",
+ "chars": 6593,
+ "blocks": 101,
+ "genre": "prose_fiction",
+ "langs": [
+  "ko"
+ ],
+ "seconds": 62.3,
+ "usage": {
+  "calls": 12,
+  "prompt_tokens": 102859,
+  "completion_tokens": 26746,
+  "cached_tokens": 26624,
+  "est_cost_usd_peak": 0.0551
+ },
+ "text_identical": true,
+ "block_status": {
+  "tagged": 101
+ },
+ "valid": true,
+ "schema_errors": 0,
+ "dangling_refs": [],
+ "registry": {
+  "persons": 11,
+  "places": 8,
+  "orgs": 3
+ },
+ "stage1_scores": {
+  "persName": {
+   "gold": 81,
+   "pred": 85,
+   "exact_PRF": [
+    0.659,
+    0.691,
+    0.675
+   ],
+   "overlap_PRF": [
+    0.788,
+    0.827,
+    0.807
+   ]
+  },
+  "placeName": {
+   "gold": 14,
+   "pred": 86,
+   "exact_PRF": [
+    0.116,
+    0.714,
+    0.2
+   ],
+   "overlap_PRF": [
+    0.128,
+    0.786,
+    0.22
+   ]
+  },
+  "orgName": {
+   "gold": 0,
+   "pred": 8,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "said": {
+   "gold": 48,
+   "pred": 44,
+   "exact_PRF": [
+    1.0,
+    0.917,
+    0.957
+   ],
+   "overlap_PRF": [
+    1.0,
+    0.917,
+    0.957
+   ]
+  },
+  "date": {
+   "gold": 12,
+   "pred": 16,
+   "exact_PRF": [
+    0.312,
+    0.417,
+    0.357
+   ],
+   "overlap_PRF": [
+    0.375,
+    0.5,
+    0.429
+   ]
+  },
+  "time": {
+   "gold": 10,
+   "pred": 0,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "measure": {
+   "gold": 4,
+   "pred": 0,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "foreign": {
+   "gold": 1,
+   "pred": 1,
+   "exact_PRF": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "overlap_PRF": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "rs": {
+   "gold": 84,
+   "pred": 0,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  }
+ },
+ "final_scores": {
+  "persName": {
+   "gold": 81,
+   "pred": 83,
+   "exact_PRF": [
+    0.675,
+    0.691,
+    0.683
+   ],
+   "overlap_PRF": [
+    0.807,
+    0.827,
+    0.817
+   ]
+  },
+  "placeName": {
+   "gold": 14,
+   "pred": 86,
+   "exact_PRF": [
+    0.116,
+    0.714,
+    0.2
+   ],
+   "overlap_PRF": [
+    0.128,
+    0.786,
+    0.22
+   ]
+  },
+  "orgName": {
+   "gold": 0,
+   "pred": 8,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "said": {
+   "gold": 48,
+   "pred": 44,
+   "exact_PRF": [
+    1.0,
+    0.917,
+    0.957
+   ],
+   "overlap_PRF": [
+    1.0,
+    0.917,
+    0.957
+   ]
+  },
+  "date": {
+   "gold": 12,
+   "pred": 19,
+   "exact_PRF": [
+    0.421,
+    0.667,
+    0.516
+   ],
+   "overlap_PRF": [
+    0.474,
+    0.75,
+    0.581
+   ]
+  },
+  "time": {
+   "gold": 10,
+   "pred": 2,
+   "exact_PRF": [
+    0.5,
+    0.1,
+    0.167
+   ],
+   "overlap_PRF": [
+    0.5,
+    0.1,
+    0.167
+   ]
+  },
+  "measure": {
+   "gold": 4,
+   "pred": 5,
+   "exact_PRF": [
+    0.8,
+    1.0,
+    0.889
+   ],
+   "overlap_PRF": [
+    0.8,
+    1.0,
+    0.889
+   ]
+  },
+  "foreign": {
+   "gold": 1,
+   "pred": 1,
+   "exact_PRF": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "overlap_PRF": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "rs": {
+   "gold": 84,
+   "pred": 7,
+   "exact_PRF": [
+    0.857,
+    0.071,
+    0.132
+   ],
+   "overlap_PRF": [
+    1.0,
+    0.083,
+    0.154
+   ]
+  }
+ },
+ "who": {
+  "said_with_gold_who": 44,
+  "speaker_name_match": 37,
+  "acc": 0.841
+ },
+ "recommended": [
+  [
+   "rs",
+   1,
+   60
+  ],
+  [
+   "thought",
+   1,
+   4
+  ],
+  [
+   "time",
+   2,
+   12
+  ],
+  [
+   "measure",
+   2,
+   6
+  ],
+  [
+   "floatingText",
+   2,
+   1
+  ],
+  [
+   "gap",
+   2,
+   1
+  ],
+  [
+   "milestones",
+   3,
+   4
+  ],
+  [
+   "soCalled",
+   3,
+   3
+  ]
+ ],
+ "questions": [
+  "‘5년급’은 학년 표기로 보이는데, 이를 <date>나 <measure>로 감쌀 필요가 있을까요, 아니면 일반 서술로 두는 것이 좋을까요?",
+  "‘사흘째’를 상대적 시간 표현으로 보아 <date>로 감쌀지, 단순 기간 표현으로 둘지 확신이 서지 않습니다.",
+  "‘골목 윗편’을 장소명으로 태깅할지, 일반 방향 표현으로 둘지 판단이 어렵습니다.",
+  "이 대답은 명환이가 만난 동네 사람(여러 명)의 말인데, 특정 화자를 지시할 수 없어 @who를 붙이지 않았습니다. 익명 화자로 두어도 될까요?",
+  "'사랑'을 변호사 사무실(#LAW_OFFICE)로 보아 placeName으로 태깅했는데, 집 안의 사랑방을 가리키는 일반 명사로 보아 태깅하지 않는 편이 나을까요?",
+  "‘요 너머’를 정자 우물(#WELL)로 보아 placeName으로 묶었는데, 위치 지시어로 보아 태깅하지 않는 편이 좋을까요?",
+  "‘○○동’의 ‘동’만 placeName으로 묶었습니다. ‘○○동’ 전체를 하나의 placeName으로 묶는 것이 나을까요?",
+  "‘이 집’을 칠성이 집 가게(#CS_SHOP)로 보았는데, 화자가 가리키는 대상이 확실한가요?"
+ ],
+ "accepted": [
+  "rs",
+  "measure",
+  "time"
+ ],
+ "errors_sample": []
+}

@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://www.tei-c.org/Vault/P5/4.12.0/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="ko">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title type="main" xml:lang="ko">복녀</title>
+        <author>
+          <persName xml:lang="ko">김동인</persName>
+        </author>
+        <respStmt xml:id="teiagent">
+          <resp>Automatic TEI encoding (LLM-assisted), subject to human review</resp>
+          <name>TEI-Agent 0.1.0 with DeepSeek-V4.1-Flash (API model deepseek-flash)</name>
+        </respStmt>
+      </titleStmt>
+      <extent>
+        <measure unit="chars" quantity="4639">4639 chars</measure>
+        <measure unit="words" quantity="1585">1585 words</measure>
+      </extent>
+      <publicationStmt>
+        <publisher>[발행처 미상]</publisher>
+        <date when="2026-10-13">2026-10-13</date>
+      </publicationStmt>
+      <sourceDesc>
+        <p>Born-digital transcription supplied by the user; source not yet described.</p>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p>Encoded according to the TEI P5 Guidelines 4.12.0 (tei_all) with LLM-assisted tagging and interactive human refinement.</p>
+      </projectDesc>
+      <editorialDecl>
+        <normalization>
+          <p>Original orthography and punctuation preserved; no silent normalisation.</p>
+        </normalization>
+        <quotation>
+          <p>Quotation marks retained in the text, outside &lt;said&gt;/&lt;q&gt;.</p>
+        </quotation>
+      </editorialDecl>
+      <tagsDecl>
+        <namespace name="http://www.tei-c.org/ns/1.0">
+          <tagUsage gi="p" occurs="122"/>
+          <tagUsage gi="persName" occurs="110"/>
+          <tagUsage gi="rs" occurs="66"/>
+          <tagUsage gi="said" occurs="51"/>
+          <tagUsage gi="placeName" occurs="35"/>
+          <tagUsage gi="measure" occurs="33"/>
+          <tagUsage gi="time" occurs="9"/>
+          <tagUsage gi="date" occurs="7"/>
+          <tagUsage gi="foreign" occurs="1"/>
+          <tagUsage gi="body" occurs="1"/>
+          <tagUsage gi="text" occurs="1"/>
+        </namespace>
+      </tagsDecl>
+      <appInfo>
+        <application ident="TEI-Agent" version="0.1.0" when="2026-10-13" xml:id="app-teiagent">
+          <label>TEI-Agent (LLM: DeepSeek-V4.1-Flash (API model deepseek-flash); schema: tei_all 4.12.0)</label>
+        </application>
+      </appInfo>
+    </encodingDesc>
+    <profileDesc>
+      <creation>
+        <date>1936</date>
+      </creation>
+      <langUsage>
+        <language ident="ko" usage="100">한국어</language>
+      </langUsage>
+      <textClass>
+        <keywords scheme="#teiagent-genre">
+          <term>Prose fiction</term>
+        </keywords>
+      </textClass>
+      <particDesc>
+        <listPerson>
+          <person xml:id="BokNyeo" role="protagonist" sex="F">
+            <persName xml:lang="ko">복녀</persName>
+            <persName type="variant">복네</persName>
+            <persName type="variant">그</persName>
+            <persName type="variant">그녀</persName>
+            <persName type="variant">여편네</persName>
+            <persName type="variant">처녀</persName>
+            <persName type="variant">아내</persName>
+            <note>가난한 농가 출신으로 칠성문 밖 빈민굴에서 타락해 가는 여주인공</note>
+          </person>
+          <person xml:id="Husband" role="minor" sex="M">
+            <persName xml:lang="ko">복녀의 남편</persName>
+            <persName type="variant">남편</persName>
+            <persName type="variant">새서방</persName>
+            <persName type="variant">영감</persName>
+            <persName type="variant">그</persName>
+            <persName type="variant">홀아비</persName>
+            <persName type="variant">사내</persName>
+            <note>복녀보다 20세 연상의 게으른 남편</note>
+          </person>
+          <person xml:id="WangSeobang" role="antagonist" sex="M">
+            <persName xml:lang="ko">왕 서방</persName>
+            <persName type="variant">중국인</persName>
+            <persName type="variant">되놈</persName>
+            <persName type="variant">밭 주인</persName>
+            <note>채마밭 주인인 중국인으로 복녀와 관계를 맺음</note>
+          </person>
+          <person xml:id="Supervisor" role="minor" sex="M">
+            <persName xml:lang="ko">감독</persName>
+            <note>송충이 잡기 인부들을 감독하는 관리</note>
+          </person>
+          <person xml:id="NukSeobang" role="minor" sex="M">
+            <persName xml:lang="ko">눅 서방</persName>
+            <persName type="variant">눅 서방네</persName>
+            <note>복녀의 이웃 여편네가 찾아간 중국인 남자</note>
+          </person>
+          <person xml:id="NeighborWoman" role="minor" sex="F">
+            <persName xml:lang="ko">곁집 여편네</persName>
+            <persName type="variant">형님</persName>
+            <persName type="variant">여편네</persName>
+            <persName type="variant">이웃 여편네</persName>
+            <note>복녀와 함께 도둑질하러 다니는 이웃 여자</note>
+          </person>
+          <person xml:id="NewBride" role="minor" sex="F">
+            <persName xml:lang="ko">왕 서방의 새색시</persName>
+            <persName type="variant">색시</persName>
+            <persName type="variant">신부</persName>
+            <persName type="variant">마누라</persName>
+            <persName type="variant">새색시</persName>
+            <note>왕 서방이 돈 백 원으로 사온 처녀</note>
+          </person>
+          <person xml:id="Doctor" role="minor" sex="M">
+            <persName xml:lang="ko">한방 의사</persName>
+            <persName type="variant">의사</persName>
+            <note>복녀의 사인을 뇌일혈로 진단한 의사</note>
+          </person>
+          <person xml:id="FatherInLaw" role="minor" sex="M">
+            <persName xml:lang="ko">장인</persName>
+            <persName type="variant">아버지</persName>
+            <note>복녀의 시아버지로 선비의 꼬리</note>
+          </person>
+        </listPerson>
+      </particDesc>
+    </profileDesc>
+    <revisionDesc>
+      <change when="2026-10-13" who="#teiagent">Automatic TEI encoding generated; awaiting human review.</change>
+    </revisionDesc>
+  </teiHeader>
+  <standOff>
+    <listPlace>
+      <place xml:id="Chilseongmun" type="building">
+        <placeName>칠성문</placeName>
+        <note>평양 성의 문, 그 밖에 빈민굴이 있음</note>
+      </place>
+      <place xml:id="Pyeongyang" type="city">
+        <placeName>평양</placeName>
+        <note>작품의 주요 배경 도시</note>
+      </place>
+      <place xml:id="Daedonggang" type="natural">
+        <placeName>대동강</placeName>
+        <note>평양을 흐르는 강</note>
+      </place>
+      <place xml:id="Yeongwangjeong" type="building">
+        <placeName>연광정</placeName>
+        <note>대동강이 내려다보이는 평양의 누정</note>
+      </place>
+      <place xml:id="Gijamyo" type="building">
+        <placeName>기자묘</placeName>
+        <note>송충이 잡기 작업이 이루어진 곳</note>
+      </place>
+      <place xml:id="ChineseVegetableGarden" type="natural">
+        <placeName>중국인의 채마 밭</placeName>
+        <note>왕 서방이 소유한 채마밭</note>
+      </place>
+      <place xml:id="WangHouse" type="building">
+        <placeName>왕 서방의 집</placeName>
+        <note>칠성문 밖 채마밭 가운데 있는 집</note>
+      </place>
+      <place xml:id="BokNyeoHouse" type="building">
+        <placeName>복녀의 집</placeName>
+        <note>빈민굴에 있는 복녀 부부의 집</note>
+      </place>
+      <place xml:id="PaupersVillage" type="district">
+        <placeName>빈민굴</placeName>
+        <note>칠성문 밖에 형성된 빈민 거주 지역</note>
+      </place>
+      <place xml:id="PublicCemetery" type="natural">
+        <placeName>공동묘지</placeName>
+        <note>복녀의 시체가 묻힌 곳</note>
+      </place>
+    </listPlace>
+  </standOff>
+  <text>
+    <body>
+      <p>싸움, 간통, 살인, 도둑, 구걸, 징역, 이 세상의 모든 비극과 활극의 근원지인 <placeName ref="#Chilseongmun">칠성문 밖</placeName> <placeName ref="#PaupersVillage">빈민굴</placeName>로 오기 전까지는, <persName ref="#BokNyeo">복녀</persName>의 부처는,(사농공상의 제 이 위에 드는) 농민이었었다.</p>
+      <p><persName ref="#BokNyeo">복녀</persName>는, 원래 가난은 하나마 정직한 농가에서 규칙 있게 자라난 처녀였었다. 이전 선비의 엄한 규율은 농민으로 떨어지자부터 없어졌다 하나, 그러나 어딘지는 모르지만 딴 농민보다는 좀 똑똑하고 엄한 가율이 <rs type="person" ref="#BokNyeo">그</rs>의 집에 그냥 남아 있었다. 그 가운데서 자라난 <persName ref="#BokNyeo">복녀</persName>는 물론 다른 집 처녀들같이 여름에는 벌거벗고 개울에서 멱감고, 바짓바람으로 동네를 돌아다니는 것을 예사로 알기는 알았지만, 그러나 <rs type="person" ref="#BokNyeo">그</rs>의 마음속에는 막연하나마 도덕이라는 것에 대한 저품을 가지고 있었다.</p>
+      <p><rs type="person" ref="#BokNyeo">그</rs>는 <measure type="age" quantity="15" unit="year">열 다섯 살</measure> 나는 해에 동네 홀아비에게 <measure type="currency" quantity="80" unit="won">팔십 원</measure>에 팔려서 시집이라는 것을 갔다.<rs type="person" ref="#BokNyeo">그</rs>의 <persName ref="#Husband">새서방</persName>(<persName ref="#Husband">영감</persName>이라는 편이 적당할까)이라는 사람은 <rs type="person" ref="#BokNyeo">그</rs>보다 <measure type="duration" quantity="20" unit="year">이십 년</measure>이나 위로서, 원래 아버지의 시대에는 상당한 농민으로서 밭도 <measure type="count" unit="마지기">몇 마지기</measure>가 있었으나, <rs type="person" ref="#Husband">그</rs>의 대로 내려오면서는 하나 둘 줄기 시작하여서, 마지막에 <persName ref="#BokNyeo">복녀</persName>를 산 <measure type="currency" quantity="80" unit="won">팔십 원</measure>이 <rs type="person" ref="#Husband">그</rs>의 마지막 재산이었었다.</p>
+      <p><rs type="person" ref="#Husband">그</rs>는 극도로 게으른 사람이었었다. 동네 노인의 주선으로 소작 밭깨나 얻어주면, 종자나 뿌려둔 뒤에는 후치질도 안하고 김도 안 매고 그냥 버려두었다가는, 가을에 가서는 되는 대로 거두어서 '금년은 흉년이네' 하고 전주집에는 가져도 안가고 자기 혼자 먹어버리고 하였다. 그러니까 <rs type="person" ref="#Husband">그</rs>는 한밭을 <measure type="duration" quantity="2" unit="year">이태</measure>를 연하여 붙여본 일이 없었다. 이리하여 <measure type="duration" unit="year">몇 해</measure>를 지내는 동안 <rs type="person" ref="#Husband">그</rs>는 그 동네에서는 밭을 못 얻으리만큼 인심과 신용을 잃고 말았다.</p>
+      <p><persName ref="#BokNyeo">복녀</persName>가 시집을 온 뒤, 한 삼사 년은 <persName ref="#FatherInLaw">장인</persName>의 덕으로 이렁저렁 지내갔으나, 이전 선비의 꼬리인<persName ref="#FatherInLaw">장인</persName>도 차차 사위를 밉게 보기 시작하였다. <rs type="person" ref="#BokNyeo">그</rs>들은 처가에까지 신용을 잃게 되었다.</p>
+      <p><rs type="person" ref="#BokNyeo">그</rs>들 부처는 여러 가지로 의논하다가 하릴없이 <placeName ref="#Pyeongyang">평양 성 안</placeName>으로 막벌이로 들어왔다. 그러나 게으른 <rs type="person" ref="#Husband">그</rs>에게는 막벌이나마 역시 되지 않았다. <time>하루 종일</time> 지게를 지고 <placeName ref="#Yeongwangjeong">연광정</placeName>에 가서 <placeName ref="#Daedonggang">대동강</placeName>만 내려다보고 있으니, 어찌 막벌이인들 될까. 한 <measure type="duration" unit="month">서너 달</measure> 막벌이를 하다가, <rs type="person" ref="#BokNyeo">그</rs>들은 요행 어떤 집 막간(행랑)살이로 들어가게 되었다.</p>
+      <p>그러나 그 집에서도 얼마 안 하여 쫓겨나왔다.<persName ref="#BokNyeo">복녀</persName>는 부지런히 주인집 일을 보았지만,<persName ref="#Husband">남편</persName>의 게으름은 어찌할 수가 없었다. 매일 <persName ref="#BokNyeo">복녀</persName>는 눈에 칼을 세워가지고 <persName ref="#Husband">남편</persName>을 채근하였지만, <rs type="person" ref="#Husband">그</rs>의 게으른 버릇은 개를 줄 수는 없었다.</p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true">벳섬 좀 치워달라우요.</said>"</p>
+      <p>"<said who="#Husband" direct="true" aloud="true"> 남 졸음 오는데, 님자 치우시관.</said>"</p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true"> 내가 치우나요?</said>"</p>
+      <p>"<said who="#Husband" direct="true" aloud="true"> 이십 년이나 밥 처먹구 그걸 못 치워.</said></p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true">에이구, 칵 죽구나 말디.</said>"</p>
+      <p>"<said who="#Husband" direct="true" aloud="true"> 이년, 뭘!</said>"</p>
+      <p>이러한 싸움이 그치지 않다가, 마침내 그 집에서도 쫓겨나왔다.</p>
+      <p>이젠 어디로 가나? <rs type="person" ref="#BokNyeo">그</rs>들은 하릴없이 <placeName ref="#Chilseongmun">칠성문 밖</placeName> <placeName ref="#PaupersVillage">빈민굴</placeName>로 밀리어오게 되었다.</p>
+      <p><placeName ref="#Chilseongmun">칠성문 밖</placeName>을 한 부락으로 삼고 그곳에 모여 있는 모든 사람들의 정업은 거러지요, 부업으로는 도둑질과 '자기네끼리의' 매음, 그밖에 이 세상의 모든 무섭고 더러운 죄악이었었다. <persName ref="#BokNyeo">복녀</persName>도 그 정업으로 나섰다.</p>
+      <p>그러나 <measure type="age" quantity="19" unit="year">열 아홉 살</measure>의 한창 좋은 나이의 <rs type="person" ref="#BokNyeo">여편네</rs>에게 누가 밥인들 잘 줄까.</p>
+      <p>"<said direct="true" aloud="true">젊은 거이 거랑은 왜?</said>"</p>
+      <p>그런 소리를 들을 때마다 <rs type="person" ref="#BokNyeo">그</rs>는 여러 가지 말로, <rs type="person" ref="#Husband">남편</rs>이 병으로 죽어가거니 어쩌거니 핑계는 대었지만, 그런 핑계에는 단련된 <placeName ref="#Pyeongyang">평양 시민</placeName>의 동정은 역시 살 수가 없었다. <rs type="person" ref="#BokNyeo">그</rs>들은 이 <placeName ref="#Chilseongmun">칠성문 밖</placeName>에서도 가장 가난한 사람 가운데 드는 편이었었다. 그 가운데서 잘 수입되는 사람은 하루에 <measure type="currency" quantity="5" unit="리">오리</measure>짜리 돈 뿐으로 <measure type="currency" quantity="1.78" unit="원">일원 칠팔십 전</measure>의 현금을 쥐고 돌아오는 사람까지 있었다. 극단으로 나가서는 밤에 돈벌이 나갔던 사람은 그날 밤 <measure type="currency" quantity="400" unit="원">사 백 여 원</measure>을 벌어 가지고 와서 그 근처에서 담배장사를 시작한 사람까지 있었다.</p>
+      <p><persName ref="#BokNyeo">복녀</persName>는 <measure type="age" quantity="19" unit="year">열 아홉 살</measure>이었었다. 얼굴도 그만하면 빤빤하였다. 그 동네 여인들의 보통 하는 일을 본받아서, 그도 돈벌이 좀 잘하는 사람의 집에라도 간간 찾아가면, 매일 <measure type="currency" atLeast="50" atMost="60" unit="전">오륙십 전</measure>은 벌 수가 있었지만, 선비의 집안에서 자라난 그는 그런 일은 할 수가 없었다.</p>
+      <p>그들 부처는 역시 가난하게 지냈다. 굶는 일도 흔히 있었다.</p>
+      <p><placeName ref="#Gijamyo">기자묘 솔밭</placeName>에 송충이가 끓었다. 그때, <placeName ref="#Pyeongyang">평양</placeName> '부'에서는 그 송충이 잡는데(은혜를 베푸는 뜻으로) <placeName ref="#Chilseongmun">칠성문 밖</placeName> <placeName ref="#PaupersVillage">빈민굴</placeName>의 여인들을 인부로 쓰게 되었다.</p>
+      <p><placeName ref="#PaupersVillage">빈민굴</placeName> 여인들은 모두 다 지원을 하였다. 그러나 뽑힌 것은 겨우 <measure type="count" quantity="50" unit="명">오십 명</measure> 쯤이었었다. <persName ref="#BokNyeo">복녀</persName>도 그 뽑힌 사람 가운데 한 사람이었었다.</p>
+      <p><persName ref="#BokNyeo">복녀</persName>는 열심으로 송충이를 잡았다. 소나무에 사다리를 놓고 올라가서는, 송충이를 집게로 집어서 약물에 잡아넣고, 또 그렇게 하고, 그의 통은 잠깐 사이에 차고 하였다. 하루에 <measure type="currency" quantity="32" unit="전">삼십이 전</measure>씩의 품삯이 그의 손에 들어왔다.</p>
+      <p>그러나 <measure type="duration" quantity="6" unit="일">대엿새</measure> 하는 동안에 그는 이상한 현상을 하나 발견하였다. 그것은 다른 것이 아니라, 젊은 여인부 한 <measure type="count" atLeast="7" atMost="8" unit="명">여나믄 사람</measure>은 언제나 송충이는 안 잡고, 아래서 지절거리며 웃고 날뛰기만 하고 있는 것이었다. 뿐만 아니라, 그 놀고 있는 인부의 품삯은, 일하는 사람의 삯전보다 <measure type="currency" quantity="8" unit="전">팔 전</measure>이나 더 많이 내어주는 것이다.</p>
+      <p><persName ref="#Supervisor">감독</persName> 은 <measure type="count" quantity="1" unit="명">한 사람</measure>뿐이었는데 <persName ref="#Supervisor">감독</persName> 도 그들의 놀고 있는 것을 묵인할 뿐 아니라, 때때로는 자기까지 섞여서 놀고 있었다.</p>
+      <p>어떤 날 송충이를 잡다가 <time>점심때</time>가 되어서,나무에서 내려와서 점심을 먹고 다시 올라가려 할 때에 <persName ref="#Supervisor">감독</persName> 이그를 찾았다 -</p>
+      <p>"<said who="#Supervisor" direct="true" aloud="true"> <persName ref="#BokNyeo">복네</persName>! 얘 <persName ref="#BokNyeo">복네</persName>!</said>"</p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true">왜 그릅네까?</said>"</p>
+      <p>그는 약통과 집게를 놓고 뒤로 돌아섰다.</p>
+      <p>"<said who="#Supervisor" direct="true" aloud="true">좀 오나라.</said>"</p>
+      <p>그는 말없이 <persName ref="#Supervisor">감독</persName> 앞에 갔다.</p>
+      <p>"<said who="#Supervisor" direct="true" aloud="true">얘, 너, 음… 데 뒤 좀 가보자.</said>"</p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true">뭘 하례요?</said>"</p>
+      <p>"<said who="#Supervisor" direct="true" aloud="true">글쎄, 가야…</said>"</p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true">가디요. - <rs type="person" ref="#NeighborWoman">형님</rs>.</said>"</p>
+      <p>그는 돌아서면서 인부들 모여 있는 데로 고함쳤다.</p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true"> <rs type="person" ref="#NeighborWoman">형님</rs>두 갑세다가례.</said>"</p>
+      <p>"<said who="#NeighborWoman" direct="true" aloud="true">싫다 얘. 둘이서 재미나게 가는데, <rs type="person" ref="#NeighborWoman">내</rs>가 무슨 맛에 가갔니?</said>"</p>
+      <p><persName ref="#BokNyeo">복녀</persName>는 얼굴이 새빨갛게 되면서 <persName ref="#Supervisor">감독</persName> 에게로 돌아섰다.</p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true">가보자.</said>"</p>
+      <p><persName ref="#Supervisor">감독</persName> 은 저편으로 갔다. <persName ref="#BokNyeo">복녀</persName>는 머리를 수그리고 따라갔다.</p>
+      <p>"<said direct="true" aloud="true"> <persName ref="#BokNyeo">복네</persName> 좋갔구나.</said>"</p>
+      <p>뒤에서 이러한 조롱 소리가 들렸다. <persName ref="#BokNyeo">복녀</persName>의 숙인 얼굴은 더욱 발갛게 되었다.</p>
+      <p>그날부터 <persName ref="#BokNyeo">복녀</persName>도 '일 안하고 품삯 많이 받는 인부'의 한 사람으로 되었다.</p>
+      <p><persName ref="#BokNyeo">복녀</persName>의 도덕관 내지 인생관은, 그때부터 변하였다.</p>
+      <p><rs type="person" ref="#BokNyeo">그</rs>는 아직껏 딴 사내와 관계를 한다는 것을 생각하여본 일도 없었다. 그것은 사람의 일이 아니요, 짐승의 하는 짓쯤으로만 알고 있었다. 혹은 그런 일을 하면 탁 죽어지는지도 모를 일로 알았다.</p>
+      <p>그러나 이런 이상한 일이 어디 다시 있을까. 사람인 <rs type="person" ref="#BokNyeo">자기</rs>도 그런 일을 한 것을 보면, 그것은 결코 사람으로 못할 일이 아니었었다. 게다가 일 안하고도 돈 더 받고, 긴장된 유쾌가 있고, 빌어먹는 것보다 점잖고… <foreign xml:lang="ja">일본말</foreign>로 하자면 '삼 박자(拍子)' 같은 좋은 일은 이것뿐이었었다. 이것이야말로 삶의 비결이 아닐까. 뿐만 아니라, 이 일이 있은 뒤부터, <rs type="person" ref="#BokNyeo">그</rs>는 처음으로 한 개 사람이 된 것 같은 자신까지 얻었다.</p>
+      <p>그 뒤부터는, <rs type="person" ref="#BokNyeo">그</rs>의 얼굴에는 조금씩 분도 바르게 되었다.</p>
+      <p><date>일년</date>이 지났다.</p>
+      <p><rs type="person" ref="#BokNyeo">그</rs>의 처세의 비결은 더욱 더 순탄히 진척되었다. <rs type="person" ref="#BokNyeo">그</rs>의 부처는 이제는 그리 궁하게 지내지는 않게 되었다.</p>
+      <p><rs type="person" ref="#BokNyeo">그</rs>의 <persName ref="#Husband">남편</persName>은 이것이 결국 좋은 일이라는 듯이 아랫목에 누워서 벌신벌신 웃고 있었다.</p>
+      <p><persName ref="#BokNyeo">복녀</persName>의 얼굴은 더욱 이뻐졌다.</p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true">여보, 아즈바니. 오늘은 얼마나 벌었소?</said>"</p>
+      <p><persName ref="#BokNyeo">복녀</persName>는 돈 좀 많이 벌은 듯한 거지를 보면 이렇게 찾는다.</p>
+      <p>"<said direct="true" aloud="true"> 오늘은 많이 못 벌었쉐다.</said>"</p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true">얼마?</said>"</p>
+      <p>"<said direct="true" aloud="true">도무지 <measure type="currency" unit="nyang" atLeast="10" atMost="14">열 서너 냥</measure>.</said>"</p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true">많이 벌었쉐다가레.<measure type="currency" unit="nyang" atLeast="4" atMost="5">한 댓 냥</measure> 꿰주소고레.</said>"</p>
+      <p>"<said direct="true" aloud="true"> 오늘은 내가…</said>"</p>
+      <p>어쩌고 어쩌고 하면, <persName ref="#BokNyeo">복녀</persName>는 곧 뛰어가서 <rs type="person" ref="#BokNyeo">그</rs>의 팔에 늘어진다.</p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true"> <rs type="person" ref="#BokNyeo">나</rs>한테 들킨 댐에는 뀌구야 말아요.</said>"</p>
+      <p>" <said who="#BokNyeo" direct="true" aloud="true"><rs type="person" ref="#BokNyeo">난</rs> 원 이 아즈마니 만나믄 야단이더라. 자 꿰주디 그대신 응? 알아있디?</said>"</p>
+      <p>"<said who="#WangSeobang" direct="true" aloud="true"><rs type="person" ref="#WangSeobang">난</rs> 몰라요. 해해해해.</said>"</p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true">모르믄, 안 줄 테야.</said>"</p>
+      <p>"<said who="#WangSeobang" direct="true" aloud="true">글쎄, 알았대두 그른다.</said>"</p>
+      <p>− <rs ref="#BokNyeo">그</rs>의 성격은 이만큼까지 진보되었다.</p>
+      <p><date type="season">가을</date>이 되었다.</p>
+      <p><placeName ref="#Chilseongmun">칠성문 밖</placeName> <placeName ref="#PaupersVillage">빈민굴</placeName>의 여인들은 <date type="season">가을</date>이 되면 <placeName ref="#Chilseongmun">칠성문 밖</placeName> <placeName ref="#PaupersVillage">빈민굴</placeName>에 있는 <placeName ref="#ChineseVegetableGarden">중국인의 채마 밭</placeName>에 <rs type="item">감자(고구마)</rs>며 배추를 도둑질하러, <time>밤</time>에 바구니를 가지고 간다. <persName ref="#BokNyeo">복녀</persName>도 감잣개나 잘 도둑질하여 왔다.</p>
+      <p>어떤 날 <time>밤</time>, <rs ref="#BokNyeo">그</rs>는 감자를 한 바구니 잘 도둑질하여가지고, 이젠 돌아오려고 일어설 때에, <rs ref="#BokNyeo">그</rs>의 뒤에 시꺼먼 그림자가 서서 <rs ref="#BokNyeo">그</rs>를 꽉 붙들었다. 보니, 그것은 <rs ref="#ChineseVegetableGarden">그 밭</rs>의 주인인 <placeName ref="#ChineseVegetableGarden">중국인</placeName> <persName ref="#WangSeobang">왕 서방</persName>이었었다. <persName ref="#BokNyeo">복녀</persName>는 말도 못하고 멀찐멀찐 발 아래만 내려다보고 있었다.</p>
+      <p>" <said who="#WangSeobang" direct="true" aloud="true">우리집에 가.</said>"</p>
+      <p><persName ref="#WangSeobang">왕 서방</persName>은 이렇게 말하였다.</p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true">가재믄 가디. 훤, 것두 못 갈까.</said>"</p>
+      <p><persName ref="#BokNyeo">복녀</persName>는 엉덩이를 한번 홱 두른 뒤에, 머리를 젖기고 바구니를 저으면서 <persName ref="#WangSeobang">왕 서방</persName>을 따라갔다.</p>
+      <p>한 <measure type="duration" unit="hour" quantity="1">시간</measure>쯤에 <rs ref="#BokNyeo">그</rs>는 <placeName ref="#WangHouse">왕 서방의 집</placeName>에서 나왔다. <rs ref="#BokNyeo">그</rs>가 밭고랑에서 길로 들어서려 할 때에, 문득 앞 뒤에서 누가 <rs ref="#BokNyeo">그</rs>를 찾았다.</p>
+      <p>" <said who="#NeighborWoman" direct="true" aloud="true"><persName ref="#BokNyeo">복네</persName>아니야?</said>"</p>
+      <p><persName ref="#BokNyeo">복녀</persName>는 홱 돌아서보았다. 거기는 <rs ref="#BokNyeo">자기</rs> <placeName ref="#BokNyeoHouse">곁집</placeName> <persName ref="#NeighborWoman">여편네</persName>가 바구니를 끼고, 어두운 밭고랑을 더듬더듬 나오고 있었다.</p>
+      <p>" <said who="#BokNyeo" direct="true" aloud="true"><persName ref="#NeighborWoman">형님</persName>이댔쉐까? <persName ref="#NeighborWoman">형님</persName>두 들어갔댔쉐까?</said>"</p>
+      <p>" <said who="#NeighborWoman" direct="true" aloud="true">님자두 들어갔댔나?</said>"</p>
+      <p>" <said who="#BokNyeo" direct="true" aloud="true"><persName ref="#NeighborWoman">형님</persName>은 뉘 집에?</said>"</p>
+      <p>" <said who="#NeighborWoman" direct="true" aloud="true">나? <persName ref="#NukSeobang">눅(陸) 서방</persName>네 집에. 님자는?</said>"</p>
+      <p>" <said who="#BokNyeo" direct="true" aloud="true">난 <persName ref="#WangSeobang">왕 서방</persName>네…. <persName ref="#NeighborWoman">형님</persName> 얼마 받았소?</said>"</p>
+      <p>" <said who="#NeighborWoman" direct="true" aloud="true"><persName ref="#NukSeobang">눅 서방</persName>네 그 깍쟁이 놈, 배추 세 페기….</said>"</p>
+      <p>" <said who="#BokNyeo" direct="true" aloud="true">난 <measure type="currency" unit="won" quantity="3">삼원</measure> 받았디.</said>"</p>
+      <p><persName ref="#BokNyeo">복녀</persName>는 자랑스러운 듯이 대답하였다.</p>
+      <p><measure type="duration" unit="minute" quantity="10">십 분</measure>쯤 뒤에 <rs ref="#BokNyeo">그</rs>는 <rs ref="#Husband">자기 남편</rs>과, <rs ref="#Husband">그</rs> 앞에 <measure type="currency" unit="won" quantity="3">돈 삼원</measure>을 내어놓은 뒤에, 아까 그 <persName ref="#WangSeobang">왕 서방</persName>의 이야기를 하면서 웃고 있었다.</p>
+      <p><rs ref="#BokNyeo">그</rs> 뒤부터 <persName ref="#WangSeobang">왕 서방</persName>은 무시로 <persName ref="#BokNyeo">복녀</persName>를 찾아왔다.</p>
+      <p>한참 <persName ref="#WangSeobang">왕 서방</persName>이 눈만 멀찐멀찐 앉아 있으면, <persName ref="#BokNyeo">복녀</persName>의 <persName ref="#Husband">남편</persName>은 눈치를 채고 밖으로 나간다. <persName ref="#WangSeobang">왕 서방</persName>이 돌아간 뒤에는 <rs ref="#BokNyeo #Husband">그들 부처</rs>는, <measure type="currency" unit="won" quantity="1">일원</measure> 혹은 <measure type="currency" unit="won" quantity="2">이원</measure>을 가운데 놓고 기뻐하고 하였다.</p>
+      <p><persName ref="#BokNyeo">복녀</persName>는 차차 동네 거지들한테 애교를 파는 것을 중지하였다. <persName ref="#WangSeobang">왕 서방</persName>이 분주하여 못 올 때가 있으면 <persName ref="#BokNyeo">복녀</persName>는 스스로 <placeName ref="#WangHouse">왕 서방의 집</placeName>까지 찾아갈 때도 있었다.</p>
+      <p><persName ref="#BokNyeo">복녀</persName>의 <rs ref="#BokNyeo #Husband">부처</rs>는 이제 이 <placeName ref="#PaupersVillage">빈민굴</placeName> 의 한 부자였었다.</p>
+      <p><rs type="season">그 겨울</rs>도 가고 <date type="season">봄</date>이 이르렀다.</p>
+      <p>그때 <persName ref="#WangSeobang">왕 서방</persName>은 <measure type="currency" unit="won" quantity="100">돈 백원</measure>으로 어떤 처녀를 하나 <persName ref="#NewBride">마누라</persName>로 사오게 되었다.</p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true">흥!</said>"</p>
+      <p><persName ref="#BokNyeo">복녀</persName>는 다만 코웃음만 쳤다.</p>
+      <p>" <said who="#NeighborWoman" direct="true" aloud="true"><persName ref="#BokNyeo">복녀</persName>, 강짜하갔구만.</said>"</p>
+      <p>동네 <rs ref="#NeighborWoman">여편네</rs>들이 이런 말을 하면, <persName ref="#BokNyeo">복녀</persName>는 흥 하고 코웃음을 웃고 하였다.</p>
+      <p><rs ref="#BokNyeo">내</rs>가 강짜를 해? <rs ref="#BokNyeo">그</rs>는 늘 힘있게 부인하고 하였다. 그러나 <rs ref="#BokNyeo">그</rs>의 마음에 생기는 검은 그림자는 어찌할 수가 없었다.</p>
+      <p>" <said who="#BokNyeo" direct="true" aloud="true">이놈 <persName ref="#WangSeobang">왕 서방</persName>. 네 두고 보자.</said>"</p>
+      <p><persName ref="#WangSeobang">왕 서방</persName>이 <persName ref="#NewBride">색시</persName>를 데려오는 날이 가까왔다. <persName ref="#WangSeobang">왕 서방</persName>은 아직껏 자랑하던 길다란 머리를 깎았다. 동시에 그것은 <persName ref="#NewBride">새색시</persName>의 의견이라는 소문이 퍼졌다.</p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true">흥!</said>"</p>
+      <p><persName ref="#BokNyeo">복녀</persName>는 역시 코웃음만 쳤다.</p>
+      <p>마침내 <persName ref="#NewBride">색시</persName>가 오는 날이 이르렀다. 칠보단장에 사인교를 탄 <persName ref="#NewBride">색시</persName>가, <placeName ref="#Chilseongmun">칠성문 밖</placeName> <placeName ref="#ChineseVegetableGarden">채마 밭</placeName> 가운데 있는 <placeName ref="#WangHouse">왕 서방의 집</placeName>에 이르렀다.</p>
+      <p><time>밤</time>이 깊도록, <placeName ref="#WangHouse">왕 서방의 집</placeName>에는 <rs ref="#WangSeobang">중국인</rs>들이 모여서 별한 악기를 뜯으며 별한 곡조로 노래하며 야단하였다. <persName ref="#BokNyeo">복녀</persName>는 집 모퉁이에 숨어 서서 눈에 살기를 띠고 방안의 동정을 듣고 있었다.</p>
+      <p>다른 <rs ref="#WangSeobang">중국인</rs>들은 <time when="02:00:00">새벽 두시쯤</time> 하여 돌아가는 것을 보면서 <persName ref="#BokNyeo">복녀</persName>는 <placeName ref="#WangHouse">왕 서방의 집</placeName> 안에 들어갔다. <persName ref="#BokNyeo">복녀</persName>의 얼굴에는 분이 하얗게 발리워 있었다.</p>
+      <p><rs ref="#WangSeobang #NewBride">신랑 신부</rs>는 놀라서 <rs ref="#BokNyeo">그</rs>를 쳐다보았다. 그것을 무서운 눈으로 흘겨보면서, <rs ref="#BokNyeo">그</rs>는 <persName ref="#WangSeobang">왕 서방</persName>에게 가서 팔을 잡고 늘어졌다. <rs ref="#BokNyeo">그</rs>의 입에서는 이상한 웃음이 흘렀다.</p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true">자, 우리집으로 가요.</said>"</p>
+      <p><persName ref="#WangSeobang">왕 서방</persName>은 아무 말도 못하였다. 눈만 정처 없이 두룩두룩 하였다. <persName ref="#BokNyeo">복녀</persName>는 다시 한번 <persName ref="#WangSeobang">왕 서방</persName>을 흔들었다 -</p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true">자, 어서.</said>"</p>
+      <p>" <said who="#WangSeobang" direct="true" aloud="true">우리, <time>오늘 밤</time> 일이 있어 못 가.</said>"</p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true">일은 <time>밤중</time>에 무슨 일.</said>"</p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true">그래두, 우리 일이…</said>"</p>
+      <p><persName ref="#BokNyeo">복녀</persName>의 입에 아직껏 떠돌던 이상한 웃음은 문득 없어졌다.</p>
+      <p>" <said who="#BokNyeo" direct="true" aloud="true">이까짓 것.</said>"</p>
+      <p><rs ref="#BokNyeo">그</rs>는 발을 들어서 치장한 <persName ref="#NewBride">신부</persName>의 머리를 찼다.</p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true">자, 가자우, 가자우.</said>"</p>
+      <p><persName ref="#WangSeobang">왕 서방</persName>은 와들와들 떨었다. <persName ref="#WangSeobang">왕 서방</persName>은 <persName ref="#BokNyeo">복녀</persName>의 손을 뿌리쳤다.</p>
+      <p><persName ref="#BokNyeo">복녀</persName>는 쓰러졌다. 그러나 곧 다시 일어섰다. <rs ref="#BokNyeo">그</rs>가 다시 일어설 때는, <rs ref="#BokNyeo">그</rs>의 손에는 얼른얼른 하는 낫이 한 자루 들리어 있었다.</p>
+      <p>"<said who="#BokNyeo" direct="true" aloud="true">이 <rs ref="#WangSeobang" type="epithet">되놈</rs>, 죽에라. 이놈, 나 때렸디! 이놈아, 아이구 사람 죽이누나.</said>"</p>
+      <p><rs ref="#BokNyeo">그</rs>는 목을 놓고 처울면서 낫을 휘둘렀다. <placeName ref="#Chilseongmun">칠성문 밖</placeName> 외따른 밭 가운데 홀로 서 있는 <placeName ref="#WangHouse">왕 서방의 집</placeName>에서는 일장의 활극이 일어났다. 그러나 그 활극도 곧 잠잠하게 되었다. <persName ref="#BokNyeo">복녀</persName>의 손에 들리어 있던 낫은 어느덧 <persName ref="#WangSeobang">왕 서방</persName>의 손으로 넘어가고, <persName ref="#BokNyeo">복녀</persName>는 목으로 피를 쏟으면서 그 자리에 고꾸라져 있었다.</p>
+      <p><persName ref="#BokNyeo">복녀</persName>의 송장은 <date>사흘</date>이 지나도록 무덤으로 못 갔다. <persName ref="#WangSeobang">왕 서방</persName>은 몇 번을 <persName ref="#BokNyeo">복녀</persName>의 <persName ref="#Husband">남편</persName>을 찾아갔다. <persName ref="#BokNyeo">복녀</persName>의 <persName ref="#Husband">남편</persName>도 때때로 <persName ref="#WangSeobang">왕 서방</persName>을 찾아갔다. 둘의 사이에는 무슨 교섭하는 일이 있었다. <date>사흘</date>이 지났다.</p>
+      <p><time>밤중</time> <persName ref="#BokNyeo">복녀</persName>의 시체는 <placeName ref="#WangHouse">왕 서방의 집</placeName>에서 <placeName ref="#BokNyeoHouse">남편의 집</placeName>으로 옮겼다. 그리고 시체에는 세 사람이 둘러앉았다. 한 사람은 <persName ref="#BokNyeo">복녀</persName>의 <persName ref="#Husband">남편</persName>, 한 사람은 <persName ref="#WangSeobang">왕 서방</persName>, 또 한 사람은 어떤 <persName ref="#Doctor">한방 의사</persName> - <persName ref="#WangSeobang">왕 서방</persName>은 말없이 돈주머니를 꺼내어, <measure type="currency" quantity="10" unit="won" commodity="지폐">십 원</measure>짜리 지폐 <measure type="count" quantity="3" unit="장">석 장</measure>을 <persName ref="#BokNyeo">복녀</persName>의 <persName ref="#Husband">남편</persName>에게 주었다. <persName ref="#Doctor">한방 의사</persName>의 손에도 <measure type="currency" quantity="10" unit="won" commodity="지폐">십 원</measure>짜리 <measure type="count" quantity="2" unit="장">두 장</measure>이 갔다.</p>
+      <p><date>이튿날</date>, <persName ref="#BokNyeo">복녀</persName>는 뇌일혈로 죽었다는 <persName ref="#Doctor">한방의</persName>의 진단으로 <placeName ref="#PublicCemetery">공동묘지</placeName>로 가져갔다.</p>
+    </body>
+  </text>
+</TEI>

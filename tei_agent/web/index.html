@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TEI Agent</title>
+<style>
+:root{
+  --bg:#f6f4ef; --panel:#fffdf8; --ink:#1f1d1a; --muted:#6b665d; --line:#e2ddd2; --accent:#7a2e1f; --accent-ink:#fff;
+  --ok:#2f6b3a; --warn:#9a6a00; --err:#a3261b; --code:#f1ede4;
+  --persName:#d9e8ff; --placeName:#dff3df; --orgName:#f3e3ff; --rs:#eef2f7; --date:#ffeccc; --time:#fff4d6; --measure:#e6f7f5;
+  --said:#fff7e8; --q:#f7f1e8; --foreign:#fde2e2; --term:#e9f0d8; --title:#f0e6da; --roleName:#e3e8ff; --other:#ececec;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, "D2Coding", monospace;
+  --serif: "Noto Serif KR", "Nanum Myeongjo", "Iowan Old Style", Georgia, serif;
+  --sans: "Pretendard", "Noto Sans KR", -apple-system, "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#16150f; --panel:#1f1d17; --ink:#ece7dc; --muted:#a39d90; --line:#36332b; --accent:#e08a6d; --accent-ink:#1a1712; --code:#26231c;
+    --persName:#24364f; --placeName:#233b26; --orgName:#3a2a47; --rs:#2a2e35; --date:#463517; --time:#42391c; --measure:#1f3c39;
+    --said:#3a3220; --q:#352f26; --foreign:#4a2626; --term:#323b22; --title:#3d3226; --roleName:#2b3150; --other:#30302e; }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 var(--sans)}
+header{display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:5;flex-wrap:wrap}
+header h1{font:600 17px var(--serif);margin:0;letter-spacing:.01em}
+.badge{font-size:11px;padding:2px 8px;border:1px solid var(--line);border-radius:999px;color:var(--muted);white-space:nowrap}
+.badge.bad{color:var(--err);border-color:var(--err)}
+.spacer{flex:1}
+button,select,input,textarea{font:inherit;color:inherit}
+button{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:6px 11px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button:disabled{opacity:.5;cursor:default}
+select,input[type=text],textarea{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+textarea{width:100%;resize:vertical}
+main{padding:16px}
+.start{max-width:880px;margin:0 auto}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px}
+.card h2{font:600 15px var(--serif);margin:0 0 10px}
+.card h3{font-size:13px;margin:12px 0 6px;color:var(--muted);font-weight:600}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.row>*{flex:0 0 auto}
+.grow{flex:1 1 200px!important}
+.hint{color:var(--muted);font-size:12px}
+.ws{display:grid;grid-template-columns:300px minmax(0,1fr) 360px;gap:12px;align-items:start}
+@media (max-width:1200px){.ws{grid-template-columns:minmax(0,1fr) 340px}.ws>.left{grid-column:1/-1}}
+@media (max-width:820px){.ws{grid-template-columns:1fr}.sticky{position:static;max-height:none}.doc,pre.xml{max-height:none}header{position:static}}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin:-4px -4px 10px}
+.tabs button{border:0;border-bottom:2px solid transparent;border-radius:0;background:none;padding:6px 10px;color:var(--muted)}
+.tabs button.on{color:var(--ink);border-bottom-color:var(--accent)}
+.sticky{position:sticky;top:64px;max-height:calc(100vh - 80px);overflow:auto}
+.doc{font:16px/1.95 var(--serif);max-height:calc(100vh - 190px);overflow:auto;padding-right:6px}
+.blk{position:relative;padding:4px 8px 4px 38px;border-radius:6px;margin:2px 0}
+.blk:hover{background:var(--code)}
+.blk .n{position:absolute;left:4px;top:6px;font:11px var(--mono);color:var(--muted)}
+.blk.fallback{box-shadow:inset 3px 0 var(--warn)}
+.blk.err{box-shadow:inset 3px 0 var(--err)}
+.blk .w{font:12px var(--sans);color:var(--warn)}
+.divmark{font:600 12px var(--sans);color:var(--accent);margin:14px 0 2px;text-transform:uppercase;letter-spacing:.06em}
+.t{border-radius:3px;padding:0 1px}
+.t-persName{background:var(--persName)} .t-placeName,.t-geogName{background:var(--placeName)} .t-orgName{background:var(--orgName)}
+.t-rs{background:var(--rs);border-bottom:1px dashed var(--muted)} .t-date{background:var(--date)} .t-time{background:var(--time)}
+.t-measure,.t-num{background:var(--measure)} .t-said{background:var(--said)} .t-q,.t-quote,.t-soCalled{background:var(--q)}
+.t-foreign{background:var(--foreign)} .t-term{background:var(--term)} .t-title{background:var(--title);font-style:italic}
+.t-roleName{background:var(--roleName)} .t-name,.t-objectName{background:var(--other)}
+.t-said[data-aloud=false]{font-style:italic}
+.t-head{font-weight:700;display:block}
+.t-l{display:block} .t-lg{display:block;margin:.4em 0} .t-speaker{font-weight:700;font-variant:small-caps;margin-right:.5em}
+.t-stage{font-style:italic;color:var(--muted)} .t-sp{display:block;margin:.3em 0} .t-u{display:block}
+.t-pb::before{content:"[p. " attr(data-n) "]";font:11px var(--mono);color:var(--muted)}
+.t-gap::before{content:"[…]";color:var(--err)} .t-note{font-size:.85em;color:var(--muted)}
+.t-hi[data-rend*=italic]{font-style:italic} .t-hi[data-rend*=bold]{font-weight:700}
+.t[data-cert=low]{outline:1px dashed var(--warn)}
+.legend{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+.legend span{font:11px var(--mono);padding:1px 6px;border-radius:4px}
+pre.xml{font:12px/1.5 var(--mono);background:var(--code);border-radius:8px;padding:10px;overflow:auto;max-height:calc(100vh - 190px);white-space:pre-wrap;word-break:break-word;margin:0}
+.x-tag{color:#8a3b12}.x-att{color:#2b5a8a}.x-val{color:#2f6b3a}.x-com{color:var(--muted)}
+@media (prefers-color-scheme: dark){.x-tag{color:#f0a37f}.x-att{color:#8ab4e8}.x-val{color:#9fd39a}}
+.bar{display:flex;align-items:center;gap:6px;font-size:12px;margin:2px 0}
+.bar .lbl{width:92px;font-family:var(--mono);overflow:hidden;text-overflow:ellipsis}
+.bar .track{flex:1;height:8px;background:var(--code);border-radius:4px;overflow:hidden}
+.bar .fill{height:100%;background:var(--accent);opacity:.75}
+.bar .c{width:40px;text-align:right;color:var(--muted)}
+.rec{border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:6px 0}
+.rec label{display:flex;gap:8px;align-items:flex-start;cursor:pointer}
+.rec .k{font:12px var(--mono);color:var(--muted)}
+.rec .ex{font:12px var(--serif);color:var(--muted);margin-top:3px}
+.p1{border-left:3px solid var(--accent)} .p2{border-left:3px solid var(--warn)}
+.q{border:1px solid var(--line);border-radius:8px;padding:8px;margin:6px 0}
+.q.done{opacity:.55}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.chip{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:2px 9px;background:var(--panel);cursor:pointer}
+.chat{max-height:300px;overflow:auto;display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+.msg{padding:6px 9px;border-radius:8px;max-width:92%;white-space:pre-wrap}
+.msg.user{align-self:flex-end;background:var(--accent);color:var(--accent-ink)}
+.msg.assistant{align-self:flex-start;background:var(--code)}
+.msg.tool{align-self:flex-start;font-size:12px;padding:2px 9px;background:transparent}
+.job{font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:center}
+.prog{height:4px;background:var(--code);border-radius:2px;overflow:hidden;width:120px}
+.prog>div{height:100%;background:var(--accent);transition:width .3s}
+.val-ok{color:var(--ok);font-weight:600}.val-bad{color:var(--err);font-weight:600}
+.errlist{font:12px var(--mono);max-height:160px;overflow:auto;margin:6px 0 8px;padding-left:34px;flex:none}
+.reg{font-size:13px}.reg td{padding:2px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+.reg code{font-size:11px}
+.meta-grid{display:grid;grid-template-columns:96px 1fr;gap:6px;align-items:center}
+.meta-grid input{width:100%}
+.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw}
+.toast.on{opacity:1}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <h1>TEI Agent</h1>
+  <span class="badge" id="b-tei">TEI P5</span>
+  <span class="badge" id="b-model">model</span>
+  <span class="spacer"></span>
+  <div class="job hidden" id="job"><span id="job-msg"></span><div class="prog"><div id="job-bar" style="width:0"></div></div></div>
+  <select id="sess-list"><option value="">세션 열기…</option></select>
+  <button id="btn-new">새 문서</button>
+</header>
+<main>
+  <!-- start -->
+  <section class="start" id="start">
+    <div class="card">
+      <h2>원문 텍스트 입력</h2>
+      <textarea id="in-text" rows="14" placeholder="태깅할 원문을 붙여넣으세요 (한국어·영어·독일어·프랑스어·한문·일본어·라틴어 등). 문단은 빈 줄로 구분하면 가장 정확합니다."></textarea>
+      <div class="row" style="margin-top:8px">
+        <input type="text" id="in-title" placeholder="제목 (선택)" class="grow">
+        <input type="text" id="in-author" placeholder="저자 (선택)" class="grow">
+        <select id="in-genre"><option value="">장르: 자동 판별</option></select>
+        <input type="text" id="in-lang" placeholder="주 언어 (예: ko, en, de)" style="width:150px">
+      </div>
+      <div class="row" style="margin-top:8px">
+        <label class="hint"><input type="checkbox" id="in-auto" checked> 분석 직후 자동 태깅·추천까지 실행</label>
+        <span class="spacer"></span>
+        <label class="chip"><input type="file" id="in-file" accept=".txt,.md" class="hidden">텍스트 파일 불러오기</label>
+        <button class="primary" id="btn-start">분석 · 자동 태깅 시작</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>기존 TEI 파일 개선</h2>
+      <p class="hint">이미 TEI로 인코딩된 파일(예: KNoTE)을 불러와 TEI P5 최신 스키마 검증·자동 수리·추가 태깅을 할 수 있습니다. 기존 헤더는 그대로 유지됩니다.</p>
+      <label class="chip"><input type="file" id="in-tei" accept=".xml" class="hidden">TEI XML 불러오기</label>
+    </div>
+    <p class="hint" id="key-warn"></p>
+  </section>
+
+  <!-- workspace -->
+  <section class="ws hidden" id="ws">
+    <div class="left">
+      <div class="card sticky">
+        <div class="tabs" data-tabs="left"><button class="on" data-t="ov">개요</button><button data-t="md">메타데이터</button><button data-t="rg">레지스트리</button></div>
+        <div data-pane="ov">
+          <div class="row"><select id="genre" class="grow"></select></div>
+          <p class="hint" id="analysis-notes"></p>
+          <h3>태그 사용 현황</h3>
+          <div id="counts"></div>
+          <h3>블록 상태</h3>
+          <div id="bstat" class="hint"></div>
+          <h3>작업 기록</h3>
+          <div id="hist" class="hint" style="max-height:160px;overflow:auto"></div>
+        </div>
+        <div data-pane="md" class="hidden">
+          <div class="meta-grid" id="meta-form"></div>
+          <div class="row" style="margin-top:8px"><button id="btn-md-save">메타데이터 저장</button><button id="btn-md-rec">메타데이터 추천</button></div>
+          <div id="md-rec"></div>
+          <h3>Wikidata 검색</h3>
+          <div class="row"><input type="text" id="wd-q" class="grow" placeholder="인명·지명·기관명"><button id="btn-wd">검색</button></div>
+          <div id="wd-res" class="hint"></div>
+        </div>
+        <div data-pane="rg" class="hidden">
+          <p class="hint">본문 @ref/@who가 가리키는 개체 목록. 이름을 클릭하면 수정할 수 있습니다.</p>
+          <div id="registry"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="center">
+      <div class="card">
+        <div class="row" style="margin-bottom:8px">
+          <div class="tabs" data-tabs="view" style="margin:0;border:0"><button class="on" data-t="read">읽기 보기</button><button data-t="xml">XML</button></div>
+          <span class="spacer"></span>
+          <span id="val-status" class="hint">미검증</span>
+          <button id="btn-validate">검증 (tei_all)</button>
+          <button id="btn-repair">자동 수리</button>
+          <button id="btn-undo" title="마지막 변경 취소">되돌리기</button>
+          <button class="primary" id="btn-dl">XML 저장</button>
+        </div>
+        <ol class="errlist hidden" id="val-errors"></ol>
+        <div data-pane="read"><div class="legend" id="legend"></div><div class="doc" id="doc"></div></div>
+        <div data-pane="xml" class="hidden"><pre class="xml" id="xml"></pre></div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="card">
+        <h2>추천 태그</h2>
+        <div id="recs" class="hint">아직 추천이 없습니다.</div>
+        <textarea id="rec-guide" rows="2" placeholder="적용 시 추가 지침 (선택): 예) 대명사는 주요 인물만, 화폐는 commodity 없이" style="margin-top:6px"></textarea>
+        <div class="row" style="margin-top:6px"><button id="btn-rec">추천 다시 받기</button><span class="spacer"></span><button class="primary" id="btn-accept">선택 태그 적용</button></div>
+      </div>
+      <div class="card">
+        <h2>질문</h2>
+        <div id="questions" class="hint">열린 질문이 없습니다.</div>
+      </div>
+      <div class="card">
+        <h2>대화로 수정하기</h2>
+        <div class="chat" id="chat"></div>
+        <textarea id="chat-in" rows="2" placeholder="예) '그'가 김첨지를 가리키는 곳은 rs로 연결해줘 / 3장부터는 편지글이니 floatingText로 / 저자 Wikidata ID 찾아서 헤더에 넣어줘"></textarea>
+        <div class="row" style="margin-top:6px"><label class="hint"><input type="checkbox" id="chat-agent" checked> 에이전트 모드(도구 사용)</label><span class="spacer"></span><button class="primary" id="btn-chat">보내기</button></div>
+      </div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const TEI="http://www.tei-c.org/ns/1.0";
+let CFG=null, SID=null, ST=null, polling=null, lastErrBlocks=new Set();
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("on"),3500)}
+async function api(path,opt={}){
+  const r=await fetch(path,{headers:{"Content-Type":"application/json"},...opt,body:opt.body?JSON.stringify(opt.body):undefined});
+  if(!r.ok){let d;try{d=(await r.json()).detail}catch(e){d=r.statusText}throw new Error(d)}
+  const ct=r.headers.get("content-type")||"";return ct.includes("json")?r.json():r.text();
+}
+function tabs(group){$$(`[data-tabs=${group}] button`).forEach(b=>b.onclick=()=>{
+  $$(`[data-tabs=${group}] button`).forEach(x=>x.classList.toggle("on",x===b));
+  const panes=[...b.parentElement.querySelectorAll("button")].map(x=>x.dataset.t);
+  panes.forEach(p=>$$(`[data-pane=${p}]`).forEach(el=>el.classList.toggle("hidden",p!==b.dataset.t)));
+  if(b.dataset.t==="xml")loadXml();
+})}
+async function init(){
+  CFG=await api("/api/config");
+  $("#b-tei").textContent=`TEI P5 ${CFG.tei_version}`;
+  $("#b-model").textContent=`${CFG.model}${CFG.thinking?" · thinking":""}`;
+  if(!CFG.has_key){$("#b-model").classList.add("bad");$("#key-warn").textContent="⚠ DEEPSEEK_API_KEY가 설정되지 않았습니다. .env 파일에 키를 넣고 서버를 다시 시작하세요. (키 없이도 휴리스틱 분석·헤더 생성·검증은 동작합니다.)"}
+  for(const [k,g] of Object.entries(CFG.genres)){$("#in-genre").add(new Option(`${g.ko}`,k));$("#genre").add(new Option(`${g.ko} (${k})`,k))}
+  tabs("left");tabs("view");
+  const sl=await api("/api/sessions");sl.forEach(s=>$("#sess-list").add(new Option(`${s.title||s.id} · ${s.genre||""}`,s.id)));
+  const h=location.hash.slice(1);if(h)openSession(h);
+}
+$("#sess-list").onchange=e=>e.target.value&&openSession(e.target.value);
+$("#btn-new").onclick=()=>{SID=null;location.hash="";$("#ws").classList.add("hidden");$("#start").classList.remove("hidden")};
+$("#in-file").onchange=async e=>{const f=e.target.files[0];if(f)$("#in-text").value=await f.text()};
+$("#in-tei").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const r=await api("/api/sessions/import",{method:"POST",body:{xml:await f.text()}});openSession(r.id);toast("불러왔습니다. '검증'을 눌러 스키마 오류를 확인하세요.")}catch(err){toast(err.message)}};
+$("#btn-start").onclick=async()=>{
+  const text=$("#in-text").value;if(!text.trim())return toast("텍스트를 입력하세요");
+  try{const r=await api("/api/sessions",{method:"POST",body:{text,title:$("#in-title").value||null,author:$("#in-author").value||null,genre:$("#in-genre").value||null,lang:$("#in-lang").value||null,auto_tag:$("#in-auto").checked}});
+    await openSession(r.id);poll();}catch(e){toast(e.message)}
+};
+async function openSession(id){
+  SID=id;location.hash=id;$("#start").classList.add("hidden");$("#ws").classList.remove("hidden");
+  ST=await api(`/api/sessions/${id}`);render();if(ST.job&&ST.job.running)poll();
+}
+async function refresh(){ST=await api(`/api/sessions/${SID}`);render()}
+async function job(path,body){
+  try{await api(`/api/sessions/${SID}/${path}`,{method:"POST",body:body||{}});poll()}catch(e){toast(e.message)}
+}
+function poll(){
+  clearInterval(polling);$("#job").classList.remove("hidden");$$("button").forEach(b=>b.dataset.busy=1);
+  polling=setInterval(async()=>{
+    const j=await api(`/api/sessions/${SID}/job`);
+    $("#job-msg").textContent=`${j.label||""} · ${j.message||""}`;$("#job-bar").style.width=`${Math.round((j.progress||0)*100)}%`;
+    if(!j.running){clearInterval(polling);$("#job").classList.add("hidden");
+      if(j.error)toast("오류: "+j.error);
+      await refresh();
+      if(j.label==="validate"||j.label==="repair")showValidation();
+      if(j.label==="chat"&&j.result)toast("에이전트: 응답 완료");
+      if(j.label==="instruction"&&j.result&&j.result.reply)toast(j.result.reply);
+    }
+  },900);
+}
+function render(){
+  const s=ST.summary;
+  $("#genre").value=ST.genre;
+  $("#analysis-notes").textContent=(ST.analysis&&ST.analysis.notes)||"";
+  const counts=Object.entries(s.tag_counts).filter(([k])=>!["p"].includes(k));const max=Math.max(1,...counts.map(c=>c[1]));
+  $("#counts").innerHTML=counts.slice(0,18).map(([k,v])=>`<div class="bar"><span class="lbl">${esc(k)}</span><span class="track"><span class="fill" style="display:block;width:${100*v/max}%"></span></span><span class="c">${v}</span></div>`).join("")||'<span class="hint">아직 태그가 없습니다.</span>';
+  $("#bstat").textContent=Object.entries(s.block_status).map(([k,v])=>`${k}: ${v}`).join(" · ")+` · 언어: ${(ST.langs||[]).join(", ")}`;
+  $("#hist").innerHTML=ST.history.slice(-12).reverse().map(h=>`<div>${esc(h.when.slice(11,16))} ${esc(h.action)}</div>`).join("");
+  renderDoc();renderRecs();renderQs();renderChat();renderRegistry();renderMetaForm();renderMetaRecs();
+  if(ST.validation&&ST.validation.wellformed!==undefined)showValidation(true);
+  const u=ST.usage||{};$("#b-model").title=`calls ${u.calls}, in ${u.prompt_tokens}, out ${u.completion_tokens}, ≈$${u.est_cost_usd_peak}`;
+}
+// ---------- reading view
+function xmlToHtml(node){
+  if(node.nodeType===3)return esc(node.nodeValue);
+  if(node.nodeType!==1)return "";
+  const n=node.localName;let attrs="",tip=`<${n}`;
+  for(const a of node.attributes){const an=a.name.replace("xml:","");attrs+=` data-${an.replace(/[^a-z0-9-]/gi,"")}="${esc(a.value)}"`;tip+=` ${a.name}="${a.value}"`}
+  tip+=">";const inner=[...node.childNodes].map(xmlToHtml).join("");
+  return `<span class="t t-${n}" title="${esc(tip)}"${attrs}>${inner}</span>`;
+}
+function renderDoc(){
+  const used=new Set(Object.keys(ST.summary.tag_counts));
+  $("#legend").innerHTML=["persName","placeName","orgName","rs","date","time","measure","said","q","foreign","term","title","roleName","name"].filter(t=>used.has(t)).map(t=>`<span class="t-${t}">${t}</span>`).join("");
+  const parser=new DOMParser();let html="";
+  for(const b of ST.blocks){
+    if(b.div)html+=`<div class="divmark">${esc(b.div.type)} ${esc(b.div.n??"")}</div>`;
+    let inner;const d=parser.parseFromString(`<w xmlns="${TEI}">${b.xml}</w>`,"application/xml");
+    if(d.getElementsByTagName("parsererror").length)inner=`<span class="w">XML 오류</span> ${esc(b.raw)}`;
+    else inner=[...d.documentElement.childNodes].map(xmlToHtml).join("");
+    const cls=["blk",b.status==="fallback"?"fallback":"",lastErrBlocks.has(b.i)?"err":""].join(" ");
+    html+=`<div class="${cls}" data-i="${b.i}"><span class="n">${b.i}</span>${inner}${(b.warnings||[]).length?`<div class="w">⚠ ${esc(b.warnings.join(" / "))}</div>`:""}</div>`;
+  }
+  $("#doc").innerHTML=html||'<p class="hint">블록이 없습니다.</p>';
+  $$("#doc .blk").forEach(el=>el.ondblclick=()=>{$("#chat-in").value=`블록 ${el.dataset.i}: `;$("#chat-in").focus()});
+}
+async function loadXml(){
+  const x=await api(`/api/sessions/${SID}/xml`);
+  $("#xml").innerHTML=esc(x).replace(/(&lt;\/?)([\w:]+)/g,'$1<span class="x-tag">$2</span>').replace(/([\w:]+)=(&quot;.*?&quot;)/g,'<span class="x-att">$1</span>=<span class="x-val">$2</span>');
+}
+$("#btn-dl").onclick=async()=>{const x=await api(`/api/sessions/${SID}/xml`);const t=((ST.metadata.titles||[{}])[0].text||SID).replace(/[\\/:*?"<>|]/g,"_");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([x],{type:"application/xml"}));a.download=`${t}.xml`;a.click()};
+// ---------- validation
+$("#btn-validate").onclick=()=>{toast("tei_all 스키마로 검증 중… (첫 실행 시 약 10초)");job("validate")};
+$("#btn-repair").onclick=()=>job("repair");
+$("#btn-undo").onclick=async()=>{const r=await api(`/api/sessions/${SID}/undo`,{method:"POST"});toast("되돌림: "+r.undone);refresh()};
+function showValidation(quiet){
+  const v=ST.validation;if(!v||v.wellformed===undefined)return;
+  lastErrBlocks=new Set((v.errors||[]).map(e=>e.block).filter(x=>x!==null&&x!==undefined));
+  const n=(v.errors||[]).length;
+  $("#val-status").innerHTML=v.valid?`<span class="val-ok">✓ ${esc(v.schema||"valid")}</span>`:`<span class="val-bad">✗ 오류 ${n}건</span>`+(v.dangling_refs&&v.dangling_refs.length?` · 미정의 ref ${v.dangling_refs.length}`:"");
+  const ul=$("#val-errors");ul.classList.toggle("hidden",v.valid);
+  ul.innerHTML=(v.errors||[]).slice(0,40).map(e=>`<li>${e.block!=null?`[블록 ${e.block}] `:""}line ${e.line}: ${esc(e.message)}</li>`).join("");
+  if(!quiet)renderDoc();
+}
+// ---------- recommendations
+function renderRecs(){
+  const r=(ST.recommendations&&ST.recommendations.tags)||[];
+  if(!r.length){$("#recs").innerHTML='<span class="hint">아직 추천이 없습니다. “추천 다시 받기”를 누르세요.</span>';return}
+  $("#recs").innerHTML=r.map(t=>`<div class="rec p${t.priority||3}"><label><input type="checkbox" value="${esc(t.key)}" ${t.priority===1?"checked":""}>
+   <div><b>${esc(t.label)}</b> <span class="k">${esc((t.elements||[]).join(", "))} · ~${esc(t.estimated_count??"?")}</span>
+   <div>${esc(t.why||"")}</div>${(t.examples||[]).length?`<div class="ex">예: ${(t.examples||[]).slice(0,3).map(esc).join(" / ")}</div>`:""}</div></label></div>`).join("");
+}
+$("#btn-rec").onclick=()=>job("recommend/tags");
+$("#btn-accept").onclick=()=>{const keys=$$("#recs input:checked").map(i=>i.value);if(!keys.length)return toast("적용할 태그를 선택하세요");job("accept",{keys,guidance:$("#rec-guide").value})};
+// ---------- questions
+function renderQs(){
+  const qs=(ST.questions||[]).slice().sort((a,b)=>(a.answered?1:0)-(b.answered?1:0));
+  if(!qs.length){$("#questions").innerHTML='<span class="hint">열린 질문이 없습니다.</span>';return}
+  $("#questions").innerHTML=qs.slice(0,20).map(q=>`<div class="q ${q.answered?"done":""}" data-q="${esc(q.id)}">
+    <div>${esc(q.question)} ${q.block!=null?`<span class="hint">(블록 ${q.block})</span>`:""}</div>
+    ${q.about?`<div class="hint">${esc(q.about)}</div>`:""}
+    ${q.answered?`<div class="hint">→ ${esc(q.answer)}</div>`:`<div class="chips">${(q.options||[]).map(o=>`<span class="chip" data-a="${esc(o)}">${esc(o)}</span>`).join("")}</div>
+    <div class="row" style="margin-top:4px"><input type="text" class="grow" placeholder="직접 답변"><button>답변</button></div>`}</div>`).join("");
+  $$("#questions .q").forEach(el=>{const id=el.dataset.q;
+    el.querySelectorAll(".chip").forEach(c=>c.onclick=()=>job("answer",{qid:id,answer:c.dataset.a}));
+    const b=el.querySelector("button");if(b)b.onclick=()=>{const v=el.querySelector("input").value;if(v)job("answer",{qid:id,answer:v})}});
+}
+// ---------- chat
+function renderChat(){
+  $("#chat").innerHTML=(ST.chat||[]).map(m=>`<div class="msg ${m.role}">${esc(m.content)}</div>`).join("");
+  $("#chat").scrollTop=1e9;
+}
+$("#btn-chat").onclick=()=>{const t=$("#chat-in").value.trim();if(!t)return;$("#chat-in").value="";
+  ST.chat.push({role:"user",content:t});renderChat();job($("#chat-agent").checked?"chat":"instruct",{text:t})};
+$("#chat-in").onkeydown=e=>{if(e.key==="Enter"&&(e.metaKey||e.ctrlKey))$("#btn-chat").click()};
+// ---------- registry
+function renderRegistry(){
+  const R=ST.registry;let h="";
+  for(const [k,label] of [["persons","인물"],["places","장소"],["orgs","기관"]]){
+    const l=R[k]||[];if(!l.length)continue;
+    h+=`<h3>${label} (${l.length})</h3><table class="reg">${l.map(e=>`<tr><td><code>#${esc(e.id)}</code></td><td><span class="ed" data-k="${k}" data-id="${esc(e.id)}" style="cursor:text">${esc(e.name)}</span>${e.note?`<div class="hint">${esc(e.note)}</div>`:""}</td></tr>`).join("")}</table>`;
+  }
+  $("#registry").innerHTML=h||'<span class="hint">레지스트리가 비어 있습니다.</span>';
+  $$("#registry .ed").forEach(el=>el.onclick=async()=>{const v=prompt("이름 수정 (비우면 유지)",el.textContent);if(!v)return;
+    ST=await api(`/api/sessions/${SID}/entity`,{method:"POST",body:{op:"update",kind:el.dataset.k.replace(/s$/,""),id:el.dataset.id,data:{name:v}}});render()});
+}
+// ---------- metadata
+const MF=[["title","제목","titles.0.text"],["subtitle","부제","titles.1.text"],["author","저자","authors.0.name"],["authorRef","저자 URI","authors.0.ref"],
+ ["publisher","발행처","publication.publisher"],["pubPlace","발행지","publication.pubPlace"],["licence","라이선스 URL","licence.target"],
+ ["source","저본 서지","sources.0.title"],["sourceDate","저본 연도","sources.0.date"],["sourceUrl","저본 URL","sources.0.idnos.0.value"],
+ ["creation","창작 시기","creation.date"],["series","컬렉션","series.title"],["funder","지원기관","funder"],["abstract","초록","abstract"]];
+const getp=(o,p)=>p.split(".").reduce((a,k)=>a==null?a:a[k],o);
+function renderMetaForm(){
+  $("#meta-form").innerHTML=MF.map(([id,l,p])=>`<label for="m-${id}">${l}</label><input type="text" id="m-${id}" value="${esc(getp(ST.metadata,p)??"")}">`).join("");
+}
+$("#btn-md-save").onclick=async()=>{
+  const md=JSON.parse(JSON.stringify(ST.metadata||{}));
+  const setp=(o,p,v)=>{const ks=p.split(".");let a=o;ks.forEach((k,i)=>{const last=i===ks.length-1;const nk=ks[i+1];
+    if(last){a[k]=v}else{if(a[k]==null)a[k]=/^\d+$/.test(nk)?[]:{};a=a[k]}})};
+  for(const [id,,p] of MF){const v=$(`#m-${id}`).value.trim();if(v||getp(md,p)!=null)setp(md,p,v||null)}
+  if(md.titles){md.titles=md.titles.filter(t=>t&&t.text);md.titles.forEach((t,i)=>t.type=t.type||(i?"sub":"main"))}
+  if(md.sources&&md.sources[0]){md.sources[0].type=md.sources[0].type||"originalSource";if(md.sources[0].idnos)md.sources[0].idnos.forEach(i=>i.type=i.type||"URL")}
+  if(md.licence&&md.licence.target&&!md.licence.text)md.licence.text=md.licence.target;
+  ST=await api(`/api/sessions/${SID}/metadata`,{method:"POST",body:{patch:md}});render();toast("메타데이터를 저장했습니다");
+};
+$("#btn-md-rec").onclick=()=>job("recommend/metadata");
+function renderMetaRecs(){
+  const r=ST.meta_recommendations||{};let h="";
+  if((r.suggestions||[]).length){h+="<h3>제안된 값</h3>"+r.suggestions.map((s,i)=>`<div class="rec"><b>${esc(s.key)}</b> <span class="k">${esc(s.confidence||"")}</span>${s.needs_verification?` <span class="badge bad">${s.not_in_text?"검증 필요 · 원문에 없는 값":s.model_written?"모델 작성 · 검토":"검증 필요 · 모델 지식 기반"}</span>`:''}${(s.not_in_text||[]).length?`<div class="hint">원문에서 확인 안 됨: ${esc(s.not_in_text.join(", "))}</div>`:''}${(s.identifiers_removed||[]).length?' <span class="badge">ID 제거됨 → 전거 검색 사용</span>':''}
+     <div class="k">${esc(JSON.stringify(s.patch))}</div><div>${esc(s.why||"")}</div><div class="hint">근거: ${esc(s.evidence||"")}</div>
+     <button data-sug="${i}" style="margin-top:4px">적용</button></div>`).join("")}
+  if((r.to_lookup||[]).length){h+="<h3>전거 확인 필요</h3>"+r.to_lookup.map(t=>`<span class="chip" data-look="${esc(t.name)}" data-lang="${esc(t.lang||"")}">${esc(t.kind)}: ${esc(t.name)}</span>`).join(" ")}
+  if((r.missing_fields||[]).length){h+="<h3>추가 권장 헤더 요소</h3>"+r.missing_fields.map(f=>`<div class="rec"><b>${esc(f.label)}</b> <span class="k">${esc(f.level)} · ${esc(f.path)}</span><div class="hint">${esc(f.why)}</div></div>`).join("")}
+  $("#md-rec").innerHTML=h;
+  $$("#md-rec [data-sug]").forEach(b=>b.onclick=async()=>{const s=r.suggestions[+b.dataset.sug];ST=await api(`/api/sessions/${SID}/metadata`,{method:"POST",body:{patch:s.patch}});render();toast(`${s.key} 적용`)});
+  $$("#md-rec [data-look]").forEach(c=>c.onclick=()=>{$("#wd-q").value=c.dataset.look;wd(c.dataset.lang)});
+}
+async function wd(lang){const q=$("#wd-q").value.trim();if(!q)return;$("#wd-res").textContent="검색 중…";
+  const r=await api(`/api/lookup?name=${encodeURIComponent(q)}&lang=${encodeURIComponent(lang||(ST.langs||["en"])[0])}`);
+  if(r.error){$("#wd-res").textContent=r.error;return}
+  $("#wd-res").innerHTML=(r.candidates||[]).map(c=>`<div class="rec"><b>${esc(c.label)}</b> <a href="${esc(c.uri)}" target="_blank" rel="noopener">${esc(c.qid)}</a><div>${esc(c.description)}</div>
+    <button data-qid="${esc(c.qid)}" data-uri="${esc(c.uri)}">저자 전거로 지정</button></div>`).join("")||"결과 없음";
+  $$("#wd-res [data-qid]").forEach(b=>b.onclick=async()=>{const a=(ST.metadata.authors||[{name:q}]);a[0]={...a[0],ref:b.dataset.uri,idnos:[...(a[0].idnos||[]).filter(i=>i.type!=="wikidata"),{type:"wikidata",value:b.dataset.qid}]};
+    ST=await api(`/api/sessions/${SID}/metadata`,{method:"POST",body:{patch:{authors:a}}});render();toast("저자 전거를 추가했습니다")});
+}
+$("#btn-wd").onclick=()=>wd();
+$("#genre").onchange=async e=>{ST=await api(`/api/sessions/${SID}/genre`,{method:"POST",body:{genre:e.target.value}});render();toast("장르 프로필을 바꿨습니다. 필요하면 추천을 다시 받으세요.")};
+init();
+</script>
+</body>
+</html>

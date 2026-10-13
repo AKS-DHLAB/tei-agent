@@ -1,0 +1,74 @@
+[
+ {
+  "id": "knote-dongbaek",
+  "lang": "ko",
+  "genre": "prose_fiction",
+  "licence": "CC BY 4.0",
+  "citation": "Kim, G. et al. (2026). KNoTE. JOHD 12(1). doi:10.5334/johd.590",
+  "source_file": "26_Kim Yu-jeong_The Camellias (Dongbaek-kkot).xml"
+ },
+ {
+  "id": "knote-unsu",
+  "lang": "ko",
+  "genre": "prose_fiction",
+  "licence": "CC BY 4.0",
+  "citation": "Kim, G. et al. (2026). KNoTE. JOHD 12(1). doi:10.5334/johd.590",
+  "source_file": "14_Hyun Jin-geon_A Lucky Day (Unsu Joeun Nal).xml"
+ },
+ {
+  "id": "knote-hyeol",
+  "lang": "ko",
+  "genre": "prose_fiction",
+  "licence": "CC BY 4.0",
+  "citation": "Kim, G. et al. (2026). KNoTE. JOHD 12(1). doi:10.5334/johd.590",
+  "source_file": "01_Yi In-jik_Tears of Blood (Hyeol-ui Nu).xml"
+ },
+ {
+  "id": "eltec-eng-trollope",
+  "lang": "en",
+  "genre": "prose_fiction",
+  "licence": "Text PD; markup CC BY 4.0",
+  "citation": "ELTeC-eng, COST Action CA16204 Distant Reading for European Literary History",
+  "source_file": "ENG18400_Trollope.xml"
+ },
+ {
+  "id": "eltec-fra-adam",
+  "lang": "fr",
+  "genre": "prose_fiction",
+  "licence": "Text PD; markup CC BY 4.0",
+  "citation": "ELTeC-fra, COST Action CA16204 Distant Reading for European Literary History",
+  "source_file": "FRA00101_Adam.xml"
+ },
+ {
+  "id": "gerdracor-emilia",
+  "lang": "de",
+  "genre": "drama",
+  "licence": "CC0",
+  "citation": "GerDraCor (German Drama Corpus), dracor.org",
+  "source_file": "lessing-emilia-galotti.xml"
+ },
+ {
+  "id": "tcp-a00002",
+  "lang": "en",
+  "genre": "early_print",
+  "licence": "CC0",
+  "citation": "EEBO-TCP Phase I, A00002",
+  "source_file": "A00002.xml"
+ },
+ {
+  "id": "isicily-1",
+  "lang": "la",
+  "genre": "inscription",
+  "licence": "CC BY 4.0",
+  "citation": "I.Sicily (EpiDoc), Prag et al.",
+  "source_file": "ISic000001.xml"
+ },
+ {
+  "id": "parlamint-gb",
+  "lang": "en",
+  "genre": "parliamentary",
+  "licence": "CC BY 4.0",
+  "citation": "ParlaMint 5.0, CLARIN ERIC",
+  "source_file": "ParlaMint-GB_2017-09-07-commons.xml"
+ }
+]

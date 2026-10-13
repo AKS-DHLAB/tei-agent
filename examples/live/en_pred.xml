@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://www.tei-c.org/Vault/P5/4.12.0/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title type="main">[제목 미상 / Untitled]</title>
+        <respStmt xml:id="teiagent">
+          <resp>Automatic TEI encoding (LLM-assisted), subject to human review</resp>
+          <name>TEI-Agent 0.1.0 with DeepSeek-V4.1-Flash (API model deepseek-flash)</name>
+        </respStmt>
+      </titleStmt>
+      <extent>
+        <measure unit="chars" quantity="8175">8175 chars</measure>
+        <measure unit="words" quantity="1617">1617 words</measure>
+      </extent>
+      <publicationStmt>
+        <publisher>[발행처 미상]</publisher>
+        <date when="2026-10-13">2026-10-13</date>
+      </publicationStmt>
+      <sourceDesc>
+        <p>Born-digital transcription supplied by the user; source not yet described.</p>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p>Encoded according to the TEI P5 Guidelines 4.12.0 (tei_all) with LLM-assisted tagging and interactive human refinement.</p>
+      </projectDesc>
+      <editorialDecl>
+        <normalization>
+          <p>Original orthography and punctuation preserved; no silent normalisation.</p>
+        </normalization>
+        <quotation>
+          <p>Quotation marks retained in the text, outside &lt;said&gt;/&lt;q&gt;.</p>
+        </quotation>
+      </editorialDecl>
+      <tagsDecl>
+        <namespace name="http://www.tei-c.org/ns/1.0">
+          <tagUsage gi="placeName" occurs="23"/>
+          <tagUsage gi="persName" occurs="20"/>
+          <tagUsage gi="p" occurs="14"/>
+          <tagUsage gi="foreign" occurs="4"/>
+          <tagUsage gi="orgName" occurs="2"/>
+          <tagUsage gi="date" occurs="2"/>
+          <tagUsage gi="head" occurs="1"/>
+          <tagUsage gi="title" occurs="1"/>
+          <tagUsage gi="said" occurs="1"/>
+          <tagUsage gi="body" occurs="1"/>
+          <tagUsage gi="text" occurs="1"/>
+        </namespace>
+      </tagsDecl>
+      <appInfo>
+        <application ident="TEI-Agent" version="0.1.0" when="2026-10-13" xml:id="app-teiagent">
+          <label>TEI-Agent (LLM: DeepSeek-V4.1-Flash (API model deepseek-flash); schema: tei_all 4.12.0)</label>
+        </application>
+      </appInfo>
+    </encodingDesc>
+    <profileDesc>
+      <creation>
+        <date>1850s</date>
+      </creation>
+      <langUsage>
+        <language ident="en" usage="100">영어</language>
+      </langUsage>
+      <textClass>
+        <keywords scheme="#teiagent-genre">
+          <term>Prose fiction</term>
+        </keywords>
+      </textClass>
+      <particDesc>
+        <listPerson>
+          <person xml:id="TracyGeneral" role="protagonist" sex="M">
+            <persName xml:lang="en">General Tracy</persName>
+            <persName type="variant">John George Julian Tracy</persName>
+            <persName type="variant">Mr. Tracy</persName>
+            <persName type="variant">the captain</persName>
+            <persName type="variant">the gallant lieutenant</persName>
+            <persName type="variant">brevet-major-general</persName>
+            <persName type="variant">General H.E.I.C.S.</persName>
+            <note>인도에서 복무한 장군, 트레이시 부인의 남편</note>
+          </person>
+          <person xml:id="TracyJane" role="protagonist" sex="F">
+            <persName xml:lang="en">Mrs. Tracy</persName>
+            <persName type="variant">Jane</persName>
+            <persName type="variant">Jane Tracy</persName>
+            <persName type="variant">the young wife</persName>
+            <persName type="variant">the frivolous woman of fashion</persName>
+            <note>트레이시 장군의 아내, 벌리-싱글턴에 거주</note>
+          </person>
+          <person xml:id="Green" role="minor" sex="F">
+            <persName xml:lang="en">Mrs. Green</persName>
+            <persName type="variant">the old aunt</persName>
+            <persName type="variant">the wealthy, widowed aunt</persName>
+            <persName type="variant">the considerate old soul</persName>
+            <persName type="variant">childless widow</persName>
+            <note>트레이시 부인의 부유한 이모, 벌리-싱글턴에 거주</note>
+          </person>
+          <person xml:id="Victoria" role="historical" sex="F">
+            <persName xml:lang="en">Victoria</persName>
+            <idno type="wikidata">Q943</idno>
+            <note>영국 여왕, 비유적으로 언급됨</note>
+          </person>
+        </listPerson>
+      </particDesc>
+    </profileDesc>
+    <revisionDesc>
+      <change when="2026-10-13" who="#teiagent">Automatic TEI encoding generated; awaiting human review.</change>
+    </revisionDesc>
+  </teiHeader>
+  <standOff>
+    <listPlace>
+      <place xml:id="BurleighSingleton" type="city">
+        <placeName>Burleigh-Singleton</placeName>
+        <note>영국 남부 해안의 작은 휴양지</note>
+      </place>
+      <place xml:id="England" type="country">
+        <placeName>England</placeName>
+        <note>영국</note>
+      </place>
+      <place xml:id="Heights" type="natural">
+        <placeName>the Heights</placeName>
+        <note>벌리-싱글턴 근처의 언덕</note>
+      </place>
+      <place xml:id="Mullet" type="natural">
+        <placeName>the Mullet</placeName>
+        <note>바다로 흐르는 강</note>
+      </place>
+      <place xml:id="PactonPark" type="building">
+        <placeName>Pacton Park</placeName>
+        <note>벌리-싱글턴 근처의 공원</note>
+      </place>
+      <place xml:id="Eyemouth" type="city">
+        <placeName>Eyemouth</placeName>
+        <note>벌리-싱글턴 근처의 시장 도시</note>
+      </place>
+      <place xml:id="Oxton" type="city">
+        <placeName>Oxton</placeName>
+        <note>데번셔의 진흙으로 지은 마을</note>
+      </place>
+      <place xml:id="Devonshire" type="district">
+        <placeName>Devonshire</placeName>
+        <note>잉글랜드 남서부의 주</note>
+      </place>
+      <place xml:id="India" type="country">
+        <placeName>India</placeName>
+        <note>트레이시 장군이 복무한 나라</note>
+      </place>
+      <place xml:id="Madras" type="city">
+        <placeName>Madras</placeName>
+        <note>인도의 대통령령</note>
+      </place>
+      <place xml:id="PlymouthSound" type="natural">
+        <placeName>Plymouth Sound</placeName>
+        <note>트레이시 부인이 남편을 배웅한 항구</note>
+      </place>
+      <place xml:id="Albion" type="country">
+        <placeName>Albion</placeName>
+        <note>영국의 시적 명칭</note>
+      </place>
+    </listPlace>
+    <listOrg>
+      <org xml:id="HEICS" type="military">
+        <orgName>H.E.I.C.S.</orgName>
+        <note>영국 동인도 회사 군대</note>
+      </org>
+      <org xml:id="Hancocks" type="business">
+        <orgName>Hancock's</orgName>
+        <note>트레이시 부인의 수표를 지급한 은행</note>
+      </org>
+    </listOrg>
+  </standOff>
+  <text>
+    <body>
+      <div type="chapter" n="1">
+        <head>CHAPTER I.</head>
+        <p>PLACE: TIME: CIRCUMSTANCE.</p>
+        <p><placeName ref="#BurleighSingleton">Burleigh-Singleton</placeName> is a pleasant little watering-place on the southern coast of <placeName ref="#England">England</placeName>, entirely suitable for those who have small incomes and good consciences. The latter, to residents especially, are at least as indispensable as the former: seeing that, however just the reputation of their growing little town for superior cheapness in matters of meat and drink, its character in things regarding men and manners is quite as undeniable for pre-eminent dulness.</p>
+        <p>Not but that it has its varieties of scene, and more or less of circumstances too: there are, on one flank, the breezy <placeName ref="#Heights">Heights</placeName>, with flag-staff and panorama; on the other, broad and level water-meadows, skirted by the dark-flowing <placeName ref="#Mullet">Mullet</placeName>, running to the sea between its tortuous banks: for neighbourhood, <placeName ref="#PactonPark">Pacton Park</placeName> is one great attraction—the pretty market-town of <placeName ref="#Eyemouth">Eyemouth</placeName> another—the everlasting, never-tiring sea a third; and, at high-summer, when the <placeName ref="#Devonshire">Devonshire</placeName> lanes are not knee-deep in mire, the nevertheless immeasurably filthy, though picturesque, mud-built village of <placeName ref="#Oxton">Oxton</placeName>.</p>
+        <p>Then again (and really as I enumerate these multitudinous advantages, I begin to relent for having called it dull), you may pick up curious agate pebbles on the beach, as well as corallines and scarce sea-weeds, good for gumming on front-parlour windows; you may fish for whitings in the bay, and occasionally catch them; you may wade in huge caoutchouc boots among the muddy shallows of the <placeName ref="#Mullet">Mullet</placeName>, and shoot at cormorants and curlews; you may walk to satiety between high-banked and rather dirty cross-roads; and, if you will scramble up the hedge-row, may get now and then peeps of undulated country landscape.</p>
+        <p>Moreover, you have free liberty to drop in any where to "<foreign xml:lang="hi-Latn">tiffin</foreign>"—<placeName ref="#BurleighSingleton">Burleigh</placeName> being very Indianized, and a guest always welcome; indeed, so Indianized is it, so populous in jaundiced cheek and ailing livers, that you may openly assert, without fear of being misunderstood (if you wish to vary your common phrase of loyalty), that <persName ref="#Victoria">Victoria</persName> sits upon the "<foreign xml:lang="fa-Latn">musnud</foreign>" of <placeName ref="#England">Great Britain</placeName>; you may order curry in the smallest pot-house, and still be sure to get the rice well-cooked; you may call your house-maid "<foreign xml:lang="hi-Latn">ayah</foreign>," without risk of warning for impertinence; you may vent your wrath against indolent waiters in eloquence of "<foreign xml:lang="hi-Latn">jaa, soostee</foreign>;" and, finally, you may go to the library, and besides the advantage of the day-before-yesterday's <title>Times</title>, you may behold in bilious presence an affable, but authoritative, old gentleman, who introduces himself, "<said who="#TracyGeneral" direct="true" aloud="true">Sir, you see in me the hero of Puttymuddyfudgepoor.</said>"</p>
+        <p>You may even now see such an one, I say, and hear him too, if you will but go to <placeName ref="#BurleighSingleton">Burleigh</placeName>; seeing he has by this time over-lived the year or so whereof our tale discourses. He has, by dint of service, attained to the dignity of <orgName ref="#HEICS">General H.E.I.C.S.</orgName>, and—which he was still longer coming to—the wisdom of being a communicative creature; though possibly, by a natural rëaction, at present he carries anti-secresy a little too far, and verges on the gossiping extreme. But, at the time to which we must look back to commence this right-instructive story, <persName ref="#TracyGeneral">General Tracy</persName> was still drinking "Hodgson's Pale" in <placeName ref="#India">India</placeName>, was so taciturn as to be considered almost dumb, and had not yet lifted up his yellow visage upon <placeName ref="#Albion">Albion</placeName>'s white cliffs, nor taken up head-quarters in his final rest of <placeName ref="#BurleighSingleton">Burleigh-Singleton</placeName>.</p>
+        <p>Nevertheless, with reference to quartering at <placeName ref="#BurleighSingleton">Burleigh</placeName>, a certain long-neglected wife of his, <persName ref="#TracyJane">Mrs. Tracy</persName>, had; and that for the period of at least the twenty-one years preceding: how and wherefore I proceed to tell.</p>
+        <p>A common case and common fate was that of <persName ref="#TracyJane">Mrs. Tracy</persName>. She had married, both early and hastily, a gallant lieutenant, <persName ref="#TracyGeneral">John George Julian Tracy</persName>, to wit, the military germ of our future general; their courtship and acquaintance previous to matrimony extended over the not inconsiderable space of three whole weeks—commencing with a country ball; and after marriage, honey-moon inclusive, they lived the life of cooing doves for three whole months.</p>
+        <p>And now came the furlough's end: <persName ref="#TracyGeneral">Mr. Tracy</persName>, in his then habitual reserve (a quiet man was he), had concealed its existence altogether: and, for aught <persName ref="#TracyJane">Jane</persName> knew, the hearty invalid was to remain at home for ever: but months soon slip away; and so it came to pass, that on a certain next <date>Wednesday</date> he must be on his way back to the <placeName ref="#Madras">Presidency of Madras</placeName>, and—if she will not follow him—he must leave her.</p>
+        <p>However, there was a certain old relative, one <persName ref="#Green">Mrs. Green</persName>, a childless widow—rich, capricious, and infirm—whom <persName ref="#TracyJane">Jane Tracy</persName> did not wish to lose sight of: her money was well worth both watching and waiting for; and the captain, whom a lucky chance had now lifted out of the lieutenancy, was easily persuaded to forego the pleasure of his wife's company till the somewhat indefinite period of her old aunt's death.</p>
+        <p>How far sundry discoveries made in the unknown regions of each other's temper reconciled him to this retrograding bachelorship, and her to her widowhood-bewitched, I will not undertake to say: but I will hazard the remark, anti-poor-law though it seemeth, that the separation of man and wife, however convenient, lucrative, or even mutually pleasant, is a dereliction of duty, which always deserves, and generally meets, its proper and discriminative punishment. Had the young wife faithfully performed her Maker's bidding, and left all other ties unstrung to cleave unto her lord; had she considered a husband's true affections before all other wealth, and resolved to share his dangers, to solace his cares, to be his blessing through life, and his partner even unto death, rather than selfishly to seek her own comfort, and consult her own interest—the tale of crime and sadness, which it is my lot to tell, would never have had truth for its foundation.</p>
+        <p>Ill-matched for happiness though they were, however well-matched as to mutual merit, the common man of pleasure and the <persName ref="#TracyJane">frivolous woman of fashion</persName>, still the wisest way to fuse their minds to union, the likeliest receipt for moral good and social comfort, would have been this course of foreign scenes, of new faces, sprinkled with a seasoning of adventure, hardship, danger, in a distant land. Gradually would they have learned to bear and forbear; the petty quarrel would have been forgotten in the frequent kindness; the rougher edges of temper and opinion would insensibly have smoothed away; new circumstances would have brought out better feelings under happier skies; old acquaintances, false friends forgotten, would have neutralized old feuds: and, by long-living together, though it were perhaps amid various worries and many cares, they might still have come to a good old age with more than average happiness, and more than the common run of love. Patience in dutiful enduring brings a sure reward: and marriage, however irksome a constraint to the foolish and the gay, is still so wise an ordinance, that the most ill-assorted couple imaginable will unconsciously grow happy, if they only remain true to one another, and will learn the wisdom always to hope and often to forgive.</p>
+        <p>The <persName ref="#TracyGeneral">Tracys</persName>, however, overlooked all this, and mutual friends (those invariable foes to all that is generous and unworldly) smiled upon the prudence of their temporary separation. The <persName ref="#TracyGeneral">captain</persName> was to come home again on furlough in <date>five years</date> at furthest, even if the <persName ref="#Green">aunt</persName> held out so long; and this availed to keep his wife in the rear-guard; therefore, <persName ref="#TracyJane">Mrs. Tracy</persName> wiped her eyes, bade adieu to her retreating lord in <placeName ref="#PlymouthSound">Plymouth Sound</placeName>, and determined to abide, with other expectant dames and Asiatic invalided heroes, at <placeName ref="#BurleighSingleton">Burleigh-Singleton</placeName>, until she might go to him, or he return to her: for pleasant little <placeName ref="#BurleighSingleton">Burleigh</placeName>, besides its contiguity to arriving Indiamen, was advantageous as being the dwelling-place of aforesaid <persName ref="#Green">Mrs. Green</persName>;—that wealthy, widowed <persName ref="#Green">aunt</persName>, devoutly wished in heaven: and the <persName ref="#Green">considerate old soul</persName> had offered her designing niece a home with her till <persName ref="#TracyGeneral">Tracy</persName> could come back.</p>
+        <p>During the first year of absence, ship-letters and <placeName ref="#India">India</placeName>-letters arrived duteously in consecutive succession: but somehow or other, the regular post, in no long time afterwards, became unfaithful to its trust; and if <persName ref="#TracyJane">Mrs. Jane</persName> heard quarterly, which at any rate she did through the agent, when he remitted her allowance, she consoled herself as to the captain's well-being: in due course of things, even this became irregular; he was far up the country, hunting, fighting, surveying, and what not; and no wonder that letters, if written at all, which I rather doubt, got lost. Then there came a long period of positive and protracted silence—months of it—years of it; barring that her checks for cash were honoured still at <orgName ref="#Hancocks">Hancock's</orgName>, though they could tell her nothing of her lord; so that <persName ref="#TracyJane">Mrs. Tracy</persName> was at length seriously recommended by her friends to become a widow; she tried on the cap, and looked into many mirrors; but, after long inspection, decided upon still remaining a wife, because the weeds were so clearly unbecoming. Habit, meanwhile, and that still-existing old aunt, who seemed resolved to live to a hundred, kept her as before at <placeName ref="#BurleighSingleton">Burleigh</placeName>: and, seeing that a few months after the captain's departure she had presented the world, not to say her truant lord, with twins, she had always found something to do in the way of, what she considered, education, and other juvenile amusement: that is to say, when the gayeties of a circle of fifteen miles in radius left her any time to spare in such a process. The twins—a brace of boys—were born and bred at <placeName ref="#BurleighSingleton">Burleigh</placeName>, and had attained severally to twenty years of age, just before their father came home again as brevet-major-general. But both they, and that arrival, deserve special detail, each in its own chapter.</p>
+      </div>
+    </body>
+  </text>
+</TEI>

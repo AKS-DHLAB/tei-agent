@@ -1,0 +1,351 @@
+{
+ "file": "13_Choi Seo-hae_Nostalgia (Hyangsu).xml",
+ "chars": 4530,
+ "blocks": 55,
+ "genre": "prose_fiction",
+ "langs": [
+  "ko"
+ ],
+ "seconds": 62.9,
+ "usage": {
+  "calls": 10,
+  "prompt_tokens": 77173,
+  "completion_tokens": 18795,
+  "cached_tokens": 11648,
+  "est_cost_usd_peak": 0.0423
+ },
+ "text_identical": true,
+ "block_status": {
+  "tagged": 55
+ },
+ "valid": false,
+ "schema_errors": 2,
+ "dangling_refs": [],
+ "registry": {
+  "persons": 9,
+  "places": 8,
+  "orgs": 1
+ },
+ "stage1_scores": {
+  "persName": {
+   "gold": 28,
+   "pred": 36,
+   "exact_PRF": [
+    0.611,
+    0.786,
+    0.688
+   ],
+   "overlap_PRF": [
+    0.75,
+    0.964,
+    0.844
+   ]
+  },
+  "placeName": {
+   "gold": 11,
+   "pred": 23,
+   "exact_PRF": [
+    0.478,
+    1.0,
+    0.647
+   ],
+   "overlap_PRF": [
+    0.478,
+    1.0,
+    0.647
+   ]
+  },
+  "orgName": {
+   "gold": 1,
+   "pred": 1,
+   "exact_PRF": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "overlap_PRF": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "said": {
+   "gold": 24,
+   "pred": 24,
+   "exact_PRF": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "overlap_PRF": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "date": {
+   "gold": 16,
+   "pred": 13,
+   "exact_PRF": [
+    0.308,
+    0.25,
+    0.276
+   ],
+   "overlap_PRF": [
+    0.846,
+    0.688,
+    0.759
+   ]
+  },
+  "time": {
+   "gold": 8,
+   "pred": 1,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "measure": {
+   "gold": 0,
+   "pred": 0,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "foreign": {
+   "gold": 1,
+   "pred": 1,
+   "exact_PRF": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "overlap_PRF": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "rs": {
+   "gold": 123,
+   "pred": 54,
+   "exact_PRF": [
+    0.759,
+    0.333,
+    0.463
+   ],
+   "overlap_PRF": [
+    0.926,
+    0.407,
+    0.565
+   ]
+  }
+ },
+ "final_scores": {
+  "persName": {
+   "gold": 28,
+   "pred": 36,
+   "exact_PRF": [
+    0.611,
+    0.786,
+    0.688
+   ],
+   "overlap_PRF": [
+    0.75,
+    0.964,
+    0.844
+   ]
+  },
+  "placeName": {
+   "gold": 11,
+   "pred": 23,
+   "exact_PRF": [
+    0.478,
+    1.0,
+    0.647
+   ],
+   "overlap_PRF": [
+    0.478,
+    1.0,
+    0.647
+   ]
+  },
+  "orgName": {
+   "gold": 1,
+   "pred": 1,
+   "exact_PRF": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "overlap_PRF": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "said": {
+   "gold": 24,
+   "pred": 24,
+   "exact_PRF": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "overlap_PRF": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "date": {
+   "gold": 16,
+   "pred": 12,
+   "exact_PRF": [
+    0.333,
+    0.25,
+    0.286
+   ],
+   "overlap_PRF": [
+    0.917,
+    0.688,
+    0.786
+   ]
+  },
+  "time": {
+   "gold": 8,
+   "pred": 1,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "measure": {
+   "gold": 0,
+   "pred": 6,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "foreign": {
+   "gold": 1,
+   "pred": 1,
+   "exact_PRF": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "overlap_PRF": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "rs": {
+   "gold": 123,
+   "pred": 78,
+   "exact_PRF": [
+    0.769,
+    0.488,
+    0.597
+   ],
+   "overlap_PRF": [
+    0.91,
+    0.577,
+    0.706
+   ]
+  }
+ },
+ "who": {
+  "said_with_gold_who": 24,
+  "speaker_name_match": 13,
+  "acc": 0.542
+ },
+ "recommended": [
+  [
+   "rs",
+   1,
+   40
+  ],
+  [
+   "thought",
+   1,
+   12
+  ],
+  [
+   "floatingText",
+   1,
+   1
+  ],
+  [
+   "measure",
+   2,
+   8
+  ],
+  [
+   "time",
+   2,
+   6
+  ],
+  [
+   "milestones",
+   2,
+   6
+  ],
+  [
+   "letter_parts",
+   2,
+   2
+  ],
+  [
+   "term",
+   3,
+   5
+  ]
+ ],
+ "questions": [
+  "‘칠년 전’을 @when으로 ISO 날짜로 환산할 수 없어 cert=\"low\"로 두었는데, 기준 연도를 알 수 있는지 확인 부탁드립니다.",
+  "‘일구일구년’을 1911년으로 보아 @when=\"1911-03-25\"로 처리했는데, 작품 내 연도 표기가 맞는지 확인 부탁드립니다.",
+  "편지 날짜 ‘삼월 이십삼 일’의 연도를 1911년으로 추정하여 @when=\"1911-03-23\"으로 두었는데, 연도 확정이 가능한지 확인 부탁드립니다.",
+  "‘그놈들’을 순사 집단(#Police)으로 보아 persName으로 태깅했는데, 단순 지시대명사로 보아 태깅하지 않는 편이 나을까요?",
+  "‘순사놈들’을 persName으로 태깅했는데, 멸칭이 포함된 복수 표현은 rs로 처리하는 것이 더 적절할까요?",
+  "‘오늘 아침’을 date로 태깅했는데, time으로 처리하는 것이 더 적절할까요?",
+  "‘자네’를 화자(#Narrator)를 가리키는 인물 지시로 보아 <rs>로 묶는 것이 적절할까요, 아니면 단순 호칭으로 두는 편이 좋을까요?",
+  "‘오년 만에’를 <date>로 묶었는데, @when 없이 상대적 시간 표현으로 처리하는 것이 맞습니까?"
+ ],
+ "accepted": [
+  "rs",
+  "measure",
+  "time"
+ ],
+ "errors_sample": [
+  "Invalid attribute when for element date",
+  "Invalid attribute when for element date"
+ ]
+}

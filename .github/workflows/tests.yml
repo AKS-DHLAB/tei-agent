@@ -1,0 +1,15 @@
+name: tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -e ".[mcp]" pytest
+      - name: dist/TEI_Agent.html is up to date
+        run: |
+          python scripts/build_standalone.py
+          git diff --exit-code dist/TEI_Agent.html || { echo "dist/TEI_Agent.html is stale - run scripts/build_standalone.py and commit"; exit 1; }
+      - run: pytest -q

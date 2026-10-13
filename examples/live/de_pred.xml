@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://www.tei-c.org/Vault/P5/4.12.0/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="de">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title type="main" xml:lang="de">Amphitryon</title>
+        <author>
+          <persName xml:lang="de">Heinrich von Kleist</persName>
+        </author>
+        <respStmt xml:id="teiagent">
+          <resp>Automatic TEI encoding (LLM-assisted), subject to human review</resp>
+          <name>TEI-Agent 0.1.0 with DeepSeek-V4.1-Flash (API model deepseek-flash)</name>
+        </respStmt>
+      </titleStmt>
+      <extent>
+        <measure unit="chars" quantity="6629">6629 chars</measure>
+        <measure unit="words" quantity="1349">1349 words</measure>
+      </extent>
+      <publicationStmt>
+        <publisher>[발행처 미상]</publisher>
+        <date when="2026-10-13">2026-10-13</date>
+      </publicationStmt>
+      <sourceDesc>
+        <p>Born-digital transcription supplied by the user; source not yet described.</p>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p>Encoded according to the TEI P5 Guidelines 4.12.0 (tei_all) with LLM-assisted tagging and interactive human refinement.</p>
+      </projectDesc>
+      <editorialDecl>
+        <normalization>
+          <p>Original orthography and punctuation preserved; no silent normalisation.</p>
+        </normalization>
+        <quotation>
+          <p>Quotation marks retained in the text, outside &lt;said&gt;/&lt;q&gt;.</p>
+        </quotation>
+      </editorialDecl>
+      <tagsDecl>
+        <namespace name="http://www.tei-c.org/ns/1.0">
+          <tagUsage gi="l" occurs="176"/>
+          <tagUsage gi="sp" occurs="26"/>
+          <tagUsage gi="speaker" occurs="26"/>
+          <tagUsage gi="persName" occurs="13"/>
+          <tagUsage gi="stage" occurs="12"/>
+          <tagUsage gi="placeName" occurs="8"/>
+          <tagUsage gi="head" occurs="3"/>
+          <tagUsage gi="body" occurs="1"/>
+          <tagUsage gi="text" occurs="1"/>
+        </namespace>
+      </tagsDecl>
+      <appInfo>
+        <application ident="TEI-Agent" version="0.1.0" when="2026-10-13" xml:id="app-teiagent">
+          <label>TEI-Agent (LLM: DeepSeek-V4.1-Flash (API model deepseek-flash); schema: tei_all 4.12.0)</label>
+        </application>
+      </appInfo>
+    </encodingDesc>
+    <profileDesc>
+      <creation>
+        <date>1807</date>
+      </creation>
+      <langUsage>
+        <language ident="de" usage="100">독일어</language>
+      </langUsage>
+      <textClass>
+        <keywords scheme="#teiagent-genre">
+          <term>Drama</term>
+        </keywords>
+      </textClass>
+      <particDesc>
+        <listPerson>
+          <person xml:id="Sosias" role="speaker" sex="M">
+            <persName xml:lang="de">Sosias</persName>
+            <persName type="variant">mein Diener</persName>
+            <persName type="variant">Freund</persName>
+            <persName type="variant">Kauz</persName>
+            <persName type="variant">Schuft</persName>
+            <persName type="variant">Tölpel</persName>
+            <persName type="variant">Hanswurst</persName>
+            <note>Amphitryons Diener, der in Theben den Sieg verkünden soll</note>
+          </person>
+          <person xml:id="Merkur" role="speaker" sex="M">
+            <persName xml:lang="de">Merkur</persName>
+            <persName type="variant">Gott</persName>
+            <persName type="variant">Götter</persName>
+            <note>Gott, tritt in der Gestalt des Sosias auf</note>
+          </person>
+          <person xml:id="Amphitryon" role="protagonist" sex="M">
+            <persName xml:lang="de">Amphitryon</persName>
+            <persName type="variant">mein Gebieter</persName>
+            <persName type="variant">mein hoher Herr</persName>
+            <persName type="variant">Euer edler Gatte</persName>
+            <persName type="variant">Geliebter meiner Seel</persName>
+            <note>Alkmenes Gatte, siegreicher Feldherr</note>
+          </person>
+          <person xml:id="Alkmene" role="protagonist" sex="F">
+            <persName xml:lang="de">Alkmene</persName>
+            <persName type="variant">Alkmen'</persName>
+            <persName type="variant">Fürstin</persName>
+            <persName type="variant">Gebieterin</persName>
+            <persName type="variant">gnäd'ge Frau</persName>
+            <persName type="variant">Durchlauchtigste</persName>
+            <persName type="variant">Vortreffliche</persName>
+            <note>Amphitryons Gattin, wartet auf seine Rückkehr</note>
+          </person>
+          <person xml:id="Zeus" role="historical" sex="M">
+            <persName xml:lang="de">Zeus</persName>
+            <persName type="variant">Zeus der Olympische</persName>
+            <note>Gott, der in Amphitryons Gestalt zu Alkmene kommt</note>
+          </person>
+          <person xml:id="Labdakus" role="minor" sex="M">
+            <persName xml:lang="de">Labdakus</persName>
+            <note>Führer der Athener, im Kampf gefallen</note>
+          </person>
+          <person xml:id="Phoebus" role="historical" sex="M">
+            <persName xml:lang="de">Phöbus</persName>
+            <persName type="variant">lockre Phöbus</persName>
+            <note>Sonnengott, von Sosias spöttisch erwähnt</note>
+          </person>
+        </listPerson>
+      </particDesc>
+    </profileDesc>
+    <revisionDesc>
+      <change when="2026-10-13" who="#teiagent">Automatic TEI encoding generated; awaiting human review.</change>
+    </revisionDesc>
+  </teiHeader>
+  <standOff>
+    <listPlace>
+      <place xml:id="Theben" type="city">
+        <placeName>Theben</placeName>
+        <note>Stadt, in der die Handlung spielt</note>
+      </place>
+      <place xml:id="Pharissa" type="city">
+        <placeName>Pharissa</placeName>
+        <note>Stadt, Schauplatz der Schlacht</note>
+      </place>
+      <place xml:id="Orkus" type="fictional">
+        <placeName>Orkus</placeName>
+        <note>Unterwelt</note>
+      </place>
+      <place xml:id="Styx" type="fictional">
+        <placeName>Styx</placeName>
+        <note>Fluss der Unterwelt, bei dem Merkur schwört</note>
+      </place>
+    </listPlace>
+  </standOff>
+  <text>
+    <body>
+      <div type="act" n="1">
+        <head>Erster Akt</head>
+        <stage type="setting">Es ist Nacht.</stage>
+        <div type="scene" n="1">
+          <head>Erste Szene</head>
+          <sp who="#Sosias"><speaker>Sosias</speaker><stage type="entrance">tritt mit einer Laterne auf.</stage><l>Heda! Wer schleicht da? Holla! – Wenn der Tag</l><l>Anbräche, wär mir's lieb; die Nacht ist – Was?</l><l>Gut Freund, ihr Herrn! Wir gehen eine Straße –</l><l>Ihr habt den ehrlichsten Geselln getroffen,</l><l>Bei meiner Treu, auf den die Sonne scheint –</l><l>Vielmehr der Mond jetzt, wollt ich sagen –</l><l>Spitzbuben sind's entweder, feige Schufte,</l><l>Die nicht das Herz, mich anzugreifen, haben:</l><l>Oder der Wind hat durch das Laub gerasselt.</l><l>Jedweder Schall hier heult in dem Gebirge. –</l><l>Vorsichtig! Langsam! – Aber wenn ich jetzt</l><l>Nicht bald mit meinem Hut an <placeName ref="#Theben">Theben</placeName> stoße</l><l>So will ich in den finstern <placeName ref="#Orkus">Orkus</placeName> fahren.</l><l>Ei, hol's der Henker! ob ich mutig bin,</l><l>Ein Mann von Herz; das hätte mein Gebieter</l><l>Auf anderm Wege auch erproben können.</l><l>Ruhm krönt ihn, spricht die ganze Welt, und Ehre,</l><l>Doch in der Mitternacht mich fortzuschicken,</l><l>Ist nicht viel besser, als ein schlechter Streich.</l><l>Ein wenig Rücksicht wär, und Nächstenliebe,</l><l>So lieb mir, als der Keil von Tugenden,</l><l>Mit welchem er des Feindes Reihen sprengt.</l><l>Sosias, sprach er, rüste dich mein Diener,</l><l>Du sollst in <placeName ref="#Theben">Theben</placeName> meinen Sieg verkünden</l><l>Und meine zärtliche Gebieterin</l><l>Von meiner nahen Ankunft unterrichten.</l><l>Doch hätte das nicht Zeit gehabt bis morgen,</l><l>Will ich ein Pferd sein, ein gesatteltes!</l><l>Doch sieh! Da zeigt sich, denk ich, unser Haus!</l><l>Triumph, du bist nunmehr am Ziel, Sosias,</l><l>Und allen Feinden soll vergeben sein.</l><l>Jetzt, Freund, mußt du an deinen Auftrag denken;</l><l>Man wird dich feierlich zur Fürstin führen,</l><l><persName ref="#Alkmene">Alkmen'</persName>, und den Bericht bist du ihr dann,</l><l>Vollständig und mit Rednerkunst gesetzt</l><l>Des Treffens schuldig, das <persName ref="#Amphitryon">Amphitryon</persName></l><l>Siegreich fürs Vaterland geschlagen hat.</l><l>– Doch wie zum Teufel mach ich das, da ich</l><l>Dabei nicht war? Verwünscht. Ich wollt: ich hätte</l><l>Zuweilen aus dem Zelt geguckt,</l><l>Als beide Heer im Handgemenge waren.</l><l>Ei was! Vom Hauen sprech ich dreist und Schießen,</l><l>Und werde schlechter nicht bestehn, als andre,</l><l>Die auch den Pfeil noch pfeifen nicht gehört. –</l><l>Doch wär es gut, wenn du die Rolle übtest?</l><l>Gut! Gut bemerkt, Sosias! Prüfe dich.</l><l>Hier soll der Audienzsaal sein, und diese</l><l>Latern <persName ref="#Alkmene">Alkmene</persName>, die mich auf dem Thron erwartet.</l><stage type="business">Er setzt die Laterne auf den Boden.</stage><l>Durchlauchtigste! mich schickt <persName ref="#Amphitryon">Amphitryon</persName>,</l><l>Mein hoher Herr und Euer edler Gatte,</l><l>Von seinem Siege über die Athener</l><l>Die frohe Zeitung Euch zu überbringen.</l><l>– Ein guter Anfang! – »Ach, wahrhaftig, liebster</l><l>Sosias, meine Freude mäßg' ich nicht,</l><l>Da ich dich wiedersehe.« – Diese Güte,</l><l>Vortreffliche, beschämt mich, wenn sie stolz gleich</l><l>Gewiß jedweden andern machen würde.</l><l>– Sieh! das ist auch nicht übel! – »Und dem teuren</l><l>Geliebten meiner Seel <persName ref="#Amphitryon">Amphitryon</persName>,</l><l>Wie geht's ihm?« – Gnäd'ge Frau, das faß ich kurz:</l><l>Wie einem Mann von Herzen auf dem Feld des Ruhms.</l><l>– Ein Blitzkerl! Seht die Suade! – »Wann denn kommt er?«</l><l>Gewiß nicht später, als sein Amt verstattet,</l><l>Wenngleich vielleicht so früh nicht, als er wünscht.</l><l>– Potz, alle Welt! – »Und hat er sonst dir nichts</l><l>Für mich gesagt, Sosias?« – Er sagt wenig,</l><l>Tut viel, und es erbebt die Welt vor seinem Namen.</l><l>– Daß mich die Pest! Wo kömmt der Witz mir her?</l><l>»Sie weichen also, sagst du, die Athener?«</l><l>– Sie weichen, tot ist <persName ref="#Labdakus">Labdakus</persName>, ihr Führer,</l><l>Erstürmt <placeName ref="#Pharissa">Pharissa</placeName>, und wo Berge sind,</l><l>Da hallen sie von unserm Siegsgeschrei. –</l><l>»O teuerster Sosias! Sieh, das mußt du</l><l>Umständlich mir, auf jeden Zug, erzählen.«</l><l>– Ich bin zu Euern Diensten, gnäd'ge Frau.</l><l>Denn in der Tat kann ich von diesem Siege</l><l>Vollständ'ge Auskunft, schmeichl ich mir, erteilen:</l><l>Stellt Euch, wenn Ihr die Güte haben wollt,</l><l>Auf dieser Seite hier –</l><stage type="business">Er bezeichnet die Örter auf seiner Hand –.</stage><l><placeName ref="#Pharissa">Pharissa</placeName> vor</l><l>– Was eine Stadt ist, wie Ihr wissen werdet,</l><l>So groß im Umfang, praeter propter,</l><l>Um nicht zu übertreiben, wenn nicht größer,</l><l>Als <placeName ref="#Theben">Theben</placeName>. Hier geht der Fluß. Die Unsrigen</l><l>In Schlachtordnung auf einem Hügel hier;</l><l>Und dort im Tale haufenweis der Feind.</l><l>Nachdem er ein Gelübd zum Himmel jetzt gesendet,</l><l>Daß Euch der Wolkenkreis erzitterte,</l><l>Stürzt, die Befehle treffend rings gegeben,</l><l>Er gleich den Strömen brausend auf uns ein.</l><l>Wir aber, minder tapfer nicht, wir zeigten</l><l>Den Rückweg ihm, – und Ihr sollt gleich sehn, wie?</l><l>Zuerst begegnet' er dem Vortrab hier;</l><l>Der wich. Dann stieß er auf die Bogenschützen dort;</l><l>Die zogen sich zurück. Jetzt dreist gemacht, rückt er</l><l>Den Schleudrern auf den Leib; die räumten ihm das Feld</l><l>Und als verwegen jetzt dem Hauptkorps er sich nahte,</l><l>Stürzt dies – halt! Mit dem Hauptkorps ist's nicht richtig.</l><l>Ich höre ein Geräusch dort, wie mir deucht.</l></sp>
+        </div>
+        <div type="scene" n="2">
+          <head>Zweite Szene</head>
+          <stage type="entrance">Merkur tritt in der Gestalt des Sosias aus Amphitryons Haus.</stage><sp who="#Sosias"><speaker>Sosias.</speaker></sp>
+          <sp who="#Merkur"><speaker>Merkur</speaker><stage type="delivery">für sich.</stage><l>Wenn ich den ungerufnen Schlingel dort</l><l>Beizeiten nicht von diesem Haus entferne,</l><l>So steht, beim <placeName ref="#Styx">Styx</placeName>, das Glück mir auf dem Spiel,</l><l>Das in <persName ref="#Alkmene">Alkmenens</persName> Armen zu genießen,</l><l>Heut in der Truggestalt <persName ref="#Amphitryon">Amphitryons</persName></l><l><persName ref="#Zeus">Zeus der Olympische</persName>, zur Erde stieg.</l></sp>
+          <sp who="#Sosias"><speaker>Sosias</speaker><stage type="delivery">ohne den <persName ref="#Merkur">Merkur</persName> zu sehn.</stage><l>Es ist zwar nichts und meine Furcht verschwindet,</l><l>Doch um den Abenteuern auszuweichen,</l><l>Will ich mich vollends jetzt zu Hause machen,</l><l>Und meines Auftrags mich entledigen.</l></sp>
+          <sp who="#Merkur"><speaker>Merkur</speaker><stage type="delivery">für sich.</stage><l>Du überwindest den <persName ref="#Merkur">Merkur</persName>, Freund, oder</l><l>Dich werd ich davon abzuhalten wissen.</l></sp>
+          <sp who="#Sosias"><speaker>Sosias.</speaker><l>Doch diese Nacht ist von endloser Länge.</l><l>Wenn ich fünf Stunden unterwegs nicht bin,</l><l>Fünf Stunden nach der Sonnenuhr von <placeName ref="#Theben">Theben</placeName>,</l><l>Will ich stückweise sie vom Turme schießen.</l><l>Entweder hat in Trunkenheit des Siegs</l><l>Mein Herr den Abend für den Morgen angesehn,</l><l>Oder der lockre <persName ref="#Phoebus">Phöbus</persName> schlummert noch,</l><l>Weil er zu tief ins Fläschchen gestern guckte.</l></sp>
+          <sp who="#Merkur"><speaker>Merkur.</speaker><l>Mit welcher Unehrbietigkeit der Schuft</l><l>Dort von den Göttern spricht. Geduld ein wenig;</l><l>Hier dieser Arm bald wird Respekt ihm lehren.</l></sp>
+          <sp who="#Sosias"><speaker>Sosias</speaker><stage type="business">erblickt den <persName ref="#Merkur">Merkur</persName>.</stage><l>Ach bei den Göttern der Nacht! Ich bin verloren.</l><l>Da schleicht ein Strauchdieb um das Haus, den ich</l><l>Früh oder spät am Galgen sehen werde.</l><l>– Dreist muß ich tun, und keck und zuversichtlich.</l><stage type="business">Er pfeift.</stage></sp>
+          <sp who="#Merkur"><speaker>Merkur</speaker><stage type="delivery">laut.</stage><l>Wer denn ist jener Tölpel dort, der sich</l><l>Die Freiheit nimmt, als wär er hier zu Hause,</l><l>Mit Pfeifen mir die Ohren vollzuleiern?</l><l>Soll hier mein Stock vielleicht ihm dazu tanzen?</l></sp>
+          <sp who="#Sosias"><speaker>Sosias.</speaker><l>– Ein Freund nicht scheint er der Musik zu sein.</l></sp>
+          <sp who="#Merkur"><speaker>Merkur.</speaker><l>Seit der vergangnen Woche fand ich keinen,</l><l>Dem ich die Knochen hätte brechen können.</l><l>Mein Arm wird steif, empfind ich, in der Ruhe,</l><l>Und einen Buckel von des deinen Breite,</l><l>Ihn such ich just, mich wieder einzuüben.</l></sp>
+          <sp who="#Sosias"><speaker>Sosias.</speaker><l>Wer, Teufel, hat den Kerl mir dort geboren?</l><l>Von Todesschrecken fühl ich mich ergriffen,</l><l>Die mir den Atem stocken machen.</l><l>Hätt ihn die Hölle ausgeworfen,</l><l>Es könnt entgeisternder mir nicht sein Anblick sein.</l><l>– Jedoch vielleicht geht's dem Hanswurst wie mir,</l><l>Und er versucht den Eisenfresser bloß,</l><l>Um mich ins Bockshorn schüchternd einzujagen.</l><l>Halt, Kauz, das kann ich auch. Und überdies,</l><l>Ich bin allein, er auch; zwei Fäuste hab ich,</l><l>Doch er nicht mehr; und will das Glück nicht wohl mir,</l><l>Bleibt mir ein sichrer Rückzug dort – Marsch also!</l></sp>
+          <sp who="#Merkur"><speaker>Merkur</speaker><stage type="business">vertritt ihm den Weg.</stage><l>Halt dort! Wer geht dort?</l></sp>
+          <sp who="#Sosias"><speaker>Sosias.</speaker><l>Ich.</l></sp>
+          <sp who="#Merkur"><speaker>Merkur.</speaker><l>Was für ein Ich?</l></sp>
+          <sp who="#Sosias"><speaker>Sosias.</speaker><l>Meins mit Verlaub. Und meines, denk ich, geht</l><l>Hier unverzollt gleich andern. Mut Sosias!</l></sp>
+          <sp who="#Merkur"><speaker>Merkur.</speaker><l>Halt! mit so leichter Zech entkommst du nicht.</l><l>Von welchem Stand bist du?</l></sp>
+          <sp who="#Sosias"><speaker>Sosias.</speaker><l>Von welchem Stande?</l><l>Von einem auf zwei Füßen, wie Ihr seht.</l></sp>
+          <sp who="#Merkur"><speaker>Merkur.</speaker><l>Ob Herr du bist, ob Diener, will ich wissen?</l></sp>
+          <sp who="#Sosias"><speaker>Sosias.</speaker><l>Nachdem Ihr so mich, oder so betrachtet,</l><l>Bin ich ein Herr, bin ich ein Dienersmann.</l></sp>
+          <sp who="#Merkur"><speaker>Merkur.</speaker><l>Gut. Du mißfällst mir.</l></sp>
+          <sp who="#Sosias"><speaker>Sosias.</speaker><l>Ei das tut mir leid.</l></sp>
+          <sp who="#Merkur"><speaker>Merkur.</speaker><l>Mit einem Wort, Verräter, will ich wissen,</l><l>Nichtswürd'ger Gassentreter, Eckenwächter,</l><l>Wer du magst sein, woher du gehst, wohin,</l><l>Und was du hier herum zu zaudern hast?</l></sp>
+          <sp who="#Sosias"><speaker>Sosias.</speaker><l>Darauf kann ich Euch nichts zur Antwort geben</l><l>Als dies: ich bin ein Mensch, dort komm ich her,</l><l>Da geh ich hin, und habe jetzt was vor,</l><l>Das anfängt, Langeweile mir zu machen.</l></sp>
+          <sp who="#Merkur"><speaker>Merkur.</speaker><l>Ich seh dich witzig, und du bist im Zuge,</l><l>Mich kurzhin abzufertigen. Mir aber kommt</l><l>Die Lust an, die Bekanntschaft fortzusetzen,</l><l>Und die Verwicklung einzuleiten, werd ich</l><l>Mit dieser Hand hier hinters Ohr dir schlagen.</l></sp>
+          <sp who="#Sosias"><speaker>Sosias.</speaker><l>Mir?</l></sp>
+        </div>
+      </div>
+    </body>
+  </text>
+</TEI>

@@ -1,0 +1,348 @@
+{
+ "file": "18_Bang Jeong-hwan_For Our Friends.xml",
+ "chars": 6593,
+ "blocks": 101,
+ "genre": "prose_fiction",
+ "langs": [
+  "ko"
+ ],
+ "seconds": 62.9,
+ "usage": {
+  "calls": 12,
+  "prompt_tokens": 101413,
+  "completion_tokens": 26114,
+  "cached_tokens": 28544,
+  "est_cost_usd_peak": 0.0534
+ },
+ "text_identical": true,
+ "block_status": {
+  "tagged": 101
+ },
+ "valid": true,
+ "schema_errors": 0,
+ "dangling_refs": [],
+ "registry": {
+  "persons": 11,
+  "places": 7,
+  "orgs": 2
+ },
+ "stage1_scores": {
+  "persName": {
+   "gold": 81,
+   "pred": 91,
+   "exact_PRF": [
+    0.626,
+    0.704,
+    0.663
+   ],
+   "overlap_PRF": [
+    0.857,
+    0.963,
+    0.907
+   ]
+  },
+  "placeName": {
+   "gold": 14,
+   "pred": 40,
+   "exact_PRF": [
+    0.25,
+    0.714,
+    0.37
+   ],
+   "overlap_PRF": [
+    0.25,
+    0.714,
+    0.37
+   ]
+  },
+  "orgName": {
+   "gold": 0,
+   "pred": 7,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "said": {
+   "gold": 48,
+   "pred": 43,
+   "exact_PRF": [
+    1.0,
+    0.896,
+    0.945
+   ],
+   "overlap_PRF": [
+    1.0,
+    0.896,
+    0.945
+   ]
+  },
+  "date": {
+   "gold": 12,
+   "pred": 13,
+   "exact_PRF": [
+    0.308,
+    0.333,
+    0.32
+   ],
+   "overlap_PRF": [
+    0.308,
+    0.333,
+    0.32
+   ]
+  },
+  "time": {
+   "gold": 10,
+   "pred": 0,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "measure": {
+   "gold": 4,
+   "pred": 0,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "foreign": {
+   "gold": 1,
+   "pred": 1,
+   "exact_PRF": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "overlap_PRF": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "rs": {
+   "gold": 84,
+   "pred": 34,
+   "exact_PRF": [
+    0.176,
+    0.071,
+    0.102
+   ],
+   "overlap_PRF": [
+    0.382,
+    0.155,
+    0.22
+   ]
+  }
+ },
+ "final_scores": {
+  "persName": {
+   "gold": 81,
+   "pred": 91,
+   "exact_PRF": [
+    0.626,
+    0.704,
+    0.663
+   ],
+   "overlap_PRF": [
+    0.857,
+    0.963,
+    0.907
+   ]
+  },
+  "placeName": {
+   "gold": 14,
+   "pred": 40,
+   "exact_PRF": [
+    0.25,
+    0.714,
+    0.37
+   ],
+   "overlap_PRF": [
+    0.25,
+    0.714,
+    0.37
+   ]
+  },
+  "orgName": {
+   "gold": 0,
+   "pred": 7,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "said": {
+   "gold": 48,
+   "pred": 43,
+   "exact_PRF": [
+    1.0,
+    0.896,
+    0.945
+   ],
+   "overlap_PRF": [
+    1.0,
+    0.896,
+    0.945
+   ]
+  },
+  "date": {
+   "gold": 12,
+   "pred": 13,
+   "exact_PRF": [
+    0.385,
+    0.417,
+    0.4
+   ],
+   "overlap_PRF": [
+    0.385,
+    0.417,
+    0.4
+   ]
+  },
+  "time": {
+   "gold": 10,
+   "pred": 9,
+   "exact_PRF": [
+    0.444,
+    0.4,
+    0.421
+   ],
+   "overlap_PRF": [
+    0.667,
+    0.6,
+    0.632
+   ]
+  },
+  "measure": {
+   "gold": 4,
+   "pred": 10,
+   "exact_PRF": [
+    0.4,
+    1.0,
+    0.571
+   ],
+   "overlap_PRF": [
+    0.4,
+    1.0,
+    0.571
+   ]
+  },
+  "foreign": {
+   "gold": 1,
+   "pred": 1,
+   "exact_PRF": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "overlap_PRF": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "rs": {
+   "gold": 84,
+   "pred": 41,
+   "exact_PRF": [
+    0.268,
+    0.131,
+    0.176
+   ],
+   "overlap_PRF": [
+    0.488,
+    0.238,
+    0.32
+   ]
+  }
+ },
+ "who": {
+  "said_with_gold_who": 43,
+  "speaker_name_match": 35,
+  "acc": 0.814
+ },
+ "recommended": [
+  [
+   "time",
+   1,
+   12
+  ],
+  [
+   "measure",
+   1,
+   6
+  ],
+  [
+   "thought",
+   1,
+   4
+  ],
+  [
+   "q",
+   2,
+   4
+  ],
+  [
+   "milestones",
+   2,
+   4
+  ],
+  [
+   "floatingText",
+   2,
+   1
+  ],
+  [
+   "gap",
+   2,
+   1
+  ],
+  [
+   "roleName",
+   3,
+   6
+  ]
+ ],
+ "questions": [
+  "'새로'는 시간 표현이 아니라 부사인데, date로 태깅하는 것이 적절한가요?",
+  "'새로'를 date로 태깅하는 것이 맞는지 확인 부탁드립니다.",
+  "'새로 난 가게'의 '새로'를 date로 볼 수 있는지 궁금합니다.",
+  "‘시골’을 등록된 장소로 볼지, 일반 명사로 볼지 확인 부탁드립니다.",
+  "‘큰 가게’가 #BIG_SHOP을 가리키는지 확인 부탁드립니다.",
+  "‘새로 난 가게’가 #BIG_SHOP을 가리키는지 확인 부탁드립니다.",
+  "‘새 가게’가 #BIG_SHOP을 가리키는지 확인 부탁드립니다.",
+  "이 대답의 화자가 명환이 어머니인지, 아니면 다른 동네 사람인지 확인 부탁드립니다."
+ ],
+ "accepted": [
+  "rs",
+  "measure",
+  "time"
+ ],
+ "errors_sample": []
+}

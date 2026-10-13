@@ -1,0 +1,343 @@
+{
+ "file": "22_Kim Nam-cheon_Water (Mul).xml",
+ "chars": 7835,
+ "blocks": 105,
+ "genre": "prose_fiction",
+ "langs": [
+  "ko"
+ ],
+ "seconds": 73.2,
+ "usage": {
+  "calls": 14,
+  "prompt_tokens": 114846,
+  "completion_tokens": 27765,
+  "cached_tokens": 43136,
+  "est_cost_usd_peak": 0.0551
+ },
+ "text_identical": true,
+ "block_status": {
+  "tagged": 105
+ },
+ "valid": true,
+ "schema_errors": 0,
+ "dangling_refs": [],
+ "registry": {
+  "persons": 8,
+  "places": 6,
+  "orgs": 0
+ },
+ "stage1_scores": {
+  "persName": {
+   "gold": 55,
+   "pred": 47,
+   "exact_PRF": [
+    0.511,
+    0.436,
+    0.471
+   ],
+   "overlap_PRF": [
+    0.511,
+    0.436,
+    0.471
+   ]
+  },
+  "placeName": {
+   "gold": 8,
+   "pred": 13,
+   "exact_PRF": [
+    0.077,
+    0.125,
+    0.095
+   ],
+   "overlap_PRF": [
+    0.077,
+    0.125,
+    0.095
+   ]
+  },
+  "orgName": {
+   "gold": 0,
+   "pred": 0,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "said": {
+   "gold": 32,
+   "pred": 27,
+   "exact_PRF": [
+    1.0,
+    0.844,
+    0.915
+   ],
+   "overlap_PRF": [
+    1.0,
+    0.844,
+    0.915
+   ]
+  },
+  "date": {
+   "gold": 2,
+   "pred": 17,
+   "exact_PRF": [
+    0.059,
+    0.5,
+    0.105
+   ],
+   "overlap_PRF": [
+    0.118,
+    1.0,
+    0.211
+   ]
+  },
+  "time": {
+   "gold": 1,
+   "pred": 0,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "measure": {
+   "gold": 14,
+   "pred": 1,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "foreign": {
+   "gold": 11,
+   "pred": 9,
+   "exact_PRF": [
+    0.778,
+    0.636,
+    0.7
+   ],
+   "overlap_PRF": [
+    0.889,
+    0.727,
+    0.8
+   ]
+  },
+  "rs": {
+   "gold": 70,
+   "pred": 0,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  }
+ },
+ "final_scores": {
+  "persName": {
+   "gold": 55,
+   "pred": 32,
+   "exact_PRF": [
+    0.438,
+    0.255,
+    0.322
+   ],
+   "overlap_PRF": [
+    0.438,
+    0.255,
+    0.322
+   ]
+  },
+  "placeName": {
+   "gold": 8,
+   "pred": 13,
+   "exact_PRF": [
+    0.077,
+    0.125,
+    0.095
+   ],
+   "overlap_PRF": [
+    0.077,
+    0.125,
+    0.095
+   ]
+  },
+  "orgName": {
+   "gold": 0,
+   "pred": 0,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "said": {
+   "gold": 32,
+   "pred": 27,
+   "exact_PRF": [
+    1.0,
+    0.844,
+    0.915
+   ],
+   "overlap_PRF": [
+    1.0,
+    0.844,
+    0.915
+   ]
+  },
+  "date": {
+   "gold": 2,
+   "pred": 16,
+   "exact_PRF": [
+    0.062,
+    0.5,
+    0.111
+   ],
+   "overlap_PRF": [
+    0.125,
+    1.0,
+    0.222
+   ]
+  },
+  "time": {
+   "gold": 1,
+   "pred": 2,
+   "exact_PRF": [
+    0.5,
+    1.0,
+    0.667
+   ],
+   "overlap_PRF": [
+    0.5,
+    1.0,
+    0.667
+   ]
+  },
+  "measure": {
+   "gold": 14,
+   "pred": 17,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "foreign": {
+   "gold": 11,
+   "pred": 9,
+   "exact_PRF": [
+    0.778,
+    0.636,
+    0.7
+   ],
+   "overlap_PRF": [
+    0.889,
+    0.727,
+    0.8
+   ]
+  },
+  "rs": {
+   "gold": 70,
+   "pred": 61,
+   "exact_PRF": [
+    0.328,
+    0.286,
+    0.305
+   ],
+   "overlap_PRF": [
+    0.344,
+    0.3,
+    0.321
+   ]
+  }
+ },
+ "who": {
+  "said_with_gold_who": 27,
+  "speaker_name_match": 11,
+  "acc": 0.407
+ },
+ "recommended": [
+  [
+   "rs",
+   1,
+   60
+  ],
+  [
+   "measure",
+   1,
+   25
+  ],
+  [
+   "time",
+   1,
+   15
+  ],
+  [
+   "thought",
+   1,
+   12
+  ],
+  [
+   "term",
+   2,
+   8
+  ],
+  [
+   "soCalled",
+   2,
+   6
+  ],
+  [
+   "title",
+   2,
+   2
+  ]
+ ],
+ "questions": [
+  "‘영하 십오륙도를 상하하는 추운 동지 섣달’을 하나의 date로 묶었는데, 온도 표현과 절기 표현을 분리해야 할까요?",
+  "‘열세 사람’은 인원수인데 date로 태깅하는 것이 적절한가요, 아니면 measure로 해야 할까요?",
+  "‘구십도’는 온도(화씨)로 보이는데 date로 태깅하는 것이 맞나요?",
+  "중괄호로 묶인 서명을 lzh foreign으로 처리했는데, 서명 태그(title)를 쓰는 것이 더 적절할까요?",
+  "일본어 발음을 한글로 적은 부분을 <foreign xml:lang=\"ja\">로 표시하고, 괄호 안 한국어 번역은 그대로 두었는데, 일본어 원문(漢字)을 <foreign> 안에 보충해도 되는지 확인 부탁드립니다.",
+  "이 발화의 화자가 명확하지 않아 #narrator로 지정했는데, 다른 인물(예: 물 담당)일 가능성이 있는지 검토 부탁드립니다.",
+  "활자를 하나씩 읽는 장면으로 보아 <said>로 처리했는데, 내적 독백이나 낭독으로 보아 <q> 또는 다른 요소가 더 적절한지 확인 부탁드립니다.",
+  "이 발화의 화자를 특정할 수 없어 @who를 붙이지 않았습니다. 함경도 친구로 보아도 될까요?"
+ ],
+ "accepted": [
+  "rs",
+  "measure",
+  "time"
+ ],
+ "errors_sample": []
+}

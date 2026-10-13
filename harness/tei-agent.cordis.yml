@@ -1,0 +1,22 @@
+# DeepSeek Harness (dsh) overlay: mounts TEI Agent as an MCP stdio server.
+# Format follows apps/cli/config/examples/mcp-memory/*.cordis.yml in deepseek-ai/deepseek-harness
+# (checked at commit d7432673, 2026-10-09). The harness is a developer preview — pin your dsh version.
+#
+#   pip install -e ".[mcp]"          # in the tei-agent folder (provides the `tei-agent` command)
+#   dsh web --patch "$PWD/harness/tei-agent.cordis.yml"
+#
+# Tools then appear to the model as mcp__tei_agent__tei_new_session, mcp__tei_agent__tei_tag, …
+- insert:
+    - id: tei-agent-mcp
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: tei_agent
+        transport: stdio
+        command: tei-agent
+        args: ['mcp']
+        cwd: !!js process.cwd()
+        toolCallTimeoutMs: 900000   # full-document tagging can take minutes
+        env:
+          # dsh scrubs ambient variables whose names contain KEY/TOKEN/SECRET before launching
+          # an MCP child, so the DeepSeek key must be passed explicitly:
+          DEEPSEEK_API_KEY: !!js process.env.DEEPSEEK_API_KEY

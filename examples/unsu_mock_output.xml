@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://www.tei-c.org/Vault/P5/4.12.0/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="ko">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title type="main" xml:lang="ko">운수 좋은 날</title>
+        <author>
+          <persName xml:lang="ko">현진건</persName>
+        </author>
+        <respStmt xml:id="teiagent">
+          <resp>Automatic TEI encoding (LLM-assisted), subject to human review</resp>
+          <name>TEI-Agent 0.1.0 with deepseek-flash</name>
+        </respStmt>
+      </titleStmt>
+      <extent>
+        <measure unit="chars" quantity="261">261 chars</measure>
+        <measure unit="words" quantity="84">84 words</measure>
+      </extent>
+      <publicationStmt>
+        <publisher>[발행처 미상]</publisher>
+        <date when="2026-10-13">2026-10-13</date>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</licence>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <bibl type="originalSource">
+          <title level="j">개벽</title>
+          <date when="1924-06">1924-06</date>
+        </bibl>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p>Encoded according to the TEI P5 Guidelines 4.12.0 (tei_all) with LLM-assisted tagging and interactive human refinement.</p>
+      </projectDesc>
+      <editorialDecl>
+        <normalization>
+          <p>Original orthography and punctuation preserved; no silent normalisation.</p>
+        </normalization>
+        <quotation>
+          <p>Quotation marks retained in the text, outside &lt;said&gt;/&lt;q&gt;.</p>
+        </quotation>
+      </editorialDecl>
+      <tagsDecl>
+        <namespace name="http://www.tei-c.org/ns/1.0">
+          <tagUsage gi="p" occurs="6"/>
+          <tagUsage gi="persName" occurs="2"/>
+          <tagUsage gi="placeName" occurs="2"/>
+          <tagUsage gi="measure" occurs="2"/>
+          <tagUsage gi="head" occurs="1"/>
+          <tagUsage gi="orgName" occurs="1"/>
+          <tagUsage gi="foreign" occurs="1"/>
+          <tagUsage gi="said" occurs="1"/>
+          <tagUsage gi="rs" occurs="1"/>
+          <tagUsage gi="body" occurs="1"/>
+          <tagUsage gi="text" occurs="1"/>
+        </namespace>
+      </tagsDecl>
+      <appInfo>
+        <application ident="TEI-Agent" version="0.1.0" when="2026-10-13" xml:id="app-teiagent">
+          <label>TEI-Agent (LLM: deepseek-flash; schema: tei_all 4.12.0)</label>
+        </application>
+      </appInfo>
+    </encodingDesc>
+    <profileDesc>
+      <creation>
+        <date when="1924">1924</date>
+      </creation>
+      <langUsage>
+        <language ident="ko" usage="97">한국어</language>
+        <language ident="ko-Hani" usage="3">한자</language>
+      </langUsage>
+      <textClass>
+        <keywords scheme="#teiagent-genre">
+          <term>Prose fiction</term>
+        </keywords>
+      </textClass>
+      <particDesc>
+        <listPerson>
+          <person xml:id="KCJ" role="protagonist" sex="M">
+            <persName xml:lang="ko">김첨지</persName>
+            <persName type="variant">인력거꾼</persName>
+          </person>
+          <person xml:id="STU">
+            <persName xml:lang="ko">학생</persName>
+          </person>
+        </listPerson>
+      </particDesc>
+    </profileDesc>
+    <revisionDesc>
+      <change when="2026-10-13" who="#teiagent">Automatic TEI encoding generated; awaiting human review.</change>
+    </revisionDesc>
+  </teiHeader>
+  <standOff>
+    <listPlace>
+      <place xml:id="DSM">
+        <placeName>동소문</placeName>
+      </place>
+      <place xml:id="NDM">
+        <placeName>남대문 정거장</placeName>
+      </place>
+    </listPlace>
+    <listOrg>
+      <org xml:id="DKS">
+        <orgName>동광학교</orgName>
+      </org>
+    </listOrg>
+  </standOff>
+  <text>
+    <body>
+      <div type="chapter" n="1">
+        <head>운수 좋은 날</head>
+        <p><persName>현진건</persName></p>
+        <p>새침하게 흐린 품이 눈이 올 듯하더니 눈은 아니 오고 얼다가 만 비가 추적추적 내리는 날이었다.</p>
+        <p>이날이야말로 <placeName ref="#DSM">동소문</placeName> 안에서 인력거꾼 노릇을 하는 <persName ref="#KCJ">김첨지</persName>에게는 오래간만에도 닥친 운수 좋은 날이었다. 문안에 들어간답시는 앞집 마나님을 전찻길까지 모셔다 드린 것을 비롯으로 행여나 손님이 있을까 하고 정류장에서 어정어정하며 내리는 사람 하나하나에게 거의 비는 듯한 눈결을 보내고 있다가 마침내 교원인 듯한 양복장이를 <orgName ref="#DKS">동광학교</orgName>(<foreign xml:lang="ko-Hani">東光學校</foreign>)까지 태워다 주기로 되었다.</p>
+        <p>첫 번에 <measure type="currency" unit="jeon">삼십 전</measure>, 둘째 번에 <measure type="currency" unit="jeon">오십 전</measure> - 아침 댓바람에 그리 흉하지 않은 일이었다.</p>
+        <p>"<said who="#STU"><placeName ref="#NDM">남대문 정거장</placeName>까지 얼마요?</said>"</p>
+        <p>하고 <rs type="person" ref="#STU">학생</rs>은 물었다.</p>
+      </div>
+    </body>
+  </text>
+</TEI>

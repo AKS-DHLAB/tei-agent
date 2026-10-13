@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://www.tei-c.org/Vault/P5/4.12.0/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="ko">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title type="main">[제목 미상 / Untitled]</title>
+        <respStmt xml:id="teiagent">
+          <resp>Automatic TEI encoding (LLM-assisted), subject to human review</resp>
+          <name>TEI-Agent 0.1.0 with DeepSeek-V4.1-Flash (API model deepseek-flash)</name>
+        </respStmt>
+      </titleStmt>
+      <extent>
+        <measure unit="chars" quantity="5669">5669 chars</measure>
+        <measure unit="words" quantity="1836">1836 words</measure>
+      </extent>
+      <publicationStmt>
+        <publisher>[발행처 미상]</publisher>
+        <date when="2026-10-13">2026-10-13</date>
+      </publicationStmt>
+      <sourceDesc>
+        <p>Born-digital transcription supplied by the user; source not yet described.</p>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p>Encoded according to the TEI P5 Guidelines 4.12.0 (tei_all) with LLM-assisted tagging and interactive human refinement.</p>
+      </projectDesc>
+      <editorialDecl>
+        <normalization>
+          <p>Original orthography and punctuation preserved; no silent normalisation.</p>
+        </normalization>
+        <quotation>
+          <p>Quotation marks retained in the text, outside &lt;said&gt;/&lt;q&gt;.</p>
+        </quotation>
+      </editorialDecl>
+      <tagsDecl>
+        <namespace name="http://www.tei-c.org/ns/1.0">
+          <tagUsage gi="persName" occurs="65"/>
+          <tagUsage gi="rs" occurs="64"/>
+          <tagUsage gi="p" occurs="59"/>
+          <tagUsage gi="foreign" occurs="52"/>
+          <tagUsage gi="said" occurs="30"/>
+          <tagUsage gi="measure" occurs="14"/>
+          <tagUsage gi="placeName" occurs="8"/>
+          <tagUsage gi="date" occurs="4"/>
+          <tagUsage gi="time" occurs="3"/>
+          <tagUsage gi="body" occurs="1"/>
+          <tagUsage gi="text" occurs="1"/>
+        </namespace>
+      </tagsDecl>
+      <appInfo>
+        <application ident="TEI-Agent" version="0.1.0" when="2026-10-13" xml:id="app-teiagent">
+          <label>TEI-Agent (LLM: DeepSeek-V4.1-Flash (API model deepseek-flash); schema: tei_all 4.12.0)</label>
+        </application>
+      </appInfo>
+    </encodingDesc>
+    <profileDesc>
+      <creation>
+        <date>1910년대</date>
+      </creation>
+      <langUsage>
+        <language ident="ko" usage="98">한국어</language>
+        <language ident="ko-Hani" usage="2">한국어 한자</language>
+      </langUsage>
+      <textClass>
+        <keywords scheme="#teiagent-genre">
+          <term>Prose fiction</term>
+        </keywords>
+      </textClass>
+      <particDesc>
+        <listPerson>
+          <person xml:id="Buin" role="protagonist" sex="F">
+            <persName xml:lang="ko">부인</persName>
+            <persName type="variant">젊은 부인</persName>
+            <persName type="variant">이 부인</persName>
+            <persName type="variant">가련한 이 부인</persName>
+            <persName type="variant">저 부인</persName>
+            <persName type="variant">송림한 좌수의 자부</persName>
+            <persName type="variant">한명준의 아내</persName>
+            <note>송림 한 좌수의 자부이자 한명준의 아내로, 불행한 결혼 생활 끝에 자살을 시도하는 비운의 여인</note>
+          </person>
+          <person xml:id="HMJ" role="antagonist" sex="M">
+            <persName xml:lang="ko">한명준</persName>
+            <persName type="variant">명준</persName>
+            <persName type="variant">명준이</persName>
+            <persName type="variant">한명준이</persName>
+            <persName type="variant">신랑</persName>
+            <persName type="variant">지아비</persName>
+            <persName type="variant">남편</persName>
+            <note>부인의 남편으로, 어린 나이에 결혼했으나 아내를 소원히 여기고 외입과 첩을 두어 가정을 파탄낸 인물</note>
+          </person>
+          <person xml:id="HJS" role="minor" sex="M">
+            <persName xml:lang="ko">한 좌수</persName>
+            <persName type="variant">한좌수</persName>
+            <persName type="variant">좌수</persName>
+            <persName type="variant">송림한 좌수</persName>
+            <persName type="variant">시아버지</persName>
+            <persName type="variant">구고</persName>
+            <note>명준의 아버지로, 세력 있는 좌수이며 아들의 방탕을 꾸짖으나 결국 첩을 허락한다</note>
+          </person>
+          <person xml:id="Eomeoni" role="minor" sex="F">
+            <persName xml:lang="ko">부인의 어머니</persName>
+            <persName type="variant">어머님</persName>
+            <persName type="variant">모친</persName>
+            <persName type="variant">그 모</persName>
+            <persName type="variant">모</persName>
+            <persName type="variant">시어머니</persName>
+            <note>부인의 친정 어머니로, 사위를 골라 딸을 시집보냈으나 결국 불행을 초래했다</note>
+          </person>
+          <person xml:id="Cheop" role="minor" sex="F">
+            <persName xml:lang="ko">첩</persName>
+            <persName type="variant">계집</persName>
+            <persName type="variant">그년</persName>
+            <persName type="variant">어떤 눈썹 짙고 분 바르고 권연 피우는 계집</persName>
+            <note>명준이 얻은 첩으로, 부인의 방을 차지하고 부인을 밀어낸 존재</note>
+          </person>
+          <person xml:id="Awoo" role="minor" sex="M">
+            <persName xml:lang="ko">아우</persName>
+            <persName type="variant">철없는 아우</persName>
+            <persName type="variant">그 아우</persName>
+            <note>부인의 어린 남동생으로, 누나를 놀리며 '한명준이 색시'라고 부르던 인물</note>
+          </person>
+          <person xml:id="Halmeoni" role="minor" sex="F">
+            <persName xml:lang="ko">노조모</persName>
+            <note>부인의 할머니로, 부인이 모친과 함께 그 아래에서 자랐다</note>
+          </person>
+          <person xml:id="Mujang" role="minor" sex="M">
+            <persName xml:lang="ko">모제장</persName>
+            <persName type="variant">동군 모제장</persName>
+            <note>동군의 모제장으로, 부인의 친정 아버지이며 일찍 세상을 떠났다</note>
+          </person>
+          <person xml:id="Narrator" role="author" sex="U">
+            <persName xml:lang="ko">서술자</persName>
+            <persName type="variant">나</persName>
+            <persName type="variant">우리</persName>
+            <persName type="variant">독자 제씨</persName>
+            <note>작품의 서술자로, 때로 '나'로 등장하여 독자에게 말을 건넨다</note>
+          </person>
+        </listPerson>
+      </particDesc>
+    </profileDesc>
+    <revisionDesc>
+      <change when="2026-10-13" who="#teiagent">Automatic TEI encoding generated; awaiting human review.</change>
+    </revisionDesc>
+  </teiHeader>
+  <standOff>
+    <listPlace>
+      <place xml:id="Bakcheon" type="district">
+        <placeName>박천</placeName>
+        <note>평안북도 박천 지역으로, 작품의 배경이 되는 곳</note>
+      </place>
+      <place xml:id="Songnim" type="district">
+        <placeName>송림</placeName>
+        <note>박천에 있는 마을로, 한 좌수의 집이 위치한 촌락</note>
+      </place>
+      <place xml:id="Donggun" type="district">
+        <placeName>동군</placeName>
+        <note>부인의 친정이 있던 같은 군 지역</note>
+      </place>
+      <place xml:id="Sarangbang" type="building">
+        <placeName>사랑</placeName>
+        <note>한명준이 독거하며 지내던 집안의 사랑채</note>
+      </place>
+      <place xml:id="Giwajip" type="building">
+        <placeName>기와집</placeName>
+        <note>한 좌수의 저택으로, 부인이 시집와 살던 기와집</note>
+      </place>
+      <place xml:id="Sop" type="natural">
+        <placeName>솔밭</placeName>
+        <note>부인이 자살을 결행한 소나무 숲</note>
+      </place>
+    </listPlace>
+  </standOff>
+  <text>
+    <body>
+      <p>유월 중순, 찌는 듯하는 태양이 넘어가고, 안개 같은 수증기가 만물을 잠가 산이며, 천이며, 가옥이며, 모든 물건이 모두 반이나 녹는 듯 어두운 장막이 차차차차 내림에 끓는 듯하던 공기도 얼마큼 식어가고, 서늘하고 부드러운 바람이, 빽빽한 밤나무 잎을 가만가만히 흔들어서, 정적한 맘에 바삭바삭하는 소리가 난다.</p>
+      <p>처소는 <placeName ref="#Bakcheon">박천</placeName>(<foreign xml:lang="ko-Hani">博川</foreign>)<placeName ref="#Songnim">송림</placeName>(<foreign xml:lang="ko-Hani">松林</foreign>). 몽롱한 월색이 꿈같이 이 촌락에 비치었는데 <placeName ref="#Giwajip">기와집</placeName>에 <placeName ref="#Sarangbang">사곽문</placeName>(<foreign xml:lang="ko-Hani">舍廊門</foreign>) 열어놓은 생원님들은, 몽몽(<foreign xml:lang="ko-Hani">濛濛</foreign>)한 쑥내로 문군(<foreign xml:lang="ko-Hani">蚊群</foreign>)을 방비하며, 어두운 마루에서 긴 대 털며 쓸데없는 수작으로 시간을 보내나, 피땀을 죽죽 흘리면서, 전답에 김매던 가난한 농부와 행랑 사람이며, 풀 뜯기와 잠자리 사냥에 피곤한 아동배(<foreign xml:lang="ko-Hani">兒童輩</foreign>)는 벌써 세상을 모르고 혼수(<foreign xml:lang="ko-Hani">昏睡</foreign>)하는데, 이 촌 중 중앙에 있는, 사오 채 와옥(<foreign xml:lang="ko-Hani">昏睡</foreign>) 뒷문이 방싯하고 열리더니, 그리로, 한 <measure type="age" unit="year" quantity="20">이십 세</measure>나 되었을 만한 젊은 <persName ref="#Buin">부인</persName>이 왼편 손에 자그마한 사기 병을 들고 나온다. 늙은 밤나무 잎 사이로 흐르는 월광(<foreign xml:lang="ko-Hani">月光</foreign>)이 <rs type="person" ref="#Buin">그 몸</rs>을 수놓더라. 몸에는 새로 지은 듯한 생저(<foreign xml:lang="ko-Hani">生苧</foreign>) 적삼과, 가는 베 치마를 입었고, 흰 그 얼굴에는 심통한 비애(<foreign xml:lang="ko-Hani">悲哀</foreign>)가 나타났더라. <persName ref="#Buin">부인</persName>을 따라 나오는 검은 강아지를 "쉬! 쉬!" 하여 들여 쫓고, 다시금 몽롱한 집을 들여다보더니, 소리 아니 나게 문을 닫고, 돌아선다. <rs type="person" ref="#Buin">그 두 눈</rs>으로는 멈춤 없이 눈물이 흐르더라. <persName ref="#Buin">부인</persName>은 쑥이며 으악이 갓길로 자란 풀을 헤치고, 캄캄한 <placeName ref="#Sop">솔밭</placeName>을 향하여 올라가면서, 때때로 머리를 둘러 <rs type="place" ref="#Giwajip">자기의 집</rs>을 돌아본다. <time>밤</time>이 이미 깊었으매, 바람 한 점 없고, 푸른 하늘에 물먹은 무수한 성진(<foreign xml:lang="ko-Hani">星辰</foreign>)만 반듯반듯 하계를 감하(<foreign xml:lang="ko-Hani">瞰下</foreign>)한다. <persName ref="#Buin">부인</persName>은 거의 이성을 잃은 듯, 들편들편 하면서 발을 옮겨놓는데 목적은 자못 캄캄한 데로 가는 것이라. 지금 이 <persName ref="#Buin">부인</persName>의 마음에는 희망도 없고, 공포도 없고, 심지어 비애조차 없게 되었도다. 처음에는 집을 떠날 때는 무슨 목적도 있었겠고, 계획도 있었겠다마는, 일보 일보로 점점 소거(<foreign xml:lang="ko-Hani">消去</foreign>)하고, 제일 어두운 수풀 속에 이르렀을 때에는 전혀 아무 감상도 아니 나게 되었더라.</p>
+      <p>아름이나 넘는 소나무가 빽빽이 들어서고 총생(<foreign xml:lang="ko-Hani">叢生</foreign>)한 가지며 잎이 하늘을 가리어 별도 잘 아니 보이고, 습한 지면에서는 눅눅한 취기(<foreign xml:lang="ko-Hani">臭氣</foreign>)가 나며 빽빽한 소나무 잎 사이로 흐르는 월광은 무수한 금침이 지면에 산(<foreign xml:lang="ko-Hani">散</foreign>)한 듯하더라. <persName ref="#Buin">부인</persName>은 미친 듯 <measure type="length" unit="보" quantity="5">오륙 보</measure>나 뛰더니 구부러진 소나무에 맞질려 깜짝 놀라서 우뚝 서면서 머리를 들어 우러러보더니, 경련적으로 해쭉 웃고, 앞으로 거꾸러지는 듯 그 나무를 안고 얼굴을 나무에 비빈다. <persName ref="#Buin">부인</persName>은 이러하고 한참 있더니, 무엇에 놀란 듯 프륵 떨면서 물러서서 손에 든 병을 보고 퍼석 주저앉는다. 한참이나 머리를 숙이고 앉으니 이성이 얼마큼 생긴다. 혼잣말로,</p>
+      <p>"<said who="#Buin" direct="true" aloud="true">아아, 그럴 때가 왜 있을꼬? 그럴 때가 왜 있을꼬? 아이고, 분해라! 아이고 절통해라! 그럴 때가 왜 있을꼬?</said>"</p>
+      <p><persName ref="#Buin">부인</persName>은 병 든 손으로 땅을 덮고, 몸을 왼편으로 기울이고, 바른 손으로 가슴을 누르면서 머리를 흔든다.</p>
+      <p>"<said who="#Buin" direct="true" aloud="true">내가 이 집에 시집오기만 잘못이야, 이럴 줄 알았으면, 일생 시집이라고는 아니 가고, <persName ref="#Eomeoni">어머님</persName>과 함께 있을걸, 흥, 흥.</said>"</p>
+      <p>이마를 치마로 가리고 앞으로 거꾸라진다.</p>
+      <p>"<said who="#Buin" direct="true" aloud="true">무엇이니, 무엇이니 하여, 다─쓸 데 있나······ 쓸데없어, 실컷 서방질이나······ 그래 쓸데없어, 쓸데없지!</said>"</p>
+      <p>"<said who="#Buin" direct="true" aloud="true">계집아이 하나 믿고 살까? 죽었으면 편안하지, 이놈, 어디, 얼마나, 잘 사나 보자!</said>"</p>
+      <p>하고 <persName ref="#Buin">부인</persName>은 머리 들고 어깨춤을 추면서 곁에 누가 서 있기나 한 것같이, 피 선 눈으로 견주어 보더니,</p>
+      <p>"<said who="#Buin" direct="true" aloud="true">네, 이놈, 얼마나 잘 사나 보자!</said>"</p>
+      <p>하고 병에 넣은 약을 꿀꺽꿀꺽 마시고 입을 접접 다시면서 병을 내던진다. 길게 한숨짓고 누우면서,</p>
+      <p>"<said who="#Buin">그럴 때가 왜 있을꼬? 그럴 때가 왜 있을꼬? 이놈 어디 얼마나 잘 사나 보자, <rs ref="#Buin">내</rs>가 죽어서 귀신만 되었단 보아라, 그제, 칼을 가지고 와서, <rs ref="#Cheop">그년</rs>, <rs ref="#HMJ">그놈</rs>을 이렇게······.</said>"</p>
+      <p>팔로 찌르는 형용을 하면서,</p>
+      <p>"<said who="#Buin">아이고, <rs ref="#Eomeoni">어머니</rs>, <rs ref="#Buin">난</rs> 죽노라!</said>"</p>
+      <p>하고 뱉는 듯이 운다. 두 합이나 먹은 것을 기우이 동맥, 모세관을 좇아 각 기관과, 세포에 퍼지니, 심장의 기능도 점점 둔하게 되고, 호흡도 곤란하여지며 전신에 허한(<foreign xml:lang="ko-Hani">虛汗</foreign>)만 솟는다. 정신도 차차 몽롱하게 되어 작용이 점점 단순하여지면서 원망과 육신의 고통밖에 감응치 아니하더라. 처음에는 "<said who="#Buin">이제 죽겠다</said>" 하고, 눈을 감고 가만히 누웠더니, 바라고 바라는 죽음은 아니 오고, 오는 것은 고통뿐이라. 고통이란 놈은 <rs ref="#Narrator">우리</rs>의 일생을 안고 돌다가 그것도 오히려 부족한지 죽을 때 일순시(<foreign xml:lang="ko-Hani">一瞬時</foreign>)에 남은 고통 전체가 <rs ref="#Narrator">우리</rs>의 육체와 정신을 싸는 것이라. 가련한 <rs ref="#Buin">이 부인</rs>은 지금, 잔혹, 무정, 침통한 고통에 싸워 "<said who="#Buin">아이고 배야, <rs ref="#HMJ">이놈</rs>!</said>" 하는 소리로 이것을 벗어나려 하지도 못하고 부엉이의 입에 물린 토끼와 같이 '고통'의 하라는 대로만 하고 목숨 끊어지기만 기다리도다. "<said who="#Buin">아이고 배야, 아이고 아이고 <rs ref="#Eomeoni">어머니</rs>, <rs ref="#HMJ">이놈</rs></said>" 하면서, 꼬불락, 닐락 팔과 다리를 들었다, 놓았다 하더니 약 <measure type="duration" quantity="1" unit="hour">한 시간</measure>이나 지나니, 끙끙대는 소리와, 이따금 흑흑 느끼는 것밖에 없게 되더라. 나무는 의연하셨고, <time>밤</time>은 의연히 어두우며, 우주는 의연히 묵묵하도다. 자연(천지만물, 단 인류는 제하고)은 무정하고 냉혹하여, <rs ref="#Narrator">우리</rs>야 싫어하든, 즐거워하든 잠잠히 있고, 또 그뿐 아니라 그 법칙은 극히 엄준하여 <rs ref="#Narrator">우리</rs>로 하여금 결코 일보도 그 외에 나서게 하지 아니하나니, 즉 <rs ref="#Narrator">우리</rs>가 슬퍼한대야 위로하는 법 없고, <rs ref="#Narrator">우리</rs>가 일분일초의 생명을 더 얻으려 하여도 허락지 아니하지 않는가. 그런데 사람이란 동물은 고독을 싫어하는 고로 항상 그 '동무'를 구하며, 구하여 얻으면 기뻐하고 행복되며, 얻지 못하면 슬퍼하며 불행되느니라. 자연히 그 '동무'에는 조건이 있으니 즉 '정다운 자', '사랑스러운 자'라. 만일 이 조건에 불합하는 자면 비록 백만의 '동무'가 있어도. 오히려 무인광야에 홀로 선 것같이 기쁨과 행복이 없으되 만일 일인이라도 이 조건에 합하는 자 있으면 기쁨과 행복이 마음에 충만하여 전 우주 간에 만물이 하나도 미(<foreign xml:lang="ko-Hani">美</foreign>) 아님이 없고, 하나도 애(<foreign xml:lang="ko-Hani">愛</foreign>) 아님이 없나니 전자는 인류에 가장 불행하며 가련한 자요, 후자는 가장 복되며 운 좋은 자이니라. 제왕, 부귀 그 무엇인고?</p>
+      <p>전자에 속하는 가련한 <rs ref="#Buin">저 부인</rs>은 고독의 비애가 그 극점에 달하여, 애를 실(<foreign xml:lang="ko-Hani">失</foreign>)할 시에 그 행복과, 기쁨을 잃고, 심지어 그 생명까지 버리려 하는도다. <rs ref="#Buin">이 부인</rs>으로 하여금─용자(<foreign xml:lang="ko-Hani">容姿</foreign>) 숙덕(<foreign xml:lang="ko-Hani">淑德</foreign>)을 무비(<foreign xml:lang="ko-Hani">無備</foreign>)한 <rs ref="#Buin">이 부인</rs>으로 하여금 이 지경에 이르게 한 자, 그 누구? 한 사람의 생명을 파멸한 자가 누구? "<said who="#Buin">아이고 배야, <rs ref="#HMJ">이놈</rs>!</said>" 하던 소리는 공기에 파동을 작하여 어디까지나 퍼졌는지 지지(<foreign xml:lang="ko-Hani">只至</foreign>)는 아무 소리도 없고 움직임도 없는 생명 없는 일 물체로다.</p>
+      <p>촌가에서 닭을 소리 한두 마디 나더니, 젊은 <date type="season">여름밤</date>이 벌써 지나가고 동편 하늘이 희어지며, 별이 조는 듯 차차 없어지는데 촌중이 북적 뛰놓더니 등불이 여기저기 왔다 갔다 하더라.</p>
+      <p>이상, <rs type="person" ref="#Buin">부인</rs>이라 하여온 사람은 <placeName ref="#Songnim">송림</placeName><persName ref="#HJS">한 좌수</persName>의 자부(<foreign xml:lang="ko-Hani">子婦</foreign>)라. 본시 <placeName ref="#Donggun">동군</placeName>(<foreign xml:lang="ko-Hani">同郡</foreign>)<persName ref="#Mujang">모제장</persName>의 독녀로서 일찍 부친을 여의고 <persName ref="#Eomeoni">모친</persName>과 <persName ref="#Halmeoni">노조모</persName> 하에 <persName ref="#Awoo">그 아우</persName> 하나로 더불어 길러낸 사람이라. 가세도 유여(<foreign xml:lang="ko-Hani">有餘</foreign>)하여 여비남복(<foreign xml:lang="ko-Hani">女婢男僕</foreign>)에 물 길어본 적 없으며, 또 <persName ref="#Eomeoni">그 모</persName>는 오십 넘은 상처(<foreign xml:lang="ko-Hani">喪妻</foreign>) 끝에 시집와 이십오에 과부가 되어 다문 두 자식을 바라보고 백발이 되도록 살아왔느니, 별로 교육 있는 이도 아니요, 자못 '무던한 사람'이러라. 그러므로 <persName ref="#Buin">이 부인</persName>도 <persName ref="#Eomeoni">그 모</persName>의 감화를 입어 그저 '무던한 사람'이라. 학교에서 선생의 강의를 들은 바도 없고, 서적에서 물리며, 인정을 연구한 바도 없고, 외계(<foreign xml:lang="ko-Hani">外界</foreign>) 즉 사회의 영향이라고는 그 가정과 친척의 상태, 언어, 행동 등의 지나지 못하는 단순한 부인이라. 즉 한국 모형적 부인이라. 별로 특질도 없고, 능력도 없으나 간간히 그 성질을 설명하건대 입이 무겁고, 행실이 단정하고, 아무 일이고 삼가고 삼가며 절대적 부모와 지아비의 명령에 복종함이라.</p>
+      <p><rs type="person" ref="#Buin">저</rs>가 <persName ref="#HMJ">한명준</persName>의 아내가 된 것은 거금(<foreign xml:lang="ko-Hani">去今</foreign>) <measure type="duration" quantity="8" unit="year">팔 년</measure> 전, 즉 <rs type="person" ref="#Buin">저</rs>가 <measure type="age" quantity="16" unit="year">십육</measure>, <persName ref="#HMJ">명준</persName>이가 <measure type="age" quantity="12" unit="year">십이</measure> 적이라. <persName ref="#Buin">부인</persName>의 <persName ref="#Eomeoni">모친</persName>은 이 개년이나, <rs type="person" ref="#Eomeoni">그</rs> 딸을 위하여 인근 촌리를 미행하면서 사위 될 재목을 고르던 결과로 <persName ref="#HMJ">한명준</persName>을 얻은 것이라. <rs type="person" ref="#Buin">저</rs>가 사위를 고를 때에 무엇을 표준으로 하였는고, 말하기를 일에 문벌, 이에 재산, 삼에 가족, 사에 당자며, 또 자기의 가정이 외롭다 하여 세력 있는 <persName ref="#HJS">한 좌수</persName>와 사돈 되는 것이 한 끗 의지가 된다 함이라. <persName ref="#Buin">부인</persName>은 <persName ref="#Eomeoni">그 모</persName>만 믿고 어린 마음에 신랑의 얼굴 보기만 고대하고, 남 모르게 기뻐하며, 아무도 없을 때에는 '<persName ref="#HMJ">한명준</persName><persName ref="#HMJ">한명준</persName>' 하고 즐겨 하며, 또 신랑의 화상(<foreign xml:lang="ko-Hani">畫像</foreign>)을 여러 가지로 마음에 그려보고, 그 가운데 제일 풍채 좋고 천재 있는, 정 있는 청년을 선택하여 '<persName ref="#HMJ">한명준</persName>'이라는 이름을 짓고는 즐겨하며, 철없는 <persName ref="#Awoo">아우</persName>가 "<said who="#Awoo" direct="true" aloud="true">야─, <persName ref="#HMJ">한명준</persName>이 색시</said>" 하면서 어깨를 짚을 때에도 가장 시끄러운 듯 몸은 흔드나 기쁜 웃음이 목젖까지 말려 나오고, 귓결에 신랑의 결점이 들리면, 한끝으로는 노하고, 한끝으로는 무섭기도 하여, 아무쪼록 부인하려 하더니 어언간 <date when="--11-17">십일월 십칠일</date>이 왔더라. <persName ref="#Buin">부인</persName>은 <time>밤</time> 들기를 고대하여 기쁨과 부끄러움과 의심을 섞어가지고 위황(<foreign xml:lang="ko-Hani">煒煌</foreign>)한 촉광(<foreign xml:lang="ko-Hani">燭光</foreign>)에 비치어 신랑의 방에 들어가, 장옷 속으로 병풍에 의지하여 서 있는 신랑을 보니 키는 <measure type="age" quantity="10" unit="year">십 세</measure>나 난 아해 같고 검은 갓 아래로 겨우 보이는 조그만 얼굴에는 핏빛 하나 없고 멀뚝멀뚝하는 그 두 눈, 조말조말한 그 태도. 얼굴에는 조금도 사랑스럽거나 정다운 표정이 없더라. <persName ref="#Buin">부인</persName>의 가슴에 있던 아름다운 마음은 다 스러지고, 비애와 절망만 문들문들 솟아나와 울고까지 싶도다.</p>
+      <p>곤하여서 곁에서 색색, 자는 신랑의 숨소리를 들으매, 지금껏 꽃밭에서 노니다가, 여우한테 홀리어서 여우의 굴에 들어온 것 같기도 하고, 재미있는 꿈을 꾸다가 깨친 것 같기도 하고.</p>
+      <p>'아아. 이것이 <rs type="person" ref="#HMJ">내 일생에 같이 살아갈 지아비</rs>인가' 생각하면 가슴이 막히어. 어찌하여 <persName ref="#Eomeoni">어머니</persName>가 이런 사람을 골랐던고? 시집가는 데는 <persName ref="#Eomeoni">어미</persName>도 믿지 못할 것이로다. 아아, 이것이 <rs type="person" ref="#HMJ">나의 지아비</rs>인가? 난생처음 한심이요, 난생처음 슬픔이며, 난생처음 탄식이라.</p>
+      <p>이후 <date dur="P1Y" type="duration">일 년허(<foreign xml:lang="ko-Hani">許</foreign>)</date>나 본가에 있다가 시집이라고 가보니, 모두 낯모르는 사람이요, 자못, 하나, 아는 사람은 <rs type="person" ref="#HMJ">지아비</rs>나 남보다 더 냉담하고. <persName ref="#HJS">구고</persName>(<foreign xml:lang="ko-Hani">舅姑</foreign>)는 첫 며느리라 하여 심히 종애(<foreign xml:lang="ko-Hani">鍾愛</foreign>)하나, 정작 사랑할 <rs type="person" ref="#HMJ">지아비</rs>는 "<said who="#HMJ" direct="true" aloud="true">옷 내라</said>" "<said who="#HMJ" direct="true" aloud="true">버선 기워라</said>" 하는 소리밖에 아니 하니 부모의 사랑이나 받으려면 본가에 있는 편이 낫지 아니할까.</p>
+      <p>남모르게 눈물로 지내는 중 흐르는 세월이 <measure type="duration" unit="year" quantity="1">일 년</measure>이나 지나가는데 <persName ref="#HMJ">명준</persName>이는 점점 소원하여져서 부모의 말도 아니 듣고 <placeName ref="#Sarangbang">사랑</placeName>에서 독거하게 되니 <persName ref="#Buin">부인</persName>의 비애와 적막은 날로 깊어가는지라. <rs type="person" ref="#Buin">그 화기 있고 아름답던 얼굴</rs>은 점점 여위어가고, <rs type="person" ref="#Buin">활발하던 정신</rs>은 점점 침울하게 되어 듣지도 못하고 보지도 못하던 인생 문제까지 생긴다. <persName ref="#HJS">한 좌수</persName>는 항상 밖에 있는 고로 자세히 가내 사정을 몰라, 안에 있고 이런 방면에 주의하는 <persName ref="#Eomeoni">모친</persName>은 대단히 걱정하여, 이따금 <rs type="person" ref="#HMJ">그 아들</rs>을 불러서 훈계하나 <rs type="person" ref="#HMJ">아들</rs>은 마이동풍으로 듣지 않고, 정이 점점 더 소원히 되어 <rs type="person" ref="#Buin">그 처</rs>를 보기만 하여도 미운 생각이 나는 고로 조그만 일에도 팔깍팔깍 노하더라. <persName ref="#HMJ">명준</persName>이도 차차 힘이 들어오매 이따금 <rs type="person" ref="#Buin">그 처</rs>를 어여삐 여기는 정이 생기나 이는 잠시라, <rs type="person" ref="#HMJ">자기</rs>도 왜 미워하는지 그 이유는 모르나 그저 미운 것이라, 뉘라서 능히 이 정을 없이하리오, 자못 발현치 않게 제어할 따름이지.</p>
+      <p><persName ref="#Buin">부인</persName>은 처음에는 애정과 육욕의 기갈(<foreign xml:lang="ko-Hani">飢渴</foreign>)에 비탄하더니 연령이 <measure type="age" unit="year" quantity="20">이십</measure>이 넘음에 자손 걱정까지 생겨서 비탄에 비탄을 더하더라. 설상가상은 이를 이름인지? <rs type="person" ref="#Eomeoni">그 모친</rs>의 일찍 늙은 이유를 비로소 깨닫더라.</p>
+      <p><persName ref="#HMJ">명준</persName>이도 <measure type="age" unit="year" quantity="17">열일곱</measure>이 넘자 역시 고독의 비애를 깨달아 <rs type="person" ref="#Buin">그 처</rs>에 대한 애정을 회복하려 힘쓰더니 힘쓰면 힘쓸수록 더욱 소원하여가는지라. 마침내 외박이 번번하며 성중 출입이 잦고, 얼마 아니하여 이웃에게 '외입쟁이'라는 칭호를 얻고, 주상(<foreign xml:lang="ko-Hani">酒商</foreign>) 창기의 채인(<foreign xml:lang="ko-Hani">債人</foreign>)이 <persName ref="#HJS">한 좌수</persName>의 문에 자주 출입하며, 전답 문건이 날마다 날아나게 되니 <persName ref="#Buin">부인</persName>의 유일 동정자 되는 <persName ref="#Eomeoni">시어머니</persName>도 점점 냉담하게 되어가더라.</p>
+      <p>이렁저렁 <measure type="duration" unit="year" quantity="2">이 년</measure>이 되는 후 하루는 <persName ref="#HJS">한 좌수</persName>가 <persName ref="#HMJ">명준</persName>을 불러,</p>
+      <p>"<said who="#HJS" direct="true" aloud="true">너, 이놈, 왜 그런 못된 짓을 하여서 <rs type="person" ref="#HMJ">네</rs> 집안을 망하게 한단 말이냐.</said>"</p>
+      <p>하고 <rs type="person" ref="#HMJ">그 죄</rs>를 꾸짖으매</p>
+      <p>"<said who="#HMJ" direct="true" aloud="true">그러면 첩을 하나 얻게 해주시오.</said>"</p>
+      <p><persName ref="#HMJ">명준</persName>은 외입에 단련이 되어, 조금도 부끄러움 없이 대답하거늘 <persName ref="#HJS">좌수</persName>도 여러 말로 꾸짖어도 보고, 얼려도 보다가 할 수 없이</p>
+      <p>"<said who="#HJS" direct="true" aloud="true">그러면, <rs type="person" ref="#Buin">네 처</rs>에게 물어봐라.</said>"</p>
+      <p>하고 입을 쩍쩍 다시면서 담뱃대를 떠니,</p>
+      <p>"<said who="#HMJ" direct="true" aloud="true">정말이십니까?</said>"</p>
+      <p><persName ref="#HMJ">명준</persName>은 희색(<foreign xml:lang="ko-Hani">喜色</foreign>)이 만안(<foreign xml:lang="ko-Hani">滿顔</foreign>)이라.</p>
+      <p><measure type="duration" unit="year" quantity="7">칠 년</measure> 만에 부부 동침이라!</p>
+      <p><persName ref="#Buin">부인</persName>은 무슨 일인지를 모르고 꿈같이 생각하나 조금도 기쁜 정은 없더라. <persName ref="#Buin">부인</persName>의 열렬하던 정은 <measure type="duration" unit="year" atLeast="6" atMost="7">육칠 년</measure>간 애수 비탄에 다 식어 냉회(<foreign xml:lang="ko-Hani">冷灰</foreign>)가 되었도다.</p>
+      <p>무슨 일인데 <persName ref="#HMJ">명준</persName>이가 그날은 가장 친절하며 지금껏 소원하던 죄를 성심으로 하는 것같이 사(<foreign xml:lang="ko-Hani">謝</foreign>)하며 각색 행동이 <persName ref="#HMJ">명준</persName>이는 아는 듯하더라. 어디 알았으리오. <rs type="person" ref="#HMJ">이리</rs>가 <rs type="person" ref="#Buin">양</rs>의 가죽을 쓰고 <rs type="person" ref="#Buin">양</rs>의 무리에 섞이는 것은 <rs type="person" ref="#Buin">양</rs>을 해하려 함일 줄을.</p>
+      <p>"<said who="#HMJ" direct="true" aloud="true">여보게, <rs type="person" ref="#HMJ">나</rs> 원할 게 하나 있는데.</said>"</p>
+      <p><persName ref="#Buin">부인</persName>은 들은 듯 못 들은 듯 잠잠하고 있다.</p>
+      <p>"<said who="#HMJ" direct="true" aloud="true">여보게, <rs type="person" ref="#HMJ">나</rs> 원할 게 하나 있는데.</said>"</p>
+      <p>"<said who="#Buin" direct="true" aloud="true">아니. 원할 게라니. <rs type="person" ref="#Buin">내</rs>게 무슨 원할 게 있겠소?</said>"</p>
+      <p><persName ref="#Buin">부인</persName>이 온순한 음성으로 대하면서 '무슨 소리를 하려는고?' 하고 생각한다.</p>
+      <p>"<said who="#HMJ" direct="true" aloud="true">아니 그렇게 말할 게 아니야.</said>"</p>
+      <p>"······."</p>
+      <p>"<said who="#HMJ" direct="true" aloud="true">들어주겠나? 이건, 꼭, <rs type="person" ref="#Buin">자네</rs>가 들어주어야 할 게야.</said>"</p>
+      <p>"<said who="#Buin" direct="true" aloud="true">무엇인지 말씀하시구려.</said>"</p>
+      <p>"<said who="#HMJ" direct="true" aloud="true">아니, 이건 참 들어주겠다야 하겠는데······.</said>"</p>
+      <p>"<said who="#Buin" direct="true" aloud="true">말씀을 하시구려.</said>"</p>
+      <p>"<said who="#HMJ" direct="true" aloud="true"><rs type="person" ref="#Buin">임자</rs>, 켤 내지 말으시. <rs type="person" ref="#HMJ">나</rs> <rs type="person" ref="#Cheop">첩</rs> 하나 얻으라나?</said>"</p>
+      <p><persName ref="#Buin">부인</persName>도 이 말을 듣고는 분이 버썩 나서 '에, 이, 개 같은 자식 같으니' 하고 욕하고 싶은 마음이 무럭무럭 생기며, 욕이 목젖까지 밀어오나 '무던한 사람'이라, 그도 못 하고,</p>
+      <p>"<said who="#Buin" direct="true" aloud="true"><rs type="person" ref="#HMJ">나</rs>돌아다니면서 <rs type="person" ref="#HJS">부모님</rs> 걱정 아니 시키겠으면 얻구려.</said>"</p>
+      <p>이것은 참 억지로 억지로 나오는 말이라. 이 말 속에 얼마나 비애와 원통이 숨었으리오.</p>
+      <p>"<said who="#HMJ" direct="true" aloud="true">그래도 <rs type="person" ref="#HMJ">나</rs>를 버리지는 않지요.</said>"</p>
+      <p><persName ref="#Buin">부인</persName>은 오래오래 생각하다가, 필사의 용(<foreign xml:lang="ko-Hani">勇</foreign>)을 다하여 이 말을 하였다.</p>
+      <p>"<said who="#HMJ" direct="true" aloud="true">그럴 수가 있나 버리다니······.</said>"</p>
+      <p><persName ref="#Cheop">첩</persName>을 데려온 후에는 또 전과 같이 소원하여지더라. <persName ref="#Buin">부인</persName>은 그 속음을 알고 더욱 분하며, 더욱 절통하며, 더욱 비애하여, 이전에는 자못 <persName ref="#HMJ">명준</persName>이만 원망하였더니, 좀 지나서는 전 남자를 원망하게 되며, 심지어는 전 인류를 원망하게 되고, 마침내 <rs type="person" ref="#Buin">자기</rs>의 존재를 원망하게 되더라.</p>
+      <p><persName ref="#Buin">부인</persName>은 잉태한지라. 이럴 줄을 안 후로는, 자연, 좀 기쁨이 생기며 이것이 아들인가 딸인가 하는 문제로 날마다 궁구하면서 <measure type="duration" unit="year" atLeast="7" atMost="9">팔구 년</measure> 전 <persName ref="#HMJ">명준</persName>의 화상 그리던 법을 재용(<foreign xml:lang="ko-Hani">再用</foreign>)하며 전혀, 스러졌던 공상이 점점 생겨, 다시 즐거운 시대를 만날 것 같은 희망도 생겨 그 아이 나기만 고대하더니 <rs type="person" ref="#HJS">생부</rs>의 제일(<foreign xml:lang="ko-Hani">祭日</foreign>)에 <rs type="place" ref="#Donggun">본가</rs>에 갔다가 어떠한 무녀에게 문점(<foreign xml:lang="ko-Hani">問占</foreign>) 한즉 여자라 하는지라. 공중에 지었던 누각(<foreign xml:lang="ko-Hani">樓閣</foreign>)이 다 무너지고 실망 낙담하여 <rs type="place" ref="#Giwajip">시가</rs>에 돌아와 본즉 <rs type="person" ref="#Buin">자기</rs> 있던 방에는 <rs type="person" ref="#Buin">자기</rs>의 기구는 하나도 없고 <rs type="person" ref="#Cheop">어떤 눈썹 짙고, 분 바르고, 권연(<foreign xml:lang="ko-Hani">卷煙</foreign>) 피우는 계집</rs>이 있더라. 이것은 <date when="--06-17">유월 십칠일</date>이러라.</p>
+      <p>)은 사실을 부연()한 것이니 마땅히 장편이 될 재료로되 학보에 게재키 위하여 경개()만 서()한 것이니 <persName ref="#Narrator">독자 제씨</persName>는 양찰()하시오.</p>
+    </body>
+  </text>
+</TEI>

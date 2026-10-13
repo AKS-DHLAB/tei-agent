@@ -1,0 +1,349 @@
+{
+ "file": "15_Kim Dong-in_Potato (Gamja).xml",
+ "chars": 6344,
+ "blocks": 122,
+ "genre": "prose_fiction",
+ "langs": [
+  "ko"
+ ],
+ "seconds": 80.5,
+ "usage": {
+  "calls": 13,
+  "prompt_tokens": 112513,
+  "completion_tokens": 32601,
+  "cached_tokens": 42368,
+  "est_cost_usd_peak": 0.0604
+ },
+ "text_identical": true,
+ "block_status": {
+  "repaired": 15,
+  "tagged": 107
+ },
+ "valid": true,
+ "schema_errors": 0,
+ "dangling_refs": [],
+ "registry": {
+  "persons": 9,
+  "places": 10,
+  "orgs": 0
+ },
+ "stage1_scores": {
+  "persName": {
+   "gold": 110,
+   "pred": 129,
+   "exact_PRF": [
+    0.69,
+    0.809,
+    0.745
+   ],
+   "overlap_PRF": [
+    0.69,
+    0.809,
+    0.745
+   ]
+  },
+  "placeName": {
+   "gold": 35,
+   "pred": 35,
+   "exact_PRF": [
+    0.571,
+    0.571,
+    0.571
+   ],
+   "overlap_PRF": [
+    0.743,
+    0.743,
+    0.743
+   ]
+  },
+  "orgName": {
+   "gold": 0,
+   "pred": 0,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "said": {
+   "gold": 53,
+   "pred": 51,
+   "exact_PRF": [
+    1.0,
+    0.962,
+    0.981
+   ],
+   "overlap_PRF": [
+    1.0,
+    0.962,
+    0.981
+   ]
+  },
+  "date": {
+   "gold": 8,
+   "pred": 8,
+   "exact_PRF": [
+    0.5,
+    0.5,
+    0.5
+   ],
+   "overlap_PRF": [
+    0.5,
+    0.5,
+    0.5
+   ]
+  },
+  "time": {
+   "gold": 13,
+   "pred": 0,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "measure": {
+   "gold": 29,
+   "pred": 0,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "foreign": {
+   "gold": 2,
+   "pred": 1,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "rs": {
+   "gold": 147,
+   "pred": 28,
+   "exact_PRF": [
+    0.607,
+    0.116,
+    0.194
+   ],
+   "overlap_PRF": [
+    0.679,
+    0.129,
+    0.217
+   ]
+  }
+ },
+ "final_scores": {
+  "persName": {
+   "gold": 110,
+   "pred": 110,
+   "exact_PRF": [
+    0.809,
+    0.809,
+    0.809
+   ],
+   "overlap_PRF": [
+    0.809,
+    0.809,
+    0.809
+   ]
+  },
+  "placeName": {
+   "gold": 35,
+   "pred": 35,
+   "exact_PRF": [
+    0.571,
+    0.571,
+    0.571
+   ],
+   "overlap_PRF": [
+    0.743,
+    0.743,
+    0.743
+   ]
+  },
+  "orgName": {
+   "gold": 0,
+   "pred": 0,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "said": {
+   "gold": 53,
+   "pred": 51,
+   "exact_PRF": [
+    1.0,
+    0.962,
+    0.981
+   ],
+   "overlap_PRF": [
+    1.0,
+    0.962,
+    0.981
+   ]
+  },
+  "date": {
+   "gold": 8,
+   "pred": 7,
+   "exact_PRF": [
+    0.571,
+    0.5,
+    0.533
+   ],
+   "overlap_PRF": [
+    0.571,
+    0.5,
+    0.533
+   ]
+  },
+  "time": {
+   "gold": 13,
+   "pred": 9,
+   "exact_PRF": [
+    0.778,
+    0.538,
+    0.636
+   ],
+   "overlap_PRF": [
+    0.889,
+    0.615,
+    0.727
+   ]
+  },
+  "measure": {
+   "gold": 29,
+   "pred": 33,
+   "exact_PRF": [
+    0.636,
+    0.724,
+    0.677
+   ],
+   "overlap_PRF": [
+    0.727,
+    0.828,
+    0.774
+   ]
+  },
+  "foreign": {
+   "gold": 2,
+   "pred": 1,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "rs": {
+   "gold": 147,
+   "pred": 66,
+   "exact_PRF": [
+    0.697,
+    0.313,
+    0.432
+   ],
+   "overlap_PRF": [
+    0.818,
+    0.367,
+    0.507
+   ]
+  }
+ },
+ "who": {
+  "said_with_gold_who": 51,
+  "speaker_name_match": 40,
+  "acc": 0.784
+ },
+ "recommended": [
+  [
+   "rs",
+   1,
+   60
+  ],
+  [
+   "measure",
+   1,
+   25
+  ],
+  [
+   "time",
+   1,
+   9
+  ],
+  [
+   "roleName",
+   2,
+   12
+  ],
+  [
+   "thought",
+   2,
+   8
+  ],
+  [
+   "soCalled",
+   2,
+   5
+  ],
+  [
+   "name",
+   3,
+   15
+  ],
+  [
+   "term",
+   3,
+   10
+  ]
+ ],
+ "questions": [
+  "이 대사를 복녀가 한 것으로 보았는데, 화자가 복녀가 맞습니까?",
+  "이 대사를 남편이 한 것으로 보았는데, 화자가 남편이 맞습니까?",
+  "이 대사의 화자를 특정할 수 없어 @who를 붙이지 않았는데, 화자를 지정해야 합니까?",
+  "이 조롱하는 말의 화자를 특정할 수 없어 @who를 생략했습니다. 인부들 중 한 사람으로 지정할까요?",
+  "이 대사를 하는 '거지'의 신원이 불분명하여 @who를 생략했습니다. 화자를 지정할 필요가 있을까요?",
+  "위 대사와 이어지는 화자(거지)의 @who 지정 여부를 확인해 주세요.",
+  "말줄임표로 끝나는 이 대사의 화자가 명확하지 않아 @who를 생략했습니다. 거지로 볼까요?",
+  "62번 블록의 화자를 복녀로 보았는데, 직전 문맥의 발화자와 동일 인물인지 확인이 필요합니다."
+ ],
+ "accepted": [
+  "rs",
+  "measure",
+  "time"
+ ],
+ "errors_sample": []
+}

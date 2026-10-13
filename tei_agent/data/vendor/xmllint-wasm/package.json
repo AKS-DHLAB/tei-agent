@@ -1,0 +1,55 @@
+{
+  "name": "xmllint-wasm",
+  "version": "5.3.0",
+  "description": "Fork of https://www.npmjs.com/package/xmllint with some updates",
+  "main": "index-node.js",
+  "browser": "index-browser.mjs",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node test/test.js",
+    "lint": "eslint src",
+    "check-types": "./typings-test/run-typings-test.sh",
+    "build": "./script/clean && ./script/run-with-emscripten ./script/libxml2 && ./script/run-with-emscripten ./script/compile"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/noppa/xmllint-wasm"
+  },
+  "author": "noppa",
+  "contributors": [
+    "kripken",
+    "sterpe",
+    "noppa"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/noppa/xmllint-wasm/issues"
+  },
+  "files": [
+    "index-browser.mjs",
+    "index-node.js",
+    "xmllint-browser.mjs",
+    "xmllint-node.js",
+    "xmllint.wasm",
+    "index-browser.d.ts",
+    "index-browser.mjs.flow",
+    "index-node.d.ts",
+    "index-node.js.flow"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.19.3",
+    "@babel/plugin-transform-flow-strip-types": "^7.19.0",
+    "@types/node": "20.12.7",
+    "eslint": "8.7.0",
+    "flow-bin": "^0.172.0",
+    "typescript": "5.4.5"
+  },
+  "peerDependencies": {
+    "@types/node": ">=16"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}

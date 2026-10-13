@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tei-agent"
+version = "0.1.0"
+description = "Interactive, multilingual TEI P5 (4.12.0) tagging agent powered by DeepSeek-V4.1-Flash"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT (code); bundled TEI schema CC BY / BSD-2; exemplars per data/exemplars/index.json" }
+authors = [{ name = "Center for Digital Humanities, Academy of Korean Studies" }]
+dependencies = ["openai>=1.40", "lxml>=5.0", "fastapi>=0.110", "uvicorn>=0.29", "pydantic>=2"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "httpx>=0.27"]
+mcp = ["mcp>=1.10"]
+
+[project.scripts]
+tei-agent = "tei_agent.cli:main"
+
+[tool.setuptools]
+packages = ["tei_agent"]
+
+[tool.setuptools.package-data]
+tei_agent = ["data/schema/*", "data/exemplars/*.json", "web/*"]

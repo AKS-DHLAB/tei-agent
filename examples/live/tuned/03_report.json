@@ -1,0 +1,349 @@
+{
+ "file": "03_Yi Kwang-su_The Heartless (Mujeong - Short Story).xml",
+ "chars": 7562,
+ "blocks": 59,
+ "genre": "prose_fiction",
+ "langs": [
+  "ko",
+  "ko-Hani"
+ ],
+ "seconds": 80.5,
+ "usage": {
+  "calls": 15,
+  "prompt_tokens": 129486,
+  "completion_tokens": 28358,
+  "cached_tokens": 58496,
+  "est_cost_usd_peak": 0.0557
+ },
+ "text_identical": true,
+ "block_status": {
+  "tagged": 59
+ },
+ "valid": true,
+ "schema_errors": 0,
+ "dangling_refs": [],
+ "registry": {
+  "persons": 9,
+  "places": 6,
+  "orgs": 0
+ },
+ "stage1_scores": {
+  "persName": {
+   "gold": 60,
+   "pred": 66,
+   "exact_PRF": [
+    0.788,
+    0.867,
+    0.825
+   ],
+   "overlap_PRF": [
+    0.818,
+    0.9,
+    0.857
+   ]
+  },
+  "placeName": {
+   "gold": 7,
+   "pred": 8,
+   "exact_PRF": [
+    0.25,
+    0.286,
+    0.267
+   ],
+   "overlap_PRF": [
+    0.625,
+    0.714,
+    0.667
+   ]
+  },
+  "orgName": {
+   "gold": 0,
+   "pred": 0,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "said": {
+   "gold": 39,
+   "pred": 30,
+   "exact_PRF": [
+    1.0,
+    0.769,
+    0.87
+   ],
+   "overlap_PRF": [
+    1.0,
+    0.769,
+    0.87
+   ]
+  },
+  "date": {
+   "gold": 7,
+   "pred": 4,
+   "exact_PRF": [
+    0.5,
+    0.286,
+    0.364
+   ],
+   "overlap_PRF": [
+    1.0,
+    0.571,
+    0.727
+   ]
+  },
+  "time": {
+   "gold": 4,
+   "pred": 0,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "measure": {
+   "gold": 7,
+   "pred": 1,
+   "exact_PRF": [
+    1.0,
+    0.143,
+    0.25
+   ],
+   "overlap_PRF": [
+    1.0,
+    0.143,
+    0.25
+   ]
+  },
+  "foreign": {
+   "gold": 51,
+   "pred": 52,
+   "exact_PRF": [
+    0.981,
+    1.0,
+    0.99
+   ],
+   "overlap_PRF": [
+    0.981,
+    1.0,
+    0.99
+   ]
+  },
+  "rs": {
+   "gold": 86,
+   "pred": 24,
+   "exact_PRF": [
+    0.417,
+    0.116,
+    0.182
+   ],
+   "overlap_PRF": [
+    0.5,
+    0.14,
+    0.218
+   ]
+  }
+ },
+ "final_scores": {
+  "persName": {
+   "gold": 60,
+   "pred": 65,
+   "exact_PRF": [
+    0.785,
+    0.85,
+    0.816
+   ],
+   "overlap_PRF": [
+    0.815,
+    0.883,
+    0.848
+   ]
+  },
+  "placeName": {
+   "gold": 7,
+   "pred": 8,
+   "exact_PRF": [
+    0.25,
+    0.286,
+    0.267
+   ],
+   "overlap_PRF": [
+    0.625,
+    0.714,
+    0.667
+   ]
+  },
+  "orgName": {
+   "gold": 0,
+   "pred": 0,
+   "exact_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "overlap_PRF": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "said": {
+   "gold": 39,
+   "pred": 30,
+   "exact_PRF": [
+    1.0,
+    0.769,
+    0.87
+   ],
+   "overlap_PRF": [
+    1.0,
+    0.769,
+    0.87
+   ]
+  },
+  "date": {
+   "gold": 7,
+   "pred": 4,
+   "exact_PRF": [
+    0.5,
+    0.286,
+    0.364
+   ],
+   "overlap_PRF": [
+    1.0,
+    0.571,
+    0.727
+   ]
+  },
+  "time": {
+   "gold": 4,
+   "pred": 3,
+   "exact_PRF": [
+    1.0,
+    0.75,
+    0.857
+   ],
+   "overlap_PRF": [
+    1.0,
+    0.75,
+    0.857
+   ]
+  },
+  "measure": {
+   "gold": 7,
+   "pred": 14,
+   "exact_PRF": [
+    0.357,
+    0.714,
+    0.476
+   ],
+   "overlap_PRF": [
+    0.357,
+    0.714,
+    0.476
+   ]
+  },
+  "foreign": {
+   "gold": 51,
+   "pred": 52,
+   "exact_PRF": [
+    0.981,
+    1.0,
+    0.99
+   ],
+   "overlap_PRF": [
+    0.981,
+    1.0,
+    0.99
+   ]
+  },
+  "rs": {
+   "gold": 86,
+   "pred": 64,
+   "exact_PRF": [
+    0.469,
+    0.349,
+    0.4
+   ],
+   "overlap_PRF": [
+    0.578,
+    0.43,
+    0.493
+   ]
+  }
+ },
+ "who": {
+  "said_with_gold_who": 30,
+  "speaker_name_match": 29,
+  "acc": 0.967
+ },
+ "recommended": [
+  [
+   "rs",
+   1,
+   20
+  ],
+  [
+   "measure",
+   1,
+   8
+  ],
+  [
+   "time",
+   1,
+   6
+  ],
+  [
+   "thought",
+   1,
+   5
+  ],
+  [
+   "term",
+   2,
+   10
+  ],
+  [
+   "roleName",
+   2,
+   6
+  ],
+  [
+   "soCalled",
+   2,
+   4
+  ],
+  [
+   "q",
+   3,
+   3
+  ]
+ ],
+ "questions": [
+  "‘와옥(昏睡)’은 ‘와옥(瓦屋)’의 오식으로 보이는데, 원문 그대로 두고 한자 표기만 foreign으로 처리하는 것이 맞습니까?",
+  "‘사곽문’을 사랑채 문(사랑문)으로 보아 placeName #Sarangbang으로 처리했는데, 적절합니까?",
+  "따옴표 안의 발화를 부인(#Buin)의 독백으로 보았는데, 화자 지정이 맞습니까?",
+  "'그놈'이 한명준을 가리키는지, 아니면 첩을 가리키는지 확실하지 않습니다. #HMJ로 태깅했는데 맞습니까?",
+  "서술자가 '우리'를 일반적 인류를 뜻하는 표현으로 쓴 것인지, 서술자 자신을 포함한 집단을 가리키는지 불확실합니다. #Narrator로 태깅하는 것이 적절합니까?",
+  "'지지(只至)'의 한자 표기가 '只至'가 맞는지, 다른 한자인지 확인이 필요합니다.",
+  "연도가 명시되지 않아 @when에 ISO 8601 완전 날짜를 넣을 수 없습니다. @when=\"--11-17\"로 두는 것이 적절한지, 아니면 @when 없이 두는 편이 나은지 확인 부탁드립니다.",
+  "'일 년허'를 기간 표현으로 보아 <date dur=\"P1Y\">로 묶었는데, @dur 사용이 적절한지 아니면 <measure>로 처리하는 것이 나은지 확인 부탁드립니다."
+ ],
+ "accepted": [
+  "rs",
+  "measure",
+  "time"
+ ],
+ "errors_sample": []
+}
