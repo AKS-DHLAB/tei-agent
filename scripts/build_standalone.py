@@ -101,7 +101,7 @@ def main():
     assert "</script" not in worker
     web = (ROOT / "tei_agent" / "web" / "index.html").read_text(encoding="utf-8")
     style = web[web.index("<style>"):web.index("</style>") + len("</style>")]
-    extra_css = "<style>dialog{border:0;padding:0;background:transparent}dialog::backdrop{background:rgba(0,0,0,.35)}button:disabled{opacity:.45}</style>"
+    extra_css = "<style>" + (SRC / "ui.css").read_text(encoding="utf-8") + "</style>"
     body = (SRC / "ui_body.html").read_text(encoding="utf-8")
     app = (SRC / "app.js").read_text(encoding="utf-8")
     ui = (SRC / "ui.js").read_text(encoding="utf-8")

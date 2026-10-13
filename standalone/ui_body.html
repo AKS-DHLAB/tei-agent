@@ -4,76 +4,82 @@
   <span class="badge" id="b-model">model</span>
   <span class="spacer"></span>
   <div class="job hidden" id="job"><span id="job-msg"></span><div class="prog"><div id="job-bar" style="width:0"></div></div></div>
-  <select id="sess-list"><option value="">저장된 작업 열기…</option></select>
-  <button id="btn-new">새 문서</button>
-  <button id="btn-settings" title="API 키·모델 설정">⚙ 설정</button>
+  <select id="sess-list"><option value="" data-en="Open saved work…">저장된 작업 열기…</option></select>
+  <button id="btn-new" data-en="New document">새 문서</button>
+  <select id="ui-lang" title="UI language / 화면 언어" aria-label="UI language"><option value="ko">한국어</option><option value="en">English</option></select>
+  <button id="btn-settings" title="API 키·모델 설정" data-en-title="API key and model settings" data-en="⚙ Settings">⚙ 설정</button>
 </header>
+<div class="done-banner hidden" id="done-banner" role="status" aria-live="assertive">
+  <span class="ico" id="done-ico">✓</span>
+  <div class="grow"><b id="done-title"></b><div id="done-detail" class="detail"></div></div>
+  <button id="done-close" data-en="OK">확인</button>
+</div>
 <main>
   <section class="start" id="start">
     <div class="card" id="key-card">
-      <h2>1. DeepSeek API 키</h2>
-      <p class="hint">키는 <b>이 브라우저에만</b> 저장되고, DeepSeek API로만 전송됩니다. 공용 PC라면 실습 후 ⚙ 설정에서 키를 지우세요.</p>
-      <div class="row"><input type="password" id="key-inline" class="grow" placeholder="sk-..." autocomplete="off"><button id="btn-key-save">저장</button><button id="btn-key-test">연결 테스트</button></div>
+      <h2 data-en="1. DeepSeek API key">1. DeepSeek API 키</h2>
+      <p class="hint" data-en="The key is stored <b>only in this browser</b> and sent only to the DeepSeek API. On a shared PC, delete it under ⚙ Settings after class.">키는 <b>이 브라우저에만</b> 저장되고, DeepSeek API로만 전송됩니다. 공용 PC라면 실습 후 ⚙ 설정에서 키를 지우세요.</p>
+      <div class="row"><input type="password" id="key-inline" class="grow" placeholder="sk-..." autocomplete="off"><button id="btn-key-save" data-en="Save">저장</button><button id="btn-key-test" data-en="Test connection">연결 테스트</button></div>
       <p class="hint" id="key-status"></p>
     </div>
     <div class="card">
-      <h2>2. 원문 텍스트 입력</h2>
-      <textarea id="in-text" rows="14" placeholder="태깅할 원문을 붙여넣으세요 (한국어·영어·독일어·프랑스어·한문·일본어·라틴어 등). 문단은 빈 줄로 구분하면 가장 정확합니다."></textarea>
+      <h2 data-en="2. Source text">2. 원문 텍스트 입력</h2>
+      <textarea id="in-text" rows="14" placeholder="태깅할 원문을 붙여넣으세요 (한국어·영어·독일어·프랑스어·한문·일본어·라틴어 등). 문단은 빈 줄로 구분하면 가장 정확합니다." data-en-ph="Paste the text to tag (Korean, English, German, French, Classical Chinese, Japanese, Latin, …). Separate paragraphs with blank lines for best results."></textarea>
       <div class="row" style="margin-top:8px">
-        <input type="text" id="in-title" placeholder="제목 (선택)" class="grow">
-        <input type="text" id="in-author" placeholder="저자 (선택)" class="grow">
-        <select id="in-genre"><option value="">장르: 자동 판별</option></select>
-        <input type="text" id="in-lang" placeholder="주 언어 (예: ko, en, de)" style="width:150px">
+        <input type="text" id="in-title" placeholder="제목 (선택)" data-en-ph="Title (optional)" class="grow">
+        <input type="text" id="in-author" placeholder="저자 (선택)" data-en-ph="Author (optional)" class="grow">
+        <select id="in-genre"><option value="" data-en="Genre: auto-detect">장르: 자동 판별</option></select>
+        <input type="text" id="in-lang" placeholder="주 언어 (예: ko, en, de)" data-en-ph="Main language (e.g. ko, en, de)" style="width:170px">
       </div>
       <div class="row" style="margin-top:8px">
-        <label class="hint"><input type="checkbox" id="in-auto" checked> 분석 직후 자동 태깅·추천까지 실행</label>
+        <label class="hint"><input type="checkbox" id="in-auto" checked> <span data-en="Run auto-tagging and recommendations right after analysis">분석 직후 자동 태깅·추천까지 실행</span></label>
         <span class="spacer"></span>
-        <label class="chip"><input type="file" id="in-file" accept=".txt,.md" class="hidden">텍스트 파일 불러오기</label>
-        <button class="primary" id="btn-start">분석 · 자동 태깅 시작</button>
+        <label class="chip"><input type="file" id="in-file" accept=".txt,.md" class="hidden"><span data-en="Load text file">텍스트 파일 불러오기</span></label>
+        <button class="primary" id="btn-start" data-en="Analyse · start auto-tagging">분석 · 자동 태깅 시작</button>
       </div>
     </div>
     <div class="card">
-      <h2>3. 프로젝트 지침 <span class="hint">(선택)</span></h2>
-      <p class="hint">우리 팀·반이 정한 태깅 규칙을 마크다운으로 적으면 <b>모든 태깅 지시에 덧붙습니다</b>. 일반 규칙과 부딪히면 이 지침을 따르지만, 원문 보존과 스키마 검사는 바꿀 수 없습니다. <code>&lt;!-- --&gt;</code> 안의 내용은 메모로 보고 보내지 않습니다.</p>
-      <div class="row"><select id="rules-preset"><option value="">예시 지침 불러오기…</option></select>
-        <label class="chip"><input type="file" id="in-rules-file" accept=".md,.txt" class="hidden">지침 파일(.md) 불러오기</label>
+      <h2><span data-en="3. Project rules">3. 프로젝트 지침</span> <span class="hint" data-en="(optional)">(선택)</span></h2>
+      <p class="hint" data-en="Write your team's or class's tagging conventions in Markdown; they are <b>appended to every tagging instruction</b>. Where they conflict with the general rules they win, but text preservation and schema checks cannot be overridden. Content inside <code>&lt;!-- --&gt;</code> is treated as a private note and not sent.">우리 팀·반이 정한 태깅 규칙을 마크다운으로 적으면 <b>모든 태깅 지시에 덧붙습니다</b>. 일반 규칙과 부딪히면 이 지침을 따르지만, 원문 보존과 스키마 검사는 바꿀 수 없습니다. <code>&lt;!-- --&gt;</code> 안의 내용은 메모로 보고 보내지 않습니다.</p>
+      <div class="row"><select id="rules-preset"><option value="" data-en="Load example rules…">예시 지침 불러오기…</option></select>
+        <label class="chip"><input type="file" id="in-rules-file" accept=".md,.txt" class="hidden"><span data-en="Load rules file (.md)">지침 파일(.md) 불러오기</span></label>
         <span class="spacer"></span><span class="hint" id="rules-count"></span></div>
-      <textarea id="in-rules" rows="7" placeholder="예)&#10;- 김장로·배학감처럼 직함으로 부르는 경우는 persName이 아니라 rs type=&quot;person&quot;&#10;- 모든 said에 who·aloud·direct를 적는다. 생각·독백은 aloud=&quot;false&quot;&#10;- 한자 병기는 foreign xml:lang=&quot;zh&quot;" style="margin-top:6px"></textarea>
+      <textarea id="in-rules" rows="7" placeholder="예)&#10;- 김장로·배학감처럼 직함으로 부르는 경우는 persName이 아니라 rs type=&quot;person&quot;&#10;- 모든 said에 who·aloud·direct를 적는다. 생각·독백은 aloud=&quot;false&quot;&#10;- 한자 병기는 foreign xml:lang=&quot;zh&quot;" data-en-ph="e.g.&#10;- References by title (Mr Kim, the Elder) are rs type=&quot;person&quot;, not persName&#10;- Every said gets who, aloud and direct; thoughts are aloud=&quot;false&quot;&#10;- Hanja glosses are foreign xml:lang=&quot;zh&quot;" style="margin-top:6px"></textarea>
     </div>
     <div class="card">
-      <h2>기존 TEI 파일 개선 · 작업 파일 열기</h2>
-      <p class="hint">TEI XML(예: KNoTE)을 불러오면 헤더는 유지한 채 TEI P5 최신 스키마 검증·자동 수리·추가 태깅을 할 수 있습니다. 저장해 둔 작업 파일(.teiagent.json)도 여기서 엽니다.</p>
-      <div class="row"><label class="chip"><input type="file" id="in-tei" accept=".xml" class="hidden">TEI XML 불러오기</label>
-        <label class="chip"><input type="file" id="in-session" accept=".json" class="hidden">작업 파일 열기</label></div>
+      <h2 data-en="Improve an existing TEI file · open work file">기존 TEI 파일 개선 · 작업 파일 열기</h2>
+      <p class="hint" data-en="Load a TEI XML file (e.g. KNoTE) to validate it against the latest TEI P5 schema, repair it and add markup while keeping its header. Saved work files (.teiagent.json) are opened here too.">TEI XML(예: KNoTE)을 불러오면 헤더는 유지한 채 TEI P5 최신 스키마 검증·자동 수리·추가 태깅을 할 수 있습니다. 저장해 둔 작업 파일(.teiagent.json)도 여기서 엽니다.</p>
+      <div class="row"><label class="chip"><input type="file" id="in-tei" accept=".xml" class="hidden"><span data-en="Load TEI XML">TEI XML 불러오기</span></label>
+        <label class="chip"><input type="file" id="in-session" accept=".json" class="hidden"><span data-en="Open work file">작업 파일 열기</span></label></div>
     </div>
   </section>
 
   <section class="ws hidden" id="ws">
     <div class="left">
       <div class="card sticky">
-        <div class="tabs" data-tabs="left"><button class="on" data-t="ov">개요</button><button data-t="md">메타데이터</button><button data-t="rg">레지스트리</button></div>
+        <div class="tabs" data-tabs="left"><button class="on" data-t="ov" data-en="Overview">개요</button><button data-t="md" data-en="Metadata">메타데이터</button><button data-t="rg" data-en="Registry">레지스트리</button></div>
         <div data-pane="ov">
           <div class="row"><select id="genre" class="grow"></select></div>
           <p class="hint" id="analysis-notes"></p>
-          <h3>태그 사용 현황</h3><div id="counts"></div>
-          <h3>블록 상태</h3><div id="bstat" class="hint"></div>
-          <h3>작업 기록</h3><div id="hist" class="hint" style="max-height:160px;overflow:auto"></div>
-          <h3>프로젝트 지침</h3>
-          <textarea id="ws-rules" rows="5" placeholder="(없음) 팀·반의 태깅 규칙을 적으면 이후 모든 태깅 지시에 덧붙습니다."></textarea>
-          <div class="row" style="margin-top:6px"><button id="btn-rules-save">지침 저장</button><button id="btn-rules-reapply" title="저장한 지침으로 전체 블록을 다시 검토합니다 (API 호출)">저장 후 전체 다시 검토</button></div>
-          <h3>작업 저장</h3>
-          <div class="row"><button id="btn-save-json">작업 파일 저장(.json)</button></div>
+          <h3 data-en="Tag counts">태그 사용 현황</h3><div id="counts"></div>
+          <h3 data-en="Block status">블록 상태</h3><div id="bstat" class="hint"></div>
+          <h3 data-en="History">작업 기록</h3><div id="hist" class="hint" style="max-height:160px;overflow:auto"></div>
+          <h3 data-en="Project rules">프로젝트 지침</h3>
+          <textarea id="ws-rules" rows="5" placeholder="(없음) 팀·반의 태깅 규칙을 적으면 이후 모든 태깅 지시에 덧붙습니다." data-en-ph="(none) Rules written here are appended to every later tagging instruction."></textarea>
+          <div class="row" style="margin-top:6px"><button id="btn-rules-save" data-en="Save rules">지침 저장</button><button id="btn-rules-reapply" title="저장한 지침으로 전체 블록을 다시 검토합니다 (API 호출)" data-en-title="Re-check every block against the saved rules (API calls)" data-en="Save and re-check all">저장 후 전체 다시 검토</button></div>
+          <h3 data-en="Save work">작업 저장</h3>
+          <div class="row"><button id="btn-save-json" data-en="Save work file (.json)">작업 파일 저장(.json)</button></div>
         </div>
         <div data-pane="md" class="hidden">
           <div class="meta-grid" id="meta-form"></div>
-          <div class="row" style="margin-top:8px"><button id="btn-md-save">메타데이터 저장</button><button id="btn-md-rec">메타데이터 추천</button></div>
+          <div class="row" style="margin-top:8px"><button id="btn-md-save" data-en="Save metadata">메타데이터 저장</button><button id="btn-md-rec" data-en="Recommend metadata">메타데이터 추천</button></div>
           <div id="md-rec"></div>
-          <h3>Wikidata 검색</h3>
-          <div class="row"><input type="text" id="wd-q" class="grow" placeholder="인명·지명·기관명"><button id="btn-wd">검색</button></div>
+          <h3 data-en="Wikidata search">Wikidata 검색</h3>
+          <div class="row"><input type="text" id="wd-q" class="grow" placeholder="인명·지명·기관명" data-en-ph="Person, place or organisation"><button id="btn-wd" data-en="Search">검색</button></div>
           <div id="wd-res" class="hint"></div>
         </div>
         <div data-pane="rg" class="hidden">
-          <p class="hint">본문 @ref/@who가 가리키는 개체 목록. 이름을 클릭하면 수정할 수 있습니다.</p>
+          <p class="hint" data-en="Entities referenced by @ref/@who in the text. Click a name to edit it.">본문 @ref/@who가 가리키는 개체 목록. 이름을 클릭하면 수정할 수 있습니다.</p>
           <div id="registry"></div>
         </div>
       </div>
@@ -81,50 +87,81 @@
     <div class="center">
       <div class="card">
         <div class="row" style="margin-bottom:8px">
-          <div class="tabs" data-tabs="view" style="margin:0;border:0"><button class="on" data-t="read">읽기 보기</button><button data-t="xml">XML</button></div>
+          <div class="tabs" data-tabs="view" style="margin:0;border:0"><button class="on" data-t="read" data-en="Reading view">읽기 보기</button><button data-t="xml">XML</button></div>
           <span class="spacer"></span>
           <span id="val-status" class="hint">미검증</span>
-          <button id="btn-validate">검증 (tei_all)</button>
-          <button id="btn-repair">자동 수리</button>
-          <button id="btn-undo" title="마지막 변경 취소">되돌리기</button>
-          <button class="primary" id="btn-dl">XML 저장</button>
+          <button id="btn-validate" data-en="Validate (tei_all)">검증 (tei_all)</button>
+          <button id="btn-repair" data-en="Auto-repair">자동 수리</button>
+          <button id="btn-undo" title="마지막 변경 취소" data-en-title="Undo the last change" data-en="Undo">되돌리기</button>
+          <button class="primary" id="btn-dl" data-en="Save XML">XML 저장</button>
         </div>
         <ol class="errlist hidden" id="val-errors"></ol>
-        <div data-pane="read"><div class="legend" id="legend"></div><div class="doc" id="doc"></div></div>
+        <div data-pane="read">
+          <p class="hint edit-hint" data-en="✎ <b>Direct editing:</b> click a coloured tag to change or remove it · select text to add a tag · use the ✎ XML button on a block to edit its markup.">✎ <b>바로 수정:</b> 색칠된 태그를 클릭하면 바꾸거나 지울 수 있고, 글자를 드래그해 선택하면 새 태그를 붙일 수 있습니다. 블록 오른쪽 ✎ XML 버튼으로 마크업을 직접 고칠 수도 있습니다.</p>
+          <div class="legend" id="legend"></div><div class="doc" id="doc"></div>
+        </div>
         <div data-pane="xml" class="hidden"><pre class="xml" id="xml"></pre></div>
       </div>
     </div>
     <div class="right">
-      <div class="card">
-        <h2>추천 태그</h2>
-        <div id="recs" class="hint">아직 추천이 없습니다.</div>
-        <textarea id="rec-guide" rows="2" placeholder="적용 시 추가 지침 (선택): 예) 대명사는 주요 인물만, 화폐는 commodity 없이" style="margin-top:6px"></textarea>
-        <div class="row" style="margin-top:6px"><button id="btn-rec">추천 다시 받기</button><span class="spacer"></span><button class="primary" id="btn-accept">선택 태그 적용</button></div>
-      </div>
-      <div class="card"><h2>질문</h2><div id="questions" class="hint">열린 질문이 없습니다.</div></div>
-      <div class="card">
-        <h2>대화로 수정하기</h2>
-        <div class="chat" id="chat"></div>
-        <textarea id="chat-in" rows="2" placeholder="예) '그'가 김첨지를 가리키는 곳은 rs로 연결해줘 / 3장부터는 편지글이니 floatingText로 / 저자 Wikidata ID 찾아서 헤더에 넣어줘"></textarea>
-        <div class="row" style="margin-top:6px"><label class="hint"><input type="checkbox" id="chat-agent" checked> 에이전트 모드(도구 사용)</label><span class="spacer"></span><button class="primary" id="btn-chat">보내기</button></div>
+      <div class="card sticky side">
+        <div class="tabs" data-tabs="side"><button class="on" data-t="chatp" data-en="💬 Chat">💬 대화로 수정</button><button data-t="qp"><span data-en="Questions">질문</span> <span class="cnt" id="q-cnt"></span></button><button data-t="recp"><span data-en="Suggested tags">추천 태그</span> <span class="cnt" id="r-cnt"></span></button></div>
+        <div data-pane="chatp" class="chat-pane">
+          <div class="chat" id="chat"></div>
+          <textarea id="chat-in" rows="3" placeholder="예) '그'가 김첨지를 가리키는 곳은 rs로 연결해줘 / 3장부터는 편지글이니 floatingText로 / 저자 Wikidata ID 찾아서 헤더에 넣어줘" data-en-ph="e.g. Link every 'he' that refers to Kim Cheomji with rs / From chapter 3 on it is a letter, use floatingText / Find the author's Wikidata ID and put it in the header"></textarea>
+          <div class="row" style="margin-top:6px"><label class="hint"><input type="checkbox" id="chat-agent" checked> <span data-en="Agent mode (uses tools)">에이전트 모드(도구 사용)</span></label><span class="spacer"></span><span class="hint" data-en="Ctrl+Enter">Ctrl+Enter</span><button class="primary" id="btn-chat" data-en="Send">보내기</button></div>
+        </div>
+        <div data-pane="qp" class="hidden"><div id="questions" class="hint"></div></div>
+        <div data-pane="recp" class="hidden">
+          <div id="recs" class="hint"></div>
+          <textarea id="rec-guide" rows="2" placeholder="적용 시 추가 지침 (선택): 예) 대명사는 주요 인물만, 화폐는 commodity 없이" data-en-ph="Extra guidance when applying (optional): e.g. pronouns only for main characters, currency without commodity" style="margin-top:6px"></textarea>
+          <div class="row" style="margin-top:6px"><button id="btn-rec" data-en="Get suggestions again">추천 다시 받기</button><span class="spacer"></span><button class="primary" id="btn-accept" data-en="Apply selected tags">선택 태그 적용</button></div>
+        </div>
       </div>
     </div>
   </section>
 </main>
 
+<button class="fab" id="fab-chat" title="대화로 수정하기" data-en-title="Chat edits">💬</button>
+<div class="sel-pop hidden" id="sel-pop"><button id="sel-add" data-en="+ Add tag">+ 태그 추가</button></div>
+
+<dialog id="dlg-edit">
+  <form method="dialog" class="card" style="margin:0;width:min(560px,92vw)" id="edit-form">
+    <h2 id="ed-title"></h2>
+    <p class="hint" id="ed-text"></p>
+    <div id="ed-elem">
+      <div class="meta-grid">
+        <label for="ed-name" data-en="Element">요소</label>
+        <div><input type="text" id="ed-name" list="ed-names" autocomplete="off" style="width:100%"><datalist id="ed-names"></datalist></div>
+      </div>
+      <h3 data-en="Attributes">속성</h3>
+      <div id="ed-attrs"></div>
+      <div class="row" style="margin-top:4px"><button type="button" id="ed-add-attr" data-en="+ Attribute">+ 속성</button><span class="hint" id="ed-allowed"></span></div>
+    </div>
+    <div id="ed-raw" class="hidden"><textarea id="ed-xml" rows="10" spellcheck="false" style="font:12px/1.5 var(--mono)"></textarea></div>
+    <div class="ed-problems hidden" id="ed-problems"></div>
+    <div class="row" style="margin-top:10px">
+      <button type="button" id="ed-unwrap" class="danger" data-en="Remove tag (keep text)">태그 제거 (글자는 유지)</button>
+      <span class="spacer"></span>
+      <button value="cancel" data-en="Cancel">취소</button>
+      <button type="button" class="primary" id="ed-apply" data-en="Apply">적용</button>
+    </div>
+  </form>
+</dialog>
+
 <dialog id="dlg-settings">
   <form method="dialog" class="card" style="margin:0;min-width:min(520px,90vw)">
-    <h2>설정</h2>
+    <h2 data-en="Settings">설정</h2>
     <div class="meta-grid">
-      <label for="s-key">API 키</label><input type="password" id="s-key" autocomplete="off" placeholder="sk-...">
-      <label for="s-model">모델</label><input type="text" id="s-model">
-      <label for="s-base">API 주소</label><input type="text" id="s-base">
-      <label for="s-chunk">청크 크기</label><input type="text" id="s-chunk">
-      <label for="s-workers">동시 요청</label><input type="text" id="s-workers">
-      <label for="s-think">thinking</label><label class="hint"><input type="checkbox" id="s-think"> 사고(thinking) 모드 사용 (느리고 비쌈)</label>
+      <label for="s-key" data-en="API key">API 키</label><input type="password" id="s-key" autocomplete="off" placeholder="sk-...">
+      <label for="s-model" data-en="Model">모델</label><input type="text" id="s-model">
+      <label for="s-base" data-en="API URL">API 주소</label><input type="text" id="s-base">
+      <label for="s-chunk" data-en="Chunk size">청크 크기</label><input type="text" id="s-chunk">
+      <label for="s-workers" data-en="Parallel requests">동시 요청</label><input type="text" id="s-workers">
+      <label for="s-think">thinking</label><label class="hint"><input type="checkbox" id="s-think"> <span data-en="Use thinking mode (slower, more expensive)">사고(thinking) 모드 사용 (느리고 비쌈)</span></label>
     </div>
-    <p class="hint">키는 이 브라우저(localStorage)에만 저장됩니다. 모델명은 DeepSeek-V4.1-Flash = <code>deepseek-flash</code>.</p>
-    <div class="row"><button value="cancel">닫기</button><button id="s-clear" value="cancel">키 삭제</button><span class="spacer"></span><button class="primary" id="s-save" value="default">저장</button></div>
+    <p class="hint" data-en="The key is stored only in this browser (localStorage). Model name for DeepSeek-V4.1-Flash = <code>deepseek-flash</code>.">키는 이 브라우저(localStorage)에만 저장됩니다. 모델명은 DeepSeek-V4.1-Flash = <code>deepseek-flash</code>.</p>
+    <div class="row"><button value="cancel" data-en="Close">닫기</button><button id="s-clear" value="cancel" data-en="Delete key">키 삭제</button><span class="spacer"></span><button class="primary" id="s-save" value="default" data-en="Save">저장</button></div>
   </form>
 </dialog>
 <div class="toast" id="toast"></div>

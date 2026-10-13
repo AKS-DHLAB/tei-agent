@@ -1125,6 +1125,59 @@ class Session {
     const about = q.about ? ` (concerning: ${q.about})` : "", blk = q.block !== null && q.block !== undefined ? ` Only block ${q.block} is affected.` : "";
     return this.applyInstruction(`Question asked to me: ${q.question}${about}. My answer: ${answer}.${blk}`, progress);
   }
+  setUiLang(l) {
+    this.s.uiLang = l;
+    if (this.chat.length && this.chat[0].role === "system") this.chat[0].content = P.agent(l); // agent replies follow the UI language
+  }
+  /* ---- direct (manual) edits from the reading view: same safeguards as model output */
+  checkBlockXml(i, xml) {
+    const b = this.blocks.find((x) => x.i === i); if (!b) return { ok: false, problems: [`no block ${i}`] };
+    const pres = checkPreservation(b.raw, xml, this.pageNumbers());
+    if (!pres.ok) return { ok: false, problems: pres.problems, fatal: true };
+    const qc = quickCheck(xml);
+    return { ok: !qc.length, problems: qc, fatal: false };
+  }
+  setBlockXml(i, xml, label = "manual edit", { force = false } = {}) {
+    xml = String(xml).trim();
+    const chk = this.checkBlockXml(i, xml);
+    if (chk.fatal || (!chk.ok && !force)) return chk;
+    const b = this.blocks.find((x) => x.i === i);
+    if (b.xml === xml) return { ok: true, problems: [], unchanged: true };
+    this.snapshot(`이전: ${label} (블록 ${i})`);
+    b.xml = xml; b.status = "edited"; b.warnings = chk.problems.length ? [`schema: ${chk.problems.slice(0, 3).join(" / ")}`] : [];
+    this.reconcileRegistry(); this.log("manual_edit", { block: i, label });
+    return { ok: true, problems: chk.problems };
+  }
+  editElement(i, elIdx, { name = null, attrs = null, unwrap = false } = {}, opts = {}) {
+    const b = this.blocks.find((x) => x.i === i); if (!b) return { ok: false, problems: [`no block ${i}`] };
+    const root = parseFragment(b.xml), el = root.getElementsByTagName("*")[elIdx];
+    if (!el) return { ok: false, problems: ["element not found"] };
+    const old = lname(el);
+    if (unwrap) { while (el.firstChild) el.parentNode.insertBefore(el.firstChild, el); el.remove(); return this.setBlockXml(i, innerXml(root), `<${old}> 태그 제거`, opts); }
+    let target = el;
+    if (name && name !== old) {
+      target = root.ownerDocument.createElementNS(TEI_NS, name);
+      for (const a of el.attributes) target.setAttributeNS(a.namespaceURI, a.name, a.value);
+      while (el.firstChild) target.appendChild(el.firstChild);
+      el.parentNode.replaceChild(target, el);
+    }
+    if (attrs) {
+      for (const a of [...target.attributes]) if (!/^xmlns/.test(a.name)) target.removeAttributeNode(a);
+      for (const [k, v] of Object.entries(attrs)) { if (!k) continue; if (k.startsWith("xml:")) target.setAttributeNS(XML_NS, k, v); else target.setAttribute(k, v); }
+    }
+    return this.setBlockXml(i, innerXml(root), `<${old}>${name && name !== old ? " → <" + name + ">" : ""} 수정`, opts);
+  }
+  wrapText(i, textIdx, start, end, name, attrs = {}, opts = {}) {
+    const b = this.blocks.find((x) => x.i === i); if (!b) return { ok: false, problems: [`no block ${i}`] };
+    const root = parseFragment(b.xml), texts = [];
+    (function walk(n) { for (const c of n.childNodes) { if (c.nodeType === 3) texts.push(c); else if (c.nodeType === 1) walk(c); } })(root);
+    const tn = texts[textIdx]; if (!tn || start >= end || end > tn.nodeValue.length) return { ok: false, problems: ["selection not found"] };
+    const doc = root.ownerDocument, mid = tn.splitText(start); mid.splitText(end - start);
+    const el = doc.createElementNS(TEI_NS, name);
+    for (const [k, v] of Object.entries(attrs || {})) { if (!k) continue; if (k.startsWith("xml:")) el.setAttributeNS(XML_NS, k, v); else el.setAttribute(k, v); }
+    mid.parentNode.replaceChild(el, mid); el.appendChild(mid);
+    return this.setBlockXml(i, innerXml(root), `<${name}> 추가`, opts);
+  }
   updateMetadata(patch) {
     this.snapshot("메타데이터 수정 이전"); patch = clone(patch);
     for (const kind of ["persons", "places", "orgs"]) if (patch[kind]) {
@@ -1375,4 +1428,5 @@ const Store = {
 };
 
 window.TEIAgent = { Session, Settings, Store, agentChat, dispatch, lookupAuthority, rngValidate, checkPreservation, quickCheck, stripDisallowed, toArabic,
-  buildHeader, elementCounts, signals, guess, TAGS, GENRES, METADATA_FIELDS, TEI_VERSION, APP_VERSION, LLM, PRESETS: D.PRESETS || {} };
+  buildHeader, elementCounts, signals, guess, TAGS, GENRES, METADATA_FIELDS, TEI_VERSION, APP_VERSION, LLM, PRESETS: D.PRESETS || {},
+  elementNames: () => Object.keys(INDEX.elements).sort(), allowedAttrs: (el) => (INDEX.elements[el] || []).slice(), elementExists };

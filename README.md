@@ -14,8 +14,9 @@
 - **동작 방식:** Python판과 같은 규칙(태그·메타데이터 카탈로그, 언어 규칙, TEI 4.12 속성 허용 목록, few-shot 예시)과 같은 파이프라인을 JavaScript로 옮겼습니다.
 - **검증:** tei_all 4.12.0 전체 검증도 브라우저 안에서 합니다. libxml2를 웹어셈블리로 옮긴 xmllint-wasm(MIT)을 써서 Python판과 같은 엔진입니다.
 - **외부 통신:** DeepSeek API와, 요청할 때만 Wikidata로 나갑니다.
+- **화면 기능:** 작업이 끝나면 결과 요약이 담긴 완료 막대(실패 시 빨간 막대)가 *확인*을 누를 때까지 남습니다. 읽기 보기에서 태그를 클릭해 요소·속성을 바꾸거나 지우고, 글자를 드래그해 태그를 붙이고, 블록별 ✎ XML로 직접 고칠 수 있습니다(원문 보존·스키마 검사 동일 적용, 되돌리기 가능). 오른쪽 패널은 대화로 수정하기가 맨 위(💬 탭)이고 질문·추천 태그는 옆 탭입니다. 헤더의 언어 선택으로 UI를 한국어/English로 바꿉니다(모델의 질문·설명 언어도 함께 바뀜).
 - **수업 자료:** 실습 안내는 `dist/실습_안내.md`, 예시 텍스트는 `dist/samples/`에 있습니다.
-- **다시 만들기:** `python scripts/build_standalone.py`. 원본은 `standalone/app.js`, `ui.js`, `ui_body.html`입니다.
+- **다시 만들기:** `python scripts/build_standalone.py`. 원본은 `standalone/app.js`, `ui.js`, `ui.css`, `ui_body.html`입니다.
 
 ## 프로젝트 지침 · 대화로 규칙 쌓기
 - **프로젝트 지침**: 팀·반의 규칙(마크다운)을 모든 태깅 지시에 '9. PROJECT RULES'로 덧붙입니다. 일반 규칙과 충돌하면 지침이 우선하지만 원문 보존·스키마 검사는 바꿀 수 없습니다. `<!-- -->`는 메모로 보내지 않습니다. 작업 파일에 저장되고 TEI 헤더 `editorialDecl/interpretation`에 기록됩니다. 예시: `tei_agent/data/presets/mujeong_class.md`. CLI: `tei-agent tag 원문.txt -o out.xml --rules 지침.md`.
