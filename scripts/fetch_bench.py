@@ -30,6 +30,11 @@ def licence_line(xml: str) -> str:
 
 
 def main(ids: list[str]) -> int:
+    for stream in (sys.stdout, sys.stderr):  # Windows consoles (cp949): print ✓/→ as "?" instead of crashing
+        try:
+            stream.reconfigure(errors="replace")
+        except (AttributeError, ValueError):
+            pass
     items = json.loads(MANIFEST.read_text(encoding="utf-8"))["items"]
     DATA.mkdir(parents=True, exist_ok=True)
     failed = 0

@@ -19,6 +19,11 @@ def f1(r, key, kind="exact_PRF"):
 
 
 def main(a: str, b: str) -> None:
+    for stream in (sys.stdout, sys.stderr):  # Windows consoles (cp949): print ✓/→ as "?" instead of crashing
+        try:
+            stream.reconfigure(errors="replace")
+        except (AttributeError, ValueError):
+            pass
     A, B = load(a), load(b)
     fmt = lambda x: "  –  " if x is None else f"{x:.2f}"  # noqa: E731
     d = lambda x, y: "" if x is None or y is None else f"{y - x:+.2f}"  # noqa: E731

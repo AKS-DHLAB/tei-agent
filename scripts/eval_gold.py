@@ -31,9 +31,9 @@ ROOT = Path(__file__).resolve().parents[1]
 # --package-root PATH: score another checkout of tei_agent (e.g. v0.1.2) with this same harness and benchmark
 _pr = sys.argv.index("--package-root") if "--package-root" in sys.argv else -1
 sys.path.insert(0, str(Path(sys.argv[_pr + 1]).resolve() if _pr >= 0 else ROOT))
-from tei_agent.config import DATA_DIR, Settings  # noqa: E402
+from tei_agent.config import APP_VERSION, DATA_DIR, Settings  # noqa: E402
 from tei_agent.pipeline import Session  # noqa: E402
-from tei_agent.xmlutils import EDITORIAL, local, norm, parse_fragment, source_text  # noqa: E402
+from tei_agent.xmlutils import EDITORIAL, local, norm, parse_fragment  # noqa: E402
 
 TEI = "http://www.tei-c.org/ns/1.0"
 ENTITY = ["persName", "placeName", "orgName", "rs", "said", "q", "date", "time", "measure", "num", "foreign", "term",
@@ -126,6 +126,26 @@ def spans(xml_blocks: list[str]) -> list[tuple]:
 
         visit(root, False)
     return out
+
+
+def source_text(el) -> str:
+    """Source text of an encoding (editorial additions skipped). Defined here, not imported, so that every version
+    scored with --package-root is measured the same way (v0.1.2's xmlutils counted text inside notes)."""
+    out = []
+
+    def rec(node, skip=False):
+        name = local(node.tag)
+        parent = node.getparent()
+        s = skip or name in EDITORIAL or (name == "expan" and parent is not None and local(parent.tag) == "choice")
+        if node.text and not s:
+            out.append(node.text)
+        for ch in node:
+            if isinstance(ch.tag, str):
+                rec(ch, s)
+            if ch.tail and not s:
+                out.append(ch.tail)
+    rec(el)
+    return "".join(out)
 
 
 def text_of(xml_blocks: list[str]) -> str:
@@ -246,7 +266,8 @@ def run_item(item: dict, xml_text: str, settings: Settings, *, presets: list[str
     tags = [t for t in ENTITY + STRUCTURE if any(x[0] == t for x in gold + pred)]
     sc = score(gold, pred, tags)
     report = {
-        "id": item["id"], "lang": item.get("lang"), "genre": item.get("genre"), "presets": presets, "accepted": accept,
+        "id": item["id"], "tei_agent_version": APP_VERSION, "model": settings.model,
+        "lang": item.get("lang"), "genre": item.get("genre"), "presets": presets, "accepted": accept,
         "hints": hints, "chars": len(raw), "gold_blocks": len(gb), "seconds": round(time.time() - t0, 1),
         "detected": {"genre": s.genre, "langs": s.langs},
         "gold_raw_consistent": norm(raw) == gtext,
@@ -280,6 +301,11 @@ def summary_md(reports: list[dict]) -> str:
 
 
 def main():
+    for stream in (sys.stdout, sys.stderr):  # Windows consoles (cp949): print ✓/→ as "?" instead of crashing
+        try:
+            stream.reconfigure(errors="replace")
+        except (AttributeError, ValueError):
+            pass
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--manifest", default=str(ROOT / "bench" / "manifest.json"))
     ap.add_argument("--data", default=str(ROOT / "bench" / "data"))
@@ -324,7 +350,7 @@ def main():
     md = summary_md(reports)
     (out / "summary.md").write_text(md, encoding="utf-8")
     print(md)
-    print(f"→ {out}")
+    print(f"tei_agent {APP_VERSION} · model {settings.model} → {out}")
 
 
 if __name__ == "__main__":
