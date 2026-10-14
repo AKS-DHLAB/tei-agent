@@ -40,7 +40,7 @@ def source_text(el: etree._Element) -> str:
         for ch in node:
             if isinstance(ch.tag, str):
                 rec(ch, s)
-            if ch.tail and not skip:
+            if ch.tail and not s:  # a child's tail belongs to this node: skipped when this node is editorial
                 out.append(ch.tail)
 
     rec(el)

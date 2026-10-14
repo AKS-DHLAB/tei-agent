@@ -1,7 +1,7 @@
 {
  "id": "parlamint-gb",
  "lang": "en",
- "genre": "parliamentary",
+ "genre": "speech_transcript",
  "licence": "CC BY 4.0",
  "citation": "ParlaMint 5.0, CLARIN ERIC",
  "source_file": "ParlaMint-GB_2017-09-07-commons.xml",

@@ -44,12 +44,18 @@ TAGS: dict[str, dict] = {
                  "rule": "Scare quotes → <soCalled>; words mentioned as words → <mentioned>."},
     # --- named entities
     "persName": {"elements": ["persName"], "cat": "entity", "ko": "인명(persName)",
-                 "rule": "Personal NAMES only → <persName ref=\"#id\">. Pronouns, first-person narrator forms (나/내/난, I) and kinship terms are never persName: use <rs type=\"person\" ref=…> (TEI practice; differs from KNoTE, which tags the narrator '나' as persName). Titles/honorifics may be split with <roleName>/<forename>/<surname> only when asked."},
+                 "rule": "Personal NAMES only → <persName ref=\"#id\">. Pronouns, a narrator's self-reference and kinship terms are not names: when rs is active they become <rs type=\"person\" ref=…>. Titles/honorifics may be split with <roleName>/<forename>/<surname> only when asked.",
+                 "examples": {"ko": "나/내/난, 아버지 → rs, not persName", "en": "I, my father → rs, not persName",
+                              "de": "ich, mein Vater → rs", "fr": "je, mon père → rs", "es": "yo, mi padre → rs", "ja": "私、父 → rs"}},
     "placeName": {"elements": ["placeName"], "cat": "entity", "ko": "지명(placeName)",
-                  "rule": "PROPER place names only → <placeName ref=\"#id\">; natural features may use <geogName>. Generic place nouns (가게, 학교, 동네, the shop, the village) are NOT placeName — tag them <rs type=\"place\"> only if rs is active and they refer to a registered place."},
+                  "rule": "PROPER place names only → <placeName ref=\"#id\">; natural features may use <geogName>. Generic place nouns are NOT placeName — tag them <rs type=\"place\"> only if rs is active and they refer to a registered place.",
+                  "examples": {"ko": "generic: 가게, 학교, 동네", "en": "generic: the shop, the village", "de": "generic: das Dorf, die Stadt",
+                               "fr": "generic: le village, la ville", "es": "generic: el pueblo, la villa", "ru": "generic: город, деревня", "ja": "generic: 寺, 里"}},
     "orgName": {"elements": ["orgName"], "cat": "entity", "ko": "기관·단체명(orgName)", "rule": "Organisations → <orgName ref=\"#id\">."},
     "rs": {"elements": ["rs"], "cat": "entity", "ko": "지시어·별칭·대명사(rs, 공지시)",
-           "rule": "Pronouns (incl. first-person narrator forms 나/내/난/저, I/me), kinship terms, epithets and descriptive noun phrases that refer to a registered entity → <rs type=\"person|place|org|object\" ref=\"#id\">. Tag every such mention, not only the first. The span never includes case particles: <rs>그</rs>의, <rs>내</rs>가."},
+           "rule": "Pronouns, kinship terms, epithets and descriptive noun phrases that refer to a registered entity → <rs type=\"person|place|org|object\" ref=\"#id\">. Tag every such mention, not only the first.",
+           "examples": {"ko": "<rs>그</rs>의, <rs>내</rs>가 (particles outside)", "en": "he, my father, the old man",
+                        "de": "er, der Alte", "fr": "il, le vieillard", "es": "él, el viejo", "ru": "он, старик", "ja": "彼、翁"}},
     "roleName": {"elements": ["roleName"], "cat": "entity", "ko": "직함·관직(roleName)", "rule": "Titles/offices/occupations used as names → <roleName type=…>."},
     "objectName": {"elements": ["objectName"], "cat": "entity", "ko": "사물명(objectName)", "rule": "Names of notable objects (ships, artworks, artefacts) → <objectName>."},
     "title": {"elements": ["title"], "cat": "entity", "ko": "작품·서명(title)", "rule": "Titles of works mentioned in the text → <title level=\"m|a|j|s|u\">."},
@@ -57,13 +63,22 @@ TAGS: dict[str, dict] = {
     "event": {"elements": ["name"], "cat": "entity", "ko": "역사적 사건명(name type=event)", "rule": "Named historical events → <name type=\"event\" ref=\"#id\">."},
     # --- time & measure
     "date": {"elements": ["date"], "cat": "time", "ko": "날짜(date when=…)",
-             "rule": "Dates and other temporal expressions → <date>: calendar dates (@when=\"YYYY[-MM[-DD]]\" ONLY if exactly resolvable to ISO 8601), but ALSO seasons (봄/summer), relative days (오늘, 이튿날, the next day), named days/festivals and 'N years ago' expressions, without @when. Non-Gregorian dates: keep text, use @calendar=\"#id\" + @when-custom/@datingMethod. Never put non-ISO text in @when/@from/@to; a date without a year uses --MM-DD (never year 0000)."},
-    "time": {"elements": ["time"], "cat": "time", "ko": "시각(time)", "rule": "Times of day and parts of the day (밤, 새벽 두 시쯤, 점심때, that evening, at noon) → <time>; @when=\"HH:MM:SS\" only if exact."},
+             "rule": "Calendar dates, named days and festivals → <date> (@when=\"YYYY[-MM[-DD]]\" ONLY if exactly resolvable to ISO 8601). Seasons, relative days and 'N years ago' expressions are dates only when the project rules say so. Non-Gregorian dates: keep text, use @calendar=\"#id\" + @when-custom/@datingMethod. Never put non-ISO text in @when/@from/@to; a date without a year uses --MM-DD (never year 0000).",
+             "examples": {"ko": "1919년 3월 1일, 정월 초하루, 음력 팔월", "en": "21 March 1841, Christmas Day", "de": "am 3. Mai 1848, Ostern",
+                          "fr": "le 14 juillet 1789", "es": "el 2 de mayo de 1808", "ru": "1 января 1836 года", "ja": "三月のつごもり"}},
+    "time": {"elements": ["time"], "cat": "time", "ko": "시각(time)", "rule": "Times of day → <time>; @when=\"HH:MM:SS\" only if exact. Parts of the day (night, dawn) only when the project rules say so.",
+             "examples": {"ko": "새벽 두 시쯤, 오정", "en": "at noon, at half past nine", "de": "um drei Uhr", "fr": "à midi", "es": "a las tres", "ru": "в три часа"}},
     "measure": {"elements": ["measure", "num"], "cat": "measure", "ko": "수량·단위(measure/num)",
-                "rule": "Quantities with units → <measure type=\"currency|age|duration|length|weight|area|count…\" quantity=\"number\" unit=\"…\">. The span covers ONLY the number + unit (삼 원, 열다섯 살, 서너 달, two miles), not the counted noun (돈, 지폐), which may be named in @commodity. Ages (type=age) and durations (몇 해, 하루 종일, type=duration) count as measures. Bare numbers → <num value=…>. Numeric attributes (@quantity, @value, @atLeast, @atMost) take Arabic numerals only (열세 → 13, 삼십 → 30); ranges (팔구, 서너) → @atLeast/@atMost; vague (몇) → omit."},
+                "rule": "Quantities with units → <measure type=\"currency|length|weight|area|count…\" quantity=\"number\" unit=\"…\">. The span covers ONLY the number + unit, not the counted noun, which may be named in @commodity. Ages and durations are measures only when the project rules say so. Bare numbers → <num value=…>. Numeric attributes (@quantity, @value, @atLeast, @atMost) take Arabic numerals only; ranges → @atLeast/@atMost; vague amounts → omit.",
+                "examples": {"ko": "<measure>삼 원</measure>짜리 돈 (counted noun 돈 outside); 열세 → 13, 삼십 → 30; 서너 → atLeast 3 atMost 4; 몇 → omit",
+                             "en": "two miles, £5, a dozen eggs (unit only)", "de": "drei Taler, zwei Meilen", "fr": "trois francs, deux lieues",
+                             "es": "dos leguas, cien reales", "ru": "три рубля, две версты", "ja": "三両、二里"}},
     # --- language & orthography
     "foreign": {"elements": ["foreign"], "cat": "language", "ko": "외국어·한자 병기(foreign xml:lang)",
-                "rule": "Words in another language/script → <foreign xml:lang=\"BCP47\">. Korean in Hanja: xml:lang=\"ko-Hani\"; Literary Chinese passages: \"lzh\"; Japanese \"ja\"."},
+                "rule": "Words in another language/script → <foreign xml:lang=\"BCP47\">.",
+                "examples": {"ko": "Hanja gloss → xml:lang=\"ko-Hani\"; Literary Chinese passage → \"lzh\"; Japanese → \"ja\"",
+                             "ja": "Literary Chinese (kanbun) → \"lzh\"", "en": "Latin tags → \"la\", French phrases → \"fr\"",
+                             "de": "Französisch → \"fr\", Latein → \"la\"", "ru": "French phrases → \"fr\""}},
     "ruby": {"elements": ["ruby", "rb", "rt"], "cat": "language", "ko": "루비·후리가나(ruby/rb/rt)", "rule": "Interlinear glosses (furigana, Hanja readings) → <ruby><rb>漢字</rb><rt>かんじ</rt></ruby>."},
     "orig_reg": {"elements": ["choice", "orig", "reg"], "cat": "language", "ko": "원형/정규화 병기(choice/orig/reg)",
                  "rule": "Historical spelling with modern form → <choice><orig>…</orig><reg>…</reg></choice>; the source spelling goes in <orig>."},
@@ -90,7 +105,7 @@ GENRES: dict[str, dict] = {
         "core": ["div", "p", "said", "persName", "placeName", "orgName", "date", "foreign"],
         "optional": ["rs", "thought", "q", "time", "measure", "roleName", "title", "objectName", "term", "floatingText", "note", "hi", "soCalled", "milestones", "orig_reg"],
         "registry_location": "particDesc",
-        "exemplars": ["knote-dongbaek", "eltec-eng-trollope", "eltec-fra-adam", "knote-hyeol", "knote-unsu"],
+        "exemplars": ["knote-dongbaek", "eltec-eng-trollope", "eltec-fra-adam", "eltec-deu", "eltec-spa", "knote-hyeol", "knote-unsu"],
         "notes": "Characters go into profileDesc/particDesc/listPerson (KNoTE, ELTeC practice).",
     },
     "poetry": {
@@ -98,7 +113,7 @@ GENRES: dict[str, dict] = {
         "core": ["div", "lg", "persName", "placeName", "date", "foreign"],
         "optional": ["rhyme", "said", "q", "hi", "title", "term", "note", "orig_reg", "milestones"],
         "registry_location": "standOff",
-        "exemplars": ["gerdracor-emilia", "knote-dongbaek"],
+        "exemplars": ["disco-sonnet", "gerdracor-emilia", "knote-dongbaek"],
         "notes": "Each poem may be a <div type=\"poem\"> with <head>; keep line breaks as <l>.",
     },
     "drama": {
@@ -106,7 +121,7 @@ GENRES: dict[str, dict] = {
         "core": ["div", "sp", "p", "lg", "persName", "placeName"],
         "optional": ["date", "rs", "foreign", "hi", "note", "q", "title", "measure"],
         "registry_location": "particDesc",
-        "exemplars": ["gerdracor-emilia"],
+        "exemplars": ["gerdracor-emilia", "rusdracor-revizor"],
         "notes": "Cast goes to particDesc/listPerson (DraCor practice); @who on <sp> points to it; acts/scenes are nested divs.",
     },
     "correspondence": {
@@ -114,7 +129,7 @@ GENRES: dict[str, dict] = {
         "core": ["div", "letter_parts", "p", "persName", "placeName", "orgName", "date"],
         "optional": ["rs", "q", "title", "measure", "foreign", "note", "add_del", "gap", "hi", "milestones"],
         "registry_location": "standOff",
-        "exemplars": ["knote-hyeol", "eltec-eng-trollope"],
+        "exemplars": ["schnitzler-letter", "knote-hyeol", "eltec-eng-trollope"],
         "notes": "Header should carry correspDesc/correspAction (CMIF-compatible) for sender/addressee/place/date.",
     },
     "historical_record": {
@@ -130,7 +145,7 @@ GENRES: dict[str, dict] = {
         "core": ["div", "p", "milestones", "hi", "persName", "placeName"],
         "optional": ["abbr", "orig_reg", "fw", "gap", "sic_corr", "add_del", "foreign", "note", "date", "lg", "title"],
         "registry_location": "standOff",
-        "exemplars": ["tcp-a00002"],
+        "exemplars": ["tcp-a00002", "koui-genji"],
         "notes": "Preserve original spelling; regularisation only inside <choice>.",
     },
     "inscription": {
@@ -154,7 +169,7 @@ GENRES: dict[str, dict] = {
         "core": ["dict", "foreign"],
         "optional": ["cit", "abbr", "hi", "note", "term"],
         "registry_location": "standOff",
-        "exemplars": [],
+        "exemplars": [], "exemplar_fallback": False,
         "notes": "TEI Lex-0 recommendations (dictionary example added to the Guidelines in 4.10).",
     },
     "nonfiction": {
@@ -190,7 +205,36 @@ LANG_RULES: dict[str, str] = {
     "fr": "French: preserve historical spellings and typographic quotes « »; guillemets stay outside <said>.",
     "la": "Latin: abbreviations follow EpiDoc (<expan><abbr>…</abbr><ex>…</ex></expan>) when expansions are requested.",
     "grc": "Ancient Greek: keep polytonic diacritics exactly; EpiDoc conventions for epigraphic texts.",
+    "es": "Spanish: keep ¿ ¡ and historical accents/spellings exactly; dialogue dashes (—) and quotation marks « » “ ” stay outside <said>.",
+    "it": "Italian: keep historical spellings and apostrophes exactly; dialogue dashes and « » stay outside <said>.",
+    "pt": "Portuguese: keep historical spellings exactly; dialogue dashes and « » stay outside <said>.",
+    "ru": "Russian: keep pre-reform orthography (ѣ, і, ѳ, final ъ) exactly; dialogue dashes (—) and « » stay outside <said>.",
 }
+
+
+def tag_rule(key: str, langs=()) -> str:
+    """A tag's language-neutral rule plus the examples for the document's languages only (no Korean examples
+    in a German prompt, and vice versa)."""
+    t = TAGS[key]
+    ex = t.get("examples") or {}
+    picks = [f"{l}: {ex[l]}" for l in dict.fromkeys(str(x).split("-")[0] for x in langs) if l in ex]
+    return t["rule"] + (" Examples (" + "; ".join(picks) + ")." if picks else "")
+
+
+# Kinship terms, titles and address forms that are never unique to one person: a registry name equal to one of these
+# is not used to re-point @ref (pipeline.fix_name_refs). Grouped by language; the union is used.
+GENERIC_FORMS_BY_LANG: dict[str, str] = {
+    "ko": """선생 선생님 부인 마님 어머니 아버지 어머님 아버님 부친 모친 형님 언니 오빠 누님 누이 아씨 어른 장로 학감 교장 목사
+진사 노파 할멈 할머니 할아버지 아저씨 아주머니 주인 손님 동생 아우 자네 당신 그대 그이 저이 이애 그애 아가 아기 도령 서방 서방님
+나리 영감 대감 마나님 사람 여자 남자 학생 기생 하인 순사 의사 교사 신사 숙녀 아들 딸 남편 아내 첩 형 오라버니 외숙모 외삼촌""",
+    "en": "mother father sir madam lady lord master mistress uncle aunt brother sister king queen doctor teacher",
+    "de": "mutter vater herr frau fräulein onkel tante bruder schwester könig königin doktor lehrer",
+    "fr": "mère père monsieur madame mademoiselle oncle tante frère sœur roi reine docteur",
+    "es": "madre padre señor señora señorita tío tía hermano hermana rey reina doctor",
+    "ru": "мать отец барин барыня сударь сударыня дядя тётя брат сестра доктор",
+    "ja": "母 父 殿 君 姫 宮 主 尼 僧",
+}
+GENERIC_FORMS: set[str] = {w for v in GENERIC_FORMS_BY_LANG.values() for w in v.split()}
 
 
 # ---------------------------------------------------------------------------

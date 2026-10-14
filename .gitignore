@@ -7,3 +7,5 @@ __pycache__/
 !examples/**/*.teiagent.json
 .venv/
 _site/
+bench/data/
+bench/results/

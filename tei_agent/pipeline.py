@@ -26,7 +26,7 @@ from .config import TEI_NS, TEI_VERSION, Settings
 from .header import build_header
 from .heuristics import SIGNAL_TO_TAG, guess, script_profile, signals
 from .llm import LLM, LLMError
-from .profiles import GENRES, LANG_RULES, TAGS, metadata_fields_for, tags_for
+from .profiles import GENERIC_FORMS, GENRES, LANG_RULES, TAGS, metadata_fields_for, tag_rule, tags_for
 from .schema import attribute_cheatsheet, quick_check, strip_disallowed, validate_document
 from .xmlutils import (check_preservation, element_counts, local, parse_fragment, plain_p, refs_in, source_text,
                        strip_ns, to_string)
@@ -93,10 +93,7 @@ def deep_merge(base: dict, patch: dict) -> dict:
 
 
 # kinship terms, titles and address forms that many characters share: never used to re-point a reference
-GENERIC_FORMS = set("""선생 선생님 부인 마님 어머니 아버지 어머님 아버님 부친 모친 형님 언니 오빠 누님 누이 아씨 어른 장로 학감 교장 목사
-진사 노파 할멈 할머니 할아버지 아저씨 아주머니 주인 손님 동생 아우 자네 당신 그대 그이 저이 이애 그애 아가 아기 도령 서방 서방님
-나리 영감 대감 마나님 사람 여자 남자 학생 기생 하인 순사 의사 교사 신사 숙녀 아들 딸 남편 아내 첩 형 오라버니 외숙모 외삼촌
-mother father sir madam lady lord master mistress uncle aunt brother sister king queen doctor teacher""".split())
+# GENERIC_FORMS: kinship terms/titles by language, defined in profiles.py
 
 
 PROJECT_RULES_MAX = 8000
@@ -389,7 +386,7 @@ class Session:
         return P.tag_system(genre=self.genre, tag_keys=keys, lang_rules=lang_rules or "Preserve the source orthography.",
                             cheatsheet=attribute_cheatsheet(els), exemplars="\n\n".join(EX.format_exemplar(e) for e in ex),
                             registry=self.registry_text(), ui_lang=self.s.ui_lang, page_numbers=self.page_numbers(),
-                            extra=P.project_rules_block(self.project_rules))
+                            extra=P.project_rules_block(self.project_rules), langs=self.langs)
 
     def chunks(self, blocks: list[dict] | None = None) -> list[list[dict]]:
         blocks = self.blocks if blocks is None else blocks
@@ -595,7 +592,7 @@ class Session:
                 evidence[k]["examples"] += v["examples"][:2]
         sample = self.raw_text[:6000]
         try:
-            rec = self.llm.json(P.recommend_tags_system(self.s.ui_lang, self.genre, candidates),
+            rec = self.llm.json(P.recommend_tags_system(self.s.ui_lang, self.genre, candidates, self.langs),
                                 P.project_rules_block(self.project_rules, for_registry=True) + f"Current tag counts: {self.summary()['tag_counts']}\nRegex evidence: {json.dumps(evidence, ensure_ascii=False)}\n\nTEXT SAMPLE:\n{sample}",
                                 max_tokens=4000)
         except LLMError as e:
@@ -706,7 +703,7 @@ class Session:
             return {"changed": 0}
         if self.recommendations.get("tags"):
             self.recommendations["tags"] = [t for t in self.recommendations["tags"] if t["key"] not in keys]
-        instr = "Add the following markup wherever it applies: " + "; ".join(TAGS[k]["rule"] for k in keys)
+        instr = "Add the following markup wherever it applies: " + "; ".join(tag_rule(k, self.langs) for k in keys)
         if extra_instruction:
             instr += " Additional guidance from the user: " + extra_instruction
         return self.retag(instr, add_keys=keys, progress=progress)
@@ -788,7 +785,7 @@ class Session:
         for op in plan.get("entity_ops", []) or []:
             self.edit_entity(**{k: op.get(k) for k in ("op", "kind", "id", "data", "into")})
         if plan.get("retag_instruction") or plan.get("tag_keys") or plan.get("remove_tag_keys"):
-            instr = plan.get("retag_instruction") or ("Add: " + "; ".join(TAGS[k]["rule"] for k in plan.get("tag_keys", []) if k in TAGS))
+            instr = plan.get("retag_instruction") or ("Add: " + "; ".join(tag_rule(k, self.langs) for k in plan.get("tag_keys", []) if k in TAGS))
             if plan.get("remove_tag_keys"):
                 instr += " Remove markup of these kinds (unwrap, keep text): " + ", ".join(
                     e for k in plan["remove_tag_keys"] if k in TAGS for e in TAGS[k]["elements"])

@@ -14,7 +14,7 @@ import json
 import sys
 from pathlib import Path
 
-from .config import Settings
+from .config import DATA_DIR, Settings
 
 
 def _progress(msg, frac):
@@ -33,9 +33,17 @@ def cmd_tag(a):
     from . import tools
     from .pipeline import Session
     s = Session(Path(a.input).read_text(encoding="utf-8"), Settings.from_env())
+    rules = []
+    for name in a.preset or []:
+        f = DATA_DIR / "presets" / f"{name}.md"
+        if not f.exists():
+            sys.exit(f"unknown preset {name!r}; available: {', '.join(p.stem for p in sorted((DATA_DIR / 'presets').glob('*.md')))}")
+        rules.append(f.read_text(encoding="utf-8"))
     if a.rules:
-        s.set_project_rules(Path(a.rules).read_text(encoding="utf-8"))
-        print(f"   project rules: {a.rules} ({len(s.project_rules)} chars)", file=sys.stderr)
+        rules.append(Path(a.rules).read_text(encoding="utf-8"))
+    if rules:
+        s.set_project_rules("\n\n".join(rules))
+        print(f"   project rules: {', '.join((a.preset or []) + ([a.rules] if a.rules else []))} ({len(s.project_rules)} chars)", file=sys.stderr)
     print("1) analyse …", file=sys.stderr)
     an = s.analyze({"genre": a.genre, "lang": a.lang})
     print(f"   genre={s.genre} langs={s.langs} blocks={len(s.blocks)}\n   {an.get('notes', '')}", file=sys.stderr)
@@ -119,7 +127,8 @@ def main(argv=None):
     p = sub.add_parser("tag"); p.add_argument("input"); p.add_argument("-o", "--output", required=True)
     p.add_argument("--genre"); p.add_argument("--lang"); p.add_argument("--accept-recommended", action="store_true")
     p.add_argument("--interactive", action="store_true"); p.add_argument("--repair", action="store_true")
-    p.add_argument("--rules", help="project rules file (.md/.txt) added to every tagging instruction"); p.set_defaults(f=cmd_tag)
+    p.add_argument("--rules", help="project rules file (.md/.txt) added to every tagging instruction")
+    p.add_argument("--preset", action="append", help="bundled convention preset(s), e.g. knote_conventions, mujeong_class"); p.set_defaults(f=cmd_tag)
     p = sub.add_parser("validate"); p.add_argument("file"); p.set_defaults(f=cmd_validate)
     p = sub.add_parser("fix"); p.add_argument("file"); p.add_argument("-o", "--output", required=True); p.set_defaults(f=cmd_fix)
     p = sub.add_parser("tools"); p.set_defaults(f=cmd_tools)

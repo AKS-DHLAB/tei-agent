@@ -24,6 +24,11 @@
 - **프로젝트 지침**: 팀·반의 규칙(마크다운)을 모든 태깅 지시에 '9. PROJECT RULES'로 덧붙입니다. 일반 규칙과 충돌하면 지침이 우선하지만 원문 보존·스키마 검사는 바꿀 수 없습니다. `<!-- -->`는 메모로 보내지 않습니다. 작업 파일에 저장되고 TEI 헤더 `editorialDecl/interpretation`에 기록됩니다. 예시: `tei_agent/data/presets/mujeong_class.md`. CLI: `tei-agent tag 원문.txt -o out.xml --rules 지침.md`.
 - **대화 루프**: 에이전트는 수정 요청마다 *측정(find_markup) → 일반 규칙이면 지침에 추가(set_project_rules) → 적용(apply_instruction, 검색어로 범위 제한) → 재측정·보고*를 따릅니다. 도구 19개.
 
+## 범용성 (0.1.3)
+- **규칙의 층:** ① TEI 공통 규칙(언어 중립, 예문은 문서 언어의 것만 삽입) ② 언어 규칙(ko·ja·zh/lzh·en·de·fr·es·it·pt·ru·la·grc) ③ 장르 프로필 ④ 관행 프리셋·프로젝트 지침. KNoTE의 태깅 관행은 프리셋 `knote_conventions`(브라우저판: *예시 지침 불러오기*, CLI: `--preset knote_conventions`)로 분리했습니다. KNoTE와 맞춰 태깅하거나 KNoTE 정답과 비교할 때 켭니다.
+- **예시 선택:** 같은 장르 1편 + 문서 언어 1편. 장르도 언어도 다른 예시는 넣지 않습니다(예: 독일어 소설에 한국 소설 예시를 넣지 않음).
+- **벤치마크:** `bench/manifest.json`(12편, 예시·튜닝에 쓰지 않은 파일), `scripts/fetch_bench.py` → `scripts/eval_gold.py` → `scripts/compare_runs.py`. API 없이 두 버전의 지시·예시를 비교하는 `scripts/probe_prompts.py`. v0.1.2와의 비교 결과는 `docs/generality_0.1.3.md`.
+
 ## 수업에서 쓰기 · GitHub로 관리하기
 - **학생:** `dist/TEI_Agent.html`을 **내려받아** Chrome/Edge로 열고 본인 DeepSeek 키를 넣습니다. 드라이브·메일의 '미리보기'로 열면 동작하지 않습니다.
 - **GitHub Pages(선택):** 저장소 Settings → Pages → Source를 *GitHub Actions*로 두면 `.github/workflows/pages.yml`이 `dist/`를 `https://<owner>.github.io/<repo>/`에 올립니다. 학생은 주소만 열면 됩니다(DeepSeek API는 Pages 출처의 브라우저 호출도 허용 — 2026-10-13 preflight 확인). 키는 그 주소의 브라우저 저장소에만 남습니다.
@@ -62,6 +67,7 @@ tei-agent serve                 # → http://127.0.0.1:8765
 **CLI**
 ```sh
 tei-agent tag novel.txt -o novel.xml --accept-recommended --repair     # 일괄 처리
+tei-agent tag novel.txt -o novel.xml --preset knote_conventions          # KNoTE 관행으로
 tei-agent tag poem.txt -o poem.xml --genre poetry --interactive          # 터미널 대화
 tei-agent validate file.xml                                              # tei_all 4.12.0 검증
 tei-agent fix knote.xml -o knote_fixed.xml                               # 기존 TEI 스키마 오류 자동 수리
@@ -88,6 +94,11 @@ tei-agent mcp                                                            # MCP �
 | EEBO-TCP Phase I A00002 | en 근세 인쇄본 | CC0 |
 | I.Sicily ISic000001 | la 금석문(EpiDoc) | CC BY 4.0 |
 | ParlaMint-GB 샘플 | en 의회 발화 | CC BY 4.0 |
+| DISCO 소네트 1편 *(0.1.3)* | es 시가(`lg`/`l`, 운율 속성) | CC BY 4.0 |
+| Arthur Schnitzler 서간 L00040 *(0.1.3)* | de 서간(`address`·`salute`·`rs`·`note`) | CC BY 4.0 |
+| 校異源氏物語テキストDB 5권 *(0.1.3)* | ja 고전 인쇄본(`pb`·`lb`) | CC0 1.0 |
+| RusDraCor, Gogol 『Ревизор』 *(0.1.3)* | ru 희곡 | CC0 1.0 |
+| ELTeC-deu, ELTeC-spa *(0.1.3)* | de/es 소설 | 텍스트 PD, 마크업 CC BY 4.0 |
 
 출처와 라이선스 확인 내역은 `docs/references.md`에 있습니다. 예시를 다시 생성하려면 `scripts/build_exemplars.py`를 실행합니다. 예시 속의 4.12 무효 속성(예: KNoTE의 `said/@mode`)은 프롬프트에서 "따라 하지 말 것"으로 명시했습니다.
 
@@ -127,6 +138,6 @@ tests/           mock DeepSeek 기반 종단 테스트 (pytest)
 - Schematron 규칙은 검증하지 않습니다(RELAX NG만). 최종 납품본은 jing이나 oXygen으로 한 번 더 검증할 것을 권합니다.
 - 실제 `dsh` 환경에서 Harness overlay를 로드해 보지는 않았습니다.
 - 다음 단계 후보:
-  - KNoTE 관행과 TEI 관행 중 하나를 고르는 설정(예: 서술자 '나'를 `persName`으로 할지 `rs`로 할지)
-  - 33편 전체로 넓힌 평가
+  - 0.1.3 벤치마크(`bench/`)의 실측(DeepSeek API)과 33편 전체로 넓힌 평가
+  - 한문·한국어 비문학·역사기록 예시(개방 TEI가 없어 직접 제작 필요)
   - 프로젝트 전용 ODD 생성

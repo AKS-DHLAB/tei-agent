@@ -67,6 +67,14 @@ def test_browser_edition_end_to_end():
         assert pg.inner_text("#btn-validate") == "검증 (tei_all)"
         v = pg.evaluate("async () => await window.__teiUI.session.validate()")
         assert v["valid"], v["errors"][:3]
+        # 0.1.3: exemplar selection and language-filtered rules match the Python edition
+        from tei_agent import exemplars as EX
+        from tei_agent.profiles import GENRES, tag_rule
+        cases = [["prose_fiction", ["de"]], ["prose_fiction", ["ko"]], ["poetry", ["ko"]], ["correspondence", ["ko"]],
+                 ["dictionary", ["en"]], ["drama", ["ru"]], ["generic", ["zh"]]]
+        js = pg.evaluate("""(cases) => cases.map(([g, l]) => window.TEIAgent.selectExemplars(g, l, window.TEIAgent.GENRES[g].exemplars || []).map((d) => d.id))""", cases)
+        assert js == [[d["id"] for d in EX.select(g, l, GENRES[g]["exemplars"])] for g, l in cases]
+        assert pg.evaluate("() => window.TEIAgent.tagRule('placeName', ['de'])") == tag_rule("placeName", ["de"])
         # 4) gold data: stored, preferred as few-shot example, perfect score against itself
         live = Path(__file__).resolve().parents[1] / "examples" / "live" / "heldout"
         a, c = (live / "13_pred.xml").read_text(encoding="utf-8"), (live / "18_pred.xml").read_text(encoding="utf-8")

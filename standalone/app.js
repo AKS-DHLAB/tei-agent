@@ -6,6 +6,12 @@ const D = JSON.parse(document.getElementById("tei-data").textContent);
 const TEI_NS = "http://www.tei-c.org/ns/1.0";
 const XML_NS = "http://www.w3.org/XML/1998/namespace";
 const { TAGS, GENRES, LANG_RULES, METADATA_FIELDS, INDEX, EXEMPLARS, TEI_VERSION, APP_VERSION, MODEL_NAMES } = D;
+/** A tag's language-neutral rule plus the examples for the document's languages only (mirror of profiles.tag_rule). */
+function tagRule(k, langs = []) {
+  const t = TAGS[k], ex = t.examples || {};
+  const picks = [...new Set(langs.map((l) => String(l).split("-")[0]))].filter((l) => ex[l]).map((l) => `${l}: ${ex[l]}`);
+  return t.rule + (picks.length ? ` Examples (${picks.join("; ")}).` : "");
+}
 const APP_NAME = "TEI-Agent";
 
 /* ------------------------------------------------------------------ settings */
@@ -383,11 +389,11 @@ place and organisation that is mentioned. Reply in json only:
  "orgs":[{"id":"...","name":"...","variants":[],"type":"...","note":"..."}]}
 Rules: ids are unique across all three lists; do not invent entities not in the text; never add external
 identifiers (Wikidata, VIAF …) — those are looked up and verified separately.`,
-  tag: ({ genre, tagKeys, langRules, cheatsheet, exemplars, registry, extra = "", u = "ko", pageNumbers = false }) => {
+  tag: ({ genre, tagKeys, langRules, cheatsheet, exemplars, registry, extra = "", u = "ko", pageNumbers = false, langs = [] }) => {
     const g = GENRES[genre];
     const pageRule = pageNumbers ? 'Exception: this text contains printed page numbers; a standalone page number may become <pb n="…"/>.'
       : 'This text has NO page numbers: a number standing alone as a block is a section/chapter heading → <head>1</head> (and set "div"); never turn it into <pb/>.';
-    const rules = tagKeys.filter((k) => TAGS[k]).map((k) => `- ${TAGS[k].rule}`).join("\n");
+    const rules = tagKeys.filter((k) => TAGS[k]).map((k) => `- ${tagRule(k, langs)}`).join("\n");
     return `${ROLE}
 Task: insert TEI markup into numbered source blocks. Genre profile: ${g.en}. ${g.notes}
 
@@ -447,7 +453,7 @@ revised xml for every block you were given (unchanged blocks may be returned as-
 INSTRUCTION: ${instruction}
 Keep existing correct markup. The underlying text must stay identical.`,
   retagUser: (blocks) => "Revise these encoded blocks (json):\n" + J({ blocks: blocks.map((b) => ({ i: b.i, xml: b.xml })) }),
-  recTags: (u, genre, cands) => `${ROLE}
+  recTags: (u, genre, cands, langs = []) => `${ROLE}
 Recommend ADDITIONAL TEI markup that would add scholarly value to this ${GENRES[genre].en} text, choosing only from
 the candidate catalog below, and ask the human encoder the questions needed to encode precisely.
 Base each recommendation on concrete evidence in the text (quote short examples verbatim). Reply in json only:
@@ -457,7 +463,7 @@ Base each recommendation on concrete evidence in the text (quote short examples 
 priority 1 = strongly recommended. At most 8 tags, at most 4 questions (e.g. ambiguous speakers, Hanja language tag
 ko-Hani vs lzh, whether to encode pronoun coreference, calendar of dates).
 Candidate catalog:
-${cands.map((k) => `- ${k}: ${TAGS[k].ko} — ${TAGS[k].rule}`).join("\n")}`,
+${cands.map((k) => `- ${k}: ${TAGS[k].ko} — ${tagRule(k, langs)}`).join("\n")}`,
   recMeta: (u, genre) => `${ROLE}
 You enrich the TEI header. Given the current metadata JSON, the text analysis and text excerpts, (a) propose concrete
 VALUES you can justify from the text or from well-established bibliographic knowledge, and (b) recommend which further
@@ -499,11 +505,18 @@ header enrichments (recommend_metadata), then validate when the user is done.`,
 
 /* ------------------------------------------------------------------ exemplars */
 function selectExemplars(genre, langs, preferred, k = 2) {
-  // user-supplied gold data (same language) outranks the bundled exemplars: the project's own conventions come first
-  const user = Gold.list().filter((g) => g.use).map((g) => Gold.asExemplar(g));
-  return [...user, ...EXEMPLARS].map((d) => [(d.genre === genre ? 4 : 0) + (langs.includes(d.lang) ? 3 : 0) + (d.user && langs.includes(d.lang) ? 5 : 0)
-      + (preferred.includes(d.id) ? 2 - preferred.indexOf(d.id) * 0.1 : 0), d])
-    .sort((a, b) => b[0] - a[0]).slice(0, k).filter(([s]) => s > 0).map(([, d]) => d);
+  // mirror of exemplars.select (0.1.3): slot 1 = same genre (same language first); slot 2 = the document's language
+  // (only same genre + language if slot 1 already has the language). User gold marked "use" outranks bundled exemplars.
+  langs = langs.map((l) => String(l).split("-")[0]);
+  const pool = [...Gold.list().filter((g) => g.use).map((g) => Gold.asExemplar(g)), ...EXEMPLARS];
+  const pref = (d) => (preferred.includes(d.id) ? 1 - 0.05 * preferred.indexOf(d.id) : 0), user = (d) => (d.user ? 2 : 0);
+  const best = (c, score) => c.reduce((a, d) => (a === null || score(d) > score(a) ? d : a), null);
+  const first = best(pool.filter((d) => d.genre === genre), (d) => (langs.includes(d.lang) ? 3 : 0) + user(d) + pref(d));
+  if (!first && GENRES[genre] && GENRES[genre].exemplar_fallback === false) return [];
+  const second = first && langs.includes(first.lang)
+    ? best(pool.filter((d) => d !== first && d.genre === genre && langs.includes(d.lang)), (d) => user(d) + pref(d))
+    : best(pool.filter((d) => d !== first && langs.includes(d.lang)), (d) => (d.genre === genre ? 3 : 0) + user(d) + pref(d));
+  return [first, second].filter(Boolean).slice(0, k);
 }
 const formatExemplar = (d, max = 2200) => `### Exemplar \`${d.id}\` (${d.lang}, ${d.genre}; ${d.licence}; ${d.citation})
 Raw input (excerpt):
@@ -738,7 +751,7 @@ function registryLines(reg) {
     for (const e of reg[k] || []) out.push(`${lab} #${e.id} = ${e.name}` + ((e.variants || []).length ? ` (also: ${(e.variants || []).slice(0, 6).join(", ")})` : ""));
   return out.join("\n");
 }
-const GENERIC_FORMS = new Set(["aunt", "brother", "doctor", "father", "king", "lady", "lord", "madam", "master", "mistress", "mother", "queen", "sir", "sister", "teacher", "uncle", "교사", "교장", "그대", "그애", "그이", "기생", "나리", "남자", "남편", "노파", "누님", "누이", "당신", "대감", "도령", "동생", "딸", "마나님", "마님", "모친", "목사", "부인", "부친", "사람", "서방", "서방님", "선생", "선생님", "손님", "숙녀", "순사", "신사", "아가", "아기", "아내", "아들", "아버님", "아버지", "아씨", "아우", "아저씨", "아주머니", "어른", "어머니", "어머님", "언니", "여자", "영감", "오라버니", "오빠", "외삼촌", "외숙모", "의사", "이애", "자네", "장로", "저이", "주인", "진사", "첩", "하인", "학감", "학생", "할머니", "할멈", "할아버지", "형", "형님"]);
+const GENERIC_FORMS = new Set(D.GENERIC_FORMS || []); // kinship terms/titles by language (profiles.GENERIC_FORMS_BY_LANG)
 function projectRulesBlock(rules, forRegistry = false) {
   // the encoders' own conventions; never override text preservation or schema validity (both also enforced by code)
   rules = String(rules || "").replace(/<!--[\s\S]*?-->/g, "").trim();
@@ -902,7 +915,7 @@ class Session {
     const langRules = uniq(this.langs.map((l) => l.split("-")[0])).filter((l) => LANG_RULES[l]).map((l) => LANG_RULES[l]).join(" ");
     const ex = selectExemplars(this.genre, this.langs.map((l) => l.split("-")[0]), GENRES[this.genre].exemplars || [], 2);
     return P.tag({ genre: this.genre, tagKeys: keys, langRules: langRules || "Preserve the source orthography.", cheatsheet: attributeCheatsheet(els),
-      exemplars: ex.map((e) => formatExemplar(e)).join("\n\n"), registry: this.registryText(), u: this.s.uiLang, pageNumbers: this.pageNumbers(), extra: projectRulesBlock(this.project_rules) });
+      exemplars: ex.map((e) => formatExemplar(e)).join("\n\n"), registry: this.registryText(), u: this.s.uiLang, pageNumbers: this.pageNumbers(), extra: projectRulesBlock(this.project_rules), langs: this.langs });
   }
   chunks(blocks = null) {
     blocks = blocks || this.blocks; const out = []; let cur = [], size = 0;
@@ -1011,7 +1024,7 @@ class Session {
     const ev = {};
     for (const [s, v] of Object.entries(sig)) { const k = D.SIGNAL_TO_TAG[s]; if (k && cands.includes(k)) { ev[k] = ev[k] || { count: 0, examples: [] }; ev[k].count += v.count; ev[k].examples.push(...v.examples.slice(0, 2)); } }
     let rec;
-    try { rec = await this.llm.json(P.recTags(this.s.uiLang, this.genre, cands), projectRulesBlock(this.project_rules, true) + `Current tag counts: ${J(this.summary().tag_counts)}\nRegex evidence: ${J(ev)}\n\nTEXT SAMPLE:\n${this.raw_text.slice(0, 6000)}`, 4000); }
+    try { rec = await this.llm.json(P.recTags(this.s.uiLang, this.genre, cands, this.langs), projectRulesBlock(this.project_rules, true) + `Current tag counts: ${J(this.summary().tag_counts)}\nRegex evidence: ${J(ev)}\n\nTEXT SAMPLE:\n${this.raw_text.slice(0, 6000)}`, 4000); }
     catch (e) { rec = { tags: Object.entries(ev).map(([k, v]) => ({ key: k, why: `텍스트에서 관련 패턴 ${v.count}건 발견`, examples: v.examples.slice(0, 3), estimated_count: v.count, priority: 2 })), questions: [], note: e.message }; }
     const tags = [];
     for (const t of rec.tags || []) if (TAGS[t.key] && !this.tagset.includes(t.key)) tags.push({ ...t, label: TAGS[t.key].ko, elements: TAGS[t.key].elements, regex_evidence: ev[t.key] });
@@ -1069,7 +1082,7 @@ class Session {
   async acceptTags(keys, extra = "", progress) {
     keys = keys.filter((k) => TAGS[k]); if (!keys.length) return { changed: 0 };
     if (this.recommendations.tags) this.recommendations.tags = this.recommendations.tags.filter((t) => !keys.includes(t.key));
-    let instr = "Add the following markup wherever it applies: " + keys.map((k) => TAGS[k].rule).join("; ");
+    let instr = "Add the following markup wherever it applies: " + keys.map((k) => tagRule(k, this.langs)).join("; ");
     if (extra) instr += " Additional guidance from the user: " + extra;
     return this.retag(instr, { addKeys: keys, progress });
   }
@@ -1113,7 +1126,7 @@ class Session {
     if (plan.metadata_patch && Object.keys(plan.metadata_patch).length) { this.updateMetadata(plan.metadata_patch); out.metadata_updated = true; }
     for (const op of plan.entity_ops || []) this.editEntity(op.op, op.kind, op.id, op.data, op.into);
     if (plan.retag_instruction || (plan.tag_keys || []).length || (plan.remove_tag_keys || []).length) {
-      let instr = plan.retag_instruction || "Add: " + (plan.tag_keys || []).filter((k) => TAGS[k]).map((k) => TAGS[k].rule).join("; ");
+      let instr = plan.retag_instruction || "Add: " + (plan.tag_keys || []).filter((k) => TAGS[k]).map((k) => tagRule(k, this.langs)).join("; ");
       if ((plan.remove_tag_keys || []).length) instr += " Remove markup of these kinds (unwrap, keep text): " + plan.remove_tag_keys.filter((k) => TAGS[k]).flatMap((k) => TAGS[k].elements).join(", ");
       const scope = plan.scope || "all";
       out.retag = await this.retag(instr, { addKeys: (plan.tag_keys || []).filter((k) => TAGS[k]), removeKeys: (plan.remove_tag_keys || []).filter((k) => TAGS[k]),
@@ -1626,4 +1639,4 @@ const Store = {
 window.TEIAgent = { Session, Settings, Store, agentChat, dispatch, lookupAuthority, rngValidate, checkPreservation, quickCheck, stripDisallowed, toArabic,
   buildHeader, elementCounts, signals, guess, TAGS, GENRES, METADATA_FIELDS, TEI_VERSION, APP_VERSION, LLM, PRESETS: D.PRESETS || {},
   elementNames: () => Object.keys(INDEX.elements).sort(), allowedAttrs: (el) => (INDEX.elements[el] || []).slice(), elementExists,
-  Gold, evaluateAgainstGold, mergeAsCorpus, mergeAsSession, selectExemplars };
+  Gold, evaluateAgainstGold, mergeAsCorpus, mergeAsSession, selectExemplars, tagRule };

@@ -1,0 +1,32 @@
+{
+ "about": "TEI Agent generality benchmark (0.1.3). Held-out gold TEI files across languages and genres: none of them is a few-shot exemplar, and none was used to tune the rules (the KNoTE novels 03, 13, 15, 18 and 28 were; 22 was evaluated once and is kept). Files are fetched at pinned commits by scripts/fetch_bench.py into bench/data/ (not committed). Licences were checked in the repositories on 2026-10-14. Run: python scripts/eval_gold.py --manifest bench/manifest.json",
+ "items": [
+  {"id": "ko-knote-16", "lang": "ko", "genre": "prose_fiction", "repo": "AKS-DHLAB/KNoTE", "commit": "5508acce4f0438c67402e82c0b7f7ffaa5a468de",
+   "path": "dataset/16_Hyun Jin-geon_Director B and the Love Letters.xml", "licence": "CC BY 4.0", "max_chars": 8000,
+   "presets": ["knote_conventions"], "note": "KNoTE conventions; compare with and without the preset"},
+  {"id": "ko-knote-33", "lang": "ko", "genre": "prose_fiction", "repo": "AKS-DHLAB/KNoTE", "commit": "5508acce4f0438c67402e82c0b7f7ffaa5a468de",
+   "path": "dataset/33_Kang So-cheon_The Photo Studio that Takes Pictures of Dreams.xml", "licence": "CC BY 4.0", "max_chars": 8000,
+   "presets": ["knote_conventions"]},
+  {"id": "ko-knote-22", "lang": "ko", "genre": "prose_fiction", "repo": "AKS-DHLAB/KNoTE", "commit": "5508acce4f0438c67402e82c0b7f7ffaa5a468de",
+   "path": "dataset/22_Kim Nam-cheon_Water (Mul).xml", "licence": "CC BY 4.0", "max_chars": 8000,
+   "presets": ["knote_conventions"], "note": "evaluated once in 2026-10-13 (heldout); never used for tuning"},
+  {"id": "en-eltec-tupper", "lang": "en", "genre": "prose_fiction", "repo": "COST-ELTeC/ELTeC-eng", "commit": "3db3b6738a836f0e1b276b6c9703e42f4297f978",
+   "path": "level1/ENG18411_Tupper.xml", "licence": "Text PD; markup CC BY 4.0", "max_chars": 6000, "note": "level 1: structure only (no entity annotation)"},
+  {"id": "fr-eltec-audoux", "lang": "fr", "genre": "prose_fiction", "repo": "COST-ELTeC/ELTeC-fra", "commit": "83f0a43fdb967cd1db646027a1a237307e4924a1",
+   "path": "level1/FRA00201_Audoux.xml", "licence": "Text PD; markup CC BY 4.0", "max_chars": 6000, "note": "structure only"},
+  {"id": "de-eltec-002", "lang": "de", "genre": "prose_fiction", "repo": "COST-ELTeC/ELTeC-deu", "commit": "dd1529ae19fda711fa23c908f86bfa6e474e9412",
+   "path": "level1/DEU002.xml", "licence": "Text PD; markup CC BY 4.0", "max_chars": 6000, "note": "structure only"},
+  {"id": "es-eltec-1002", "lang": "es", "genre": "prose_fiction", "repo": "COST-ELTeC/ELTeC-spa", "commit": "83e2a22d5ef66f96e59f47f7ef810358c4236322",
+   "path": "level1/SPA1002_AlonsoDeAvecilla_LaConquistaDelPeru.xml", "licence": "Text PD; markup CC BY 4.0", "max_chars": 6000, "note": "structure only"},
+  {"id": "de-drama-kleist", "lang": "de", "genre": "drama", "repo": "dracor-org/gerdracor", "commit": "7a7a3147b57aed70393facd12cacd69d05f58091",
+   "path": "tei/kleist-amphitryon.xml", "licence": "CC0", "max_chars": 6000},
+  {"id": "ru-drama-chaika", "lang": "ru", "genre": "drama", "repo": "dracor-org/rusdracor", "commit": "cb06b3a211cc36ed0806c9ae85a94ede5da99557",
+   "path": "tei/chekhov-chaika.xml", "licence": "CC0 1.0", "max_chars": 6000},
+  {"id": "es-poetry-disco-034n", "lang": "es", "genre": "poetry", "repo": "pruizf/disco", "commit": "b626fefad22b2c8a0ecec8903cb6a465ebadb541",
+   "path": "tei/19th/per-sonnet/disco034n_0100.xml", "licence": "CC BY 4.0"},
+  {"id": "de-letter-schnitzler-101", "lang": "de", "genre": "correspondence", "repo": "arthur-schnitzler/schnitzler-briefe-data", "commit": "ea27fbd8a21305decfd0c818973ea615d999e1ce",
+   "path": "data/editions/L00101.xml", "licence": "CC BY 4.0"},
+  {"id": "la-inscription-isic2", "lang": "la", "genre": "inscription", "repo": "ISicily/ISicily", "commit": "572d7f5ee1cbb62087bfed3c46ffc7cab6cb386c",
+   "path": "inscriptions/ISic000002.xml", "licence": "CC BY 4.0", "container": "div[@type='edition']", "note": "edition text only (EpiDoc)"}
+ ]
+}

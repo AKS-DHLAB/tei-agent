@@ -7,7 +7,7 @@ import re
 import json
 
 from .config import TEI_VERSION
-from .profiles import GENRES, METADATA_FIELDS, TAGS
+from .profiles import GENRES, METADATA_FIELDS, TAGS, tag_rule
 
 LANG_NAME = {"ko": "Korean", "en": "English", "de": "German", "fr": "French", "ja": "Japanese", "zh": "Chinese"}
 
@@ -64,13 +64,13 @@ def project_rules_block(rules: str, for_registry: bool = False) -> str:
 
 
 def tag_system(*, genre: str, tag_keys: list[str], lang_rules: str, cheatsheet: str, exemplars: str,
-               registry: str, extra: str = "", ui_lang: str = "ko", page_numbers: bool = False) -> str:
+               registry: str, extra: str = "", ui_lang: str = "ko", page_numbers: bool = False, langs=()) -> str:
     g = GENRES[genre]
     page_rule = ("Exception: this text contains printed page numbers; a standalone page number may become <pb n=\"…\"/>."
                  if page_numbers else
                  "This text has NO page numbers: a number standing alone as a block is a section/chapter heading → <head>1</head> "
                  "(and set \"div\"); never turn it into <pb/>.")
-    rules = "\n".join(f"- {TAGS[k]['rule']}" for k in tag_keys if k in TAGS)
+    rules = "\n".join(f"- {tag_rule(k, langs)}" for k in tag_keys if k in TAGS)
     return f"""{ROLE}
 Task: insert TEI markup into numbered source blocks. Genre profile: {g['en']}. {g['notes']}
 
@@ -151,8 +151,8 @@ def retag_user(blocks: list[dict]) -> str:
         {"blocks": [{"i": b["i"], "xml": b["xml"]} for b in blocks]}, ensure_ascii=False)
 
 
-def recommend_tags_system(ui_lang: str, genre: str, candidates: list[str]) -> str:
-    cat = "\n".join(f"- {k}: {TAGS[k]['ko']} — {TAGS[k]['rule']}" for k in candidates)
+def recommend_tags_system(ui_lang: str, genre: str, candidates: list[str], langs=()) -> str:
+    cat = "\n".join(f"- {k}: {TAGS[k]['ko']} — {tag_rule(k, langs)}" for k in candidates)
     return f"""{ROLE}
 Recommend ADDITIONAL TEI markup that would add scholarly value to this {GENRES[genre]['en']} text, choosing only from
 the candidate catalog below, and ask the human encoder the questions needed to encode precisely.

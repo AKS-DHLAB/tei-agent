@@ -66,9 +66,57 @@
  {
   "id": "parlamint-gb",
   "lang": "en",
-  "genre": "parliamentary",
+  "genre": "speech_transcript",
   "licence": "CC BY 4.0",
   "citation": "ParlaMint 5.0, CLARIN ERIC",
   "source_file": "ParlaMint-GB_2017-09-07-commons.xml"
+ },
+ {
+  "id": "disco-sonnet",
+  "lang": "es",
+  "genre": "poetry",
+  "licence": "CC BY 4.0",
+  "citation": "Ruiz Fabo, P. et al. DISCO: Diachronic Spanish Sonnet Corpus. github.com/pruizf/disco",
+  "source_file": "disco018g_0031.xml"
+ },
+ {
+  "id": "schnitzler-letter",
+  "lang": "de",
+  "genre": "correspondence",
+  "licence": "CC BY 4.0",
+  "citation": "Arthur Schnitzler: Briefwechsel mit Autorinnen und Autoren (ACDH-CH), L00040",
+  "source_file": "L00040.xml"
+ },
+ {
+  "id": "koui-genji",
+  "lang": "ja",
+  "genre": "early_print",
+  "licence": "CC0 1.0",
+  "citation": "校異源氏物語テキストDB (Kōi Genji monogatari text DB), vol. 5",
+  "source_file": "05.xml"
+ },
+ {
+  "id": "rusdracor-revizor",
+  "lang": "ru",
+  "genre": "drama",
+  "licence": "CC0 1.0",
+  "citation": "RusDraCor (Russian Drama Corpus), dracor.org: Gogol, Revizor",
+  "source_file": "gogol-revizor.xml"
+ },
+ {
+  "id": "eltec-deu",
+  "lang": "de",
+  "genre": "prose_fiction",
+  "licence": "Text PD; markup CC BY 4.0",
+  "citation": "ELTeC-deu, COST Action CA16204 Distant Reading for European Literary History",
+  "source_file": "DEU001.xml"
+ },
+ {
+  "id": "eltec-spa",
+  "lang": "es",
+  "genre": "prose_fiction",
+  "licence": "Text PD; markup CC BY 4.0",
+  "citation": "ELTeC-spa, COST Action CA16204 Distant Reading for European Literary History",
+  "source_file": "SPA1001_GilYCarrasco_ElSenyorDeBembibre.xml"
  }
 ]

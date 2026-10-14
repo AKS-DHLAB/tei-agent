@@ -22,7 +22,7 @@ sys.path.insert(0, str(ROOT))
 from tei_agent.config import APP_VERSION, TEI_VERSION  # noqa: E402
 from tei_agent.header import MODEL_NAMES  # noqa: E402
 from tei_agent.heuristics import PATTERNS, SIGNAL_TO_TAG  # noqa: E402
-from tei_agent.profiles import GENRES, LANG_RULES, METADATA_FIELDS, TAGS  # noqa: E402
+from tei_agent.profiles import GENERIC_FORMS, GENRES, LANG_RULES, METADATA_FIELDS, TAGS  # noqa: E402
 from tei_agent.schema import GLOBAL_ATTRS, index  # noqa: E402
 
 SRC = ROOT / "standalone"
@@ -92,6 +92,7 @@ def main():
         "TAGS": TAGS, "GENRES": GENRES, "LANG_RULES": LANG_RULES, "METADATA_FIELDS": METADATA_FIELDS,
         "PATTERNS": js_patterns(), "SIGNAL_TO_TAG": SIGNAL_TO_TAG, "INDEX": slim_index(), "EXEMPLARS": exemplars(),
         "PRESETS": {p.stem: p.read_text(encoding="utf-8") for p in sorted((DATA / "presets").glob("*.md"))},
+        "GENERIC_FORMS": sorted(GENERIC_FORMS),
     }
     data_json = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     rng = (DATA / "schema" / "tei_all.rng").read_text(encoding="utf-8")

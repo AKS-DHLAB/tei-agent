@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tei-agent"
-version = "0.1.2"
+version = "0.1.3"
 description = "Interactive, multilingual TEI P5 (4.12.0) tagging agent powered by DeepSeek-V4.1-Flash"
 readme = "README.md"
 requires-python = ">=3.10"
