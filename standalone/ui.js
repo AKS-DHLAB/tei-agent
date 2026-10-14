@@ -189,6 +189,7 @@
     $("#legend").innerHTML = ["persName", "placeName", "orgName", "rs", "date", "time", "measure", "said", "q", "foreign", "term", "title", "roleName", "name"].filter((t) => used.has(t)).map((t) => `<span class="t-${t}">${t}</span>`).join("");
     const parser = new DOMParser(); let html = "";
     for (const b of S.blocks) {
+      if (b.part) html += `<div class="divmark part">${esc(b.part.type)} ${esc(b.part.n ?? "")}</div>`;
       if (b.div) html += `<div class="divmark">${esc(b.div.type)} ${esc(b.div.n ?? "")}</div>`;
       const d = parser.parseFromString(`<w xmlns="http://www.tei-c.org/ns/1.0">${b.xml}</w>`, "application/xml");
       const c = { e: 0, t: 0 };
@@ -447,6 +448,98 @@
   }
   $("#btn-wd").onclick = () => wd();
   $("#genre").onchange = (e) => { A.dispatch(S, "set_genre", { genre: e.target.value }); save(); render(); toast(L("장르 프로필을 바꿨습니다. 필요하면 추천을 다시 받으세요.", "Genre profile changed. Get new suggestions if needed.")); };
+
+  /* ---------- gold data: few-shot examples + scoring */
+  function renderGold() {
+    const l = A.Gold.list();
+    let bytes = 0; try { bytes = (localStorage.getItem(A.Gold.key) || "").length * 2; } catch (e) { /* ignore */ }
+    $("#gold-size").textContent = l.length ? L(`${l.length}개 · 약 ${(bytes / 1e6).toFixed(2)} MB`, `${l.length} entries · ~${(bytes / 1e6).toFixed(2)} MB`) : "";
+    $("#gold-from-session").disabled = !S;
+    $("#gold-list").innerHTML = l.length ? l.map((g) => {
+      const top = Object.entries(g.counts || {}).filter(([k]) => !["p", "div", "head"].includes(k)).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([k, v]) => `${k} ${v}`).join(", ");
+      return `<div class="gold-item" data-g="${esc(g.id)}"><div><b>${esc(g.title)}</b> <span class="k">${esc(g.lang)} · ${esc(g.genre)} · ${g.blocks.length} ${L("블록", "blocks")}</span>
+        <div class="hint">${esc(top)}${g.file ? ` · ${esc(g.file)}` : ""}</div></div>
+        <div class="acts"><label class="hint"><input type="checkbox" data-act="use" ${g.use ? "checked" : ""}> ${L("예시로 사용", "use as example")}</label>
+        <button type="button" data-act="eval" ${S ? "" : "disabled"}>${L("현재 문서와 비교", "Score current document")}</button>
+        <button type="button" data-act="text">${L("원문으로 새 태깅", "Tag its text anew")}</button>
+        <button type="button" data-act="del" class="danger">${L("삭제", "Delete")}</button></div></div>`;
+    }).join("") : `<p class="hint">${L("아직 정답 데이터가 없습니다.", "No gold data yet.")}</p>`;
+    $$("#gold-list .gold-item").forEach((el) => {
+      const id = el.dataset.g;
+      el.querySelector("[data-act=use]").onchange = (e) => { A.Gold.setUse(id, e.target.checked); toast(e.target.checked ? L("태깅 예시로 사용합니다", "Used as tagging example") : L("예시에서 뺐습니다", "No longer used as example")); };
+      el.querySelector("[data-act=del]").onclick = () => { if (confirm(L("이 정답 데이터를 삭제할까요?", "Delete this gold entry?"))) { A.Gold.remove(id); renderGold(); } };
+      el.querySelector("[data-act=text]").onclick = () => {
+        const g = A.Gold.get(id); $("#dlg-gold").close();
+        S = null; hideDone(); $("#ws").classList.add("hidden"); $("#start").classList.remove("hidden");
+        $("#in-text").value = g.raw; $("#in-title").value = g.title; $("#in-lang").value = g.lang;
+        toast(L("정답의 원문을 넣었습니다. 태깅 후 ‘📚 정답 데이터 → 현재 문서와 비교’로 점수를 확인하세요.", "Gold text loaded. After tagging, use ‘📚 Gold data → Score current document’."));
+      };
+      el.querySelector("[data-act=eval]").onclick = () => showEval(A.evaluateAgainstGold(S.blocks.map((b) => b.xml), A.Gold.get(id), S.registry));
+    });
+  }
+  function showEval(r) {
+    const f = (x) => x.map((v) => v.toFixed(2)).join(" / ");
+    $("#gold-eval").innerHTML = `<h3>${L("평가", "Evaluation")}: ${esc(r.gold_title)}</h3>
+      <p class="hint">${r.text_identical ? L("✓ 원문이 정답과 같습니다.", "✓ Text identical to the gold.") : L(`⚠ 원문이 정답과 다릅니다 (정답 ${r.text_chars.gold}자, 현재 ${r.text_chars.pred}자). 위치를 맞춰 비교했으니 수치는 참고용입니다.`, `⚠ Text differs from the gold (${r.text_chars.gold} vs ${r.text_chars.pred} chars); spans were aligned, treat scores as indicative.`)}
+      ${r.who.compared ? L(` · 화자(@who) 일치 ${r.who.match}/${r.who.compared} = ${r.who.acc}`, ` · speaker (@who) agreement ${r.who.match}/${r.who.compared} = ${r.who.acc}`) : ""}</p>
+      <table class="evtable"><tr><th>${L("요소", "element")}</th><th>${L("정답", "gold")}</th><th>${L("예측", "pred")}</th><th>${L("정확 일치 P / R / F1", "exact P / R / F1")}</th><th>${L("겹침 P / R / F1", "overlap P / R / F1")}</th></tr>
+      ${r.rows.map((x) => `<tr><td>${esc(x.tag)}</td><td>${x.gold}</td><td>${x.pred}</td><td>${f(x.exact)}</td><td>${f(x.overlap)}</td></tr>`).join("")}
+      <tr class="sum"><td>micro</td><td>${r.rows.reduce((a, x) => a + x.gold, 0)}</td><td>${r.rows.reduce((a, x) => a + x.pred, 0)}</td><td>${f(r.micro.exact)}</td><td>${f(r.micro.overlap)}</td></tr></table>
+      <div class="row" style="margin-top:6px"><button type="button" id="eval-dl">${L("평가 결과 저장(.json)", "Save evaluation (.json)")}</button></div>`;
+    $("#eval-dl").onclick = () => download(`${S ? fname() : "eval"}.eval.json`, JSON.stringify(r, null, 1), "application/json");
+    S.log("evaluate", { gold: r.gold_title, micro: r.micro }); save();
+    showDone(true, L("정답 비교 완료", "Evaluation finished"), L(`${r.gold_title} · 정확 일치 micro F1 ${r.micro.exact[2]} · 겹침 micro F1 ${r.micro.overlap[2]}`, `${r.gold_title} · exact micro F1 ${r.micro.exact[2]} · overlap micro F1 ${r.micro.overlap[2]}`));
+    $("#gold-eval").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+  $("#btn-gold").onclick = () => { $("#gold-eval").innerHTML = ""; renderGold(); $("#dlg-gold").showModal(); };
+  $("#gold-files").onchange = async (e) => {
+    const files = [...e.target.files]; e.target.value = ""; const ok = [], bad = [];
+    for (const f of files) { try { A.Gold.add(A.Gold.fromTei(await f.text(), f.name)); ok.push(f.name); } catch (err) { bad.push(`${f.name}: ${err.message}`); } }
+    renderGold();
+    if (ok.length) showDone(!bad.length, L(`정답 데이터 ${ok.length}개 추가`, `${ok.length} gold file(s) added`), bad.length ? L("실패: ", "Failed: ") + bad.join(" / ") : ok.join(", "));
+    else if (bad.length) toast(bad.join(" / "));
+  };
+  $("#gold-from-session").onclick = () => {
+    if (!S) return;
+    try { const g = A.Gold.add(A.Gold.fromSession(S, { title: ((S.metadata.titles || [{}])[0] || {}).text || "" })); renderGold(); toast(L(`‘${g.title}’을(를) 정답으로 추가했습니다`, `‘${g.title}’ added as gold`)); }
+    catch (err) { toast(err.message); }
+  };
+
+  /* ---------- merge several TEI documents */
+  let mergeDocs = [];
+  function renderMerge() {
+    $("#merge-list").innerHTML = mergeDocs.map((d, k) => `<li><div class="row"><span class="grow">${esc(d.name)}</span>
+      <button type="button" data-up="${k}" ${k ? "" : "disabled"}>▲</button><button type="button" data-down="${k}" ${k < mergeDocs.length - 1 ? "" : "disabled"}>▼</button><button type="button" data-rm="${k}">✕</button></div></li>`).join("")
+      || `<p class="hint">${L("아직 고른 문서가 없습니다.", "No documents selected yet.")}</p>`;
+    $$("#merge-list [data-up]").forEach((b) => (b.onclick = () => { const k = +b.dataset.up; [mergeDocs[k - 1], mergeDocs[k]] = [mergeDocs[k], mergeDocs[k - 1]]; renderMerge(); }));
+    $$("#merge-list [data-down]").forEach((b) => (b.onclick = () => { const k = +b.dataset.down; [mergeDocs[k + 1], mergeDocs[k]] = [mergeDocs[k], mergeDocs[k + 1]]; renderMerge(); }));
+    $$("#merge-list [data-rm]").forEach((b) => (b.onclick = () => { mergeDocs.splice(+b.dataset.rm, 1); renderMerge(); }));
+    $("#merge-add-current").disabled = !S; $("#merge-run").disabled = mergeDocs.length < 2;
+  }
+  $("#btn-merge").onclick = () => { $("#merge-msg").classList.add("hidden"); renderMerge(); $("#dlg-merge").showModal(); };
+  $("#merge-files").onchange = async (e) => { for (const f of e.target.files) mergeDocs.push({ name: f.name, xml: await f.text() }); e.target.value = ""; renderMerge(); };
+  $("#merge-add-current").onclick = () => { if (S) { mergeDocs.push({ name: L("(현재 문서) ", "(current) ") + fname(), xml: S.toXml()[0] }); renderMerge(); } };
+  $("#merge-run").onclick = async () => {
+    const mode = ($$("input[name=merge-mode]").find((r) => r.checked) || {}).value, title = $("#merge-title").value.trim(), msg = $("#merge-msg");
+    msg.classList.add("hidden");
+    try {
+      if (mode === "single") {
+        const r = A.mergeAsSession(mergeDocs, { title, divType: $("#merge-divtype").value.trim() || "chapter", settings: settings() });
+        $("#dlg-merge").close(); mergeDocs = []; openSession(r.session); save();
+        run(L("TEI 합치기", "Merging TEI"), async (p) => { p(L("합친 문서 검증 중", "validating merged document"), 0.4); await S.validate();
+          return { merged: r.titles.length }; }).then(() => { if (r.renamed.length) toast(L(`겹친 id ${r.renamed.length}개 이름 변경: `, `${r.renamed.length} duplicate ids renamed: `) + r.renamed.slice(0, 5).join(", ")); });
+      } else {
+        const r = A.mergeAsCorpus(mergeDocs, { title });
+        const v = await A.rngValidate(r.xml);
+        const name = (title || r.titles.join("_")).replace(/[\\/:*?"<>|]/g, "_").slice(0, 80) || "corpus";
+        download(`${name}.teiCorpus.xml`, r.xml, "application/xml");
+        $("#dlg-merge").close(); mergeDocs = [];
+        showDone(v.valid, v.valid ? L("TEI 합치기 완료 (teiCorpus)", "Merged into a teiCorpus") : L("teiCorpus를 저장했지만 스키마 오류가 있습니다", "teiCorpus saved, but it has schema errors"),
+          L(`문서 ${r.titles.length}개 · 겹친 id ${r.renamed.length}개 이름 변경 · `, `${r.titles.length} documents · ${r.renamed.length} duplicate ids renamed · `)
+          + (v.valid ? L("tei_all 검증 통과", "tei_all valid") : L(`오류 ${v.errors.length}건 (원본 문서의 오류일 수 있음): `, `${v.errors.length} errors (may come from the source files): `) + v.errors.slice(0, 2).map((e) => `line ${e.line}: ${e.message}`).join(" / ")));
+      }
+    } catch (err) { msg.textContent = err.message; msg.classList.remove("hidden"); }
+  };
 
   /* ---------- project rules */
   function rememberRules(t) { try { localStorage.setItem("teiagent.rules", t || ""); } catch (e) { /* storage blocked */ } }

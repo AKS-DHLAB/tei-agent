@@ -499,7 +499,10 @@ header enrichments (recommend_metadata), then validate when the user is done.`,
 
 /* ------------------------------------------------------------------ exemplars */
 function selectExemplars(genre, langs, preferred, k = 2) {
-  return EXEMPLARS.map((d) => [(d.genre === genre ? 4 : 0) + (langs.includes(d.lang) ? 3 : 0) + (preferred.includes(d.id) ? 2 - preferred.indexOf(d.id) * 0.1 : 0), d])
+  // user-supplied gold data (same language) outranks the bundled exemplars: the project's own conventions come first
+  const user = Gold.list().filter((g) => g.use).map((g) => Gold.asExemplar(g));
+  return [...user, ...EXEMPLARS].map((d) => [(d.genre === genre ? 4 : 0) + (langs.includes(d.lang) ? 3 : 0) + (d.user && langs.includes(d.lang) ? 5 : 0)
+      + (preferred.includes(d.id) ? 2 - preferred.indexOf(d.id) * 0.1 : 0), d])
     .sort((a, b) => b[0] - a[0]).slice(0, k).filter(([s]) => s > 0).map(([, d]) => d);
 }
 const formatExemplar = (d, max = 2200) => `### Exemplar \`${d.id}\` (${d.lang}, ${d.genre}; ${d.licence}; ${d.citation})
@@ -508,7 +511,7 @@ ${d.raw_input.slice(0, max / 2)}
 
 Expert TEI encoding (excerpt, may be truncated):
 ${d.tei_body.slice(0, max)}
-NOTE: exemplars show conventions, not an attribute allow-list. Some legacy exemplar attributes (e.g. said/@mode, measure/@ref, rs/@sex) are INVALID in TEI 4.12 — never copy them.`;
+${d.user ? "This is the PROJECT'S OWN GOLD ENCODING supplied by the encoders: follow its element choices, span boundaries and attribute conventions closely.\n" : ""}NOTE: exemplars show conventions, not an attribute allow-list. Some legacy exemplar attributes (e.g. said/@mode, measure/@ref, rs/@sex) are INVALID in TEI 4.12 — never copy them.`;
 
 /* ------------------------------------------------------------------ authority (Wikidata) */
 async function wikidataSearch(name, lang = "en", limit = 5) {
@@ -1224,6 +1227,10 @@ class Session {
         const n = xml.replace(/<[^>]+>/g, "").trim();
         d = { type: last.type || "section", level: last.level || 1, n: /^\d{1,4}$/.test(n) ? n : null };
       }
+      if (b.part) { // outer division opened before the block's own division (merged documents)
+        while (stack.length) { stack.pop(); lines.push(ind() + "</div>"); }
+        lines.push(ind() + `<div type="${escAttr(b.part.type)}"` + (b.part.n ? ` n="${escAttr(b.part.n)}"` : "") + ">"); stack.push(1);
+      }
       if (d) last = d;
       if (d) {
         const lvl = parseInt(d.level || 1, 10);
@@ -1315,7 +1322,13 @@ class Session {
     for (const [kind, tag, nameTag] of [["persons", "person", "persName"], ["places", "place", "placeName"], ["orgs", "org", "orgName"]])
       for (const el of root.getElementsByTagNameNS(TEI_NS, tag)) {
         const xid = el.getAttributeNS(XML_NS, "id");
-        if (xid) { const n = [...el.children].find((c) => c.localName === nameTag); s.registry[kind].push({ id: xid, name: n ? n.textContent.trim() : xid, variants: [], keep: true }); }
+        if (xid) {
+          const n = [...el.children].find((c) => c.localName === nameTag), e = { id: xid, name: n ? n.textContent.replace(/\s+/g, " ").trim() : xid, variants: [], keep: true };
+          for (const a of ["sex", "role", "type"]) if (el.getAttribute(a)) e[a] = el.getAttribute(a);
+          const wd = [...el.children].find((c) => c.localName === "idno" && /wikidata/i.test(c.getAttribute("type") || ""));
+          if (wd) e.wikidata = wd.textContent.trim();
+          s.registry[kind].push(e);
+        }
       }
     const known = s.allIds();
     for (const part of [hdr, so]) if (part) for (const x of part.getElementsByTagName("*")) { const id = x.getAttributeNS(XML_NS, "id"); if (id && !known.has(id)) s.extra_ids.push(id); }
@@ -1408,6 +1421,189 @@ async function agentChat(s, message, progress, maxSteps = 14) {
   return { reply: "(작업 단계가 많아 여기서 멈췄습니다. 이어서 지시해 주세요.)", actions };
 }
 
+/* ------------------------------------------------------------------ gold (reference) TEI data: few-shot exemplars + evaluation */
+const teiTitle = (root) => { const t = root.getElementsByTagNameNS(TEI_NS, "titleStmt")[0]; const x = t && t.getElementsByTagNameNS(TEI_NS, "title")[0]; return x ? x.textContent.replace(/\s+/g, " ").trim() : ""; };
+const Gold = {
+  key: "teiagent.gold",
+  list() { try { return JSON.parse(localStorage.getItem(this.key) || "[]"); } catch (e) { return []; } },
+  saveAll(l) { try { localStorage.setItem(this.key, JSON.stringify(l)); return true; } catch (e) { return false; } },
+  /** Build a gold entry from a TEI document (string) or from a Session (e.g. a corrected work). */
+  fromTei(xmlText, fileName = "") {
+    const s = Session.fromTei(xmlText);
+    const root = domParser.parseFromString(xmlText, "application/xml").documentElement;
+    const lic = root.getElementsByTagNameNS(TEI_NS, "licence")[0];
+    const t = teiTitle(root), stem = fileName.replace(/\.xml$/i, "");
+    return this.fromSession(s, { title: !t || /제목\s*미상|untitled/i.test(t) ? stem || t : t, file: fileName, licence: lic ? (lic.getAttribute("target") || lic.textContent.trim()).slice(0, 80) : "" });
+  },
+  fromSession(s, { title = "", file = "", licence = "" } = {}) {
+    const blocks = s.blocks.map((b) => b.xml).filter((x) => x && x.trim());
+    if (!blocks.length) throw new Error("본문(body)에 블록이 없습니다.");
+    const t = title || ((s.metadata.titles || [{}])[0] || {}).text || s.raw_text.slice(0, 30);
+    return { id: "gold-" + uid(), title: t, file, lang: (s.langs[0] || "und").split("-")[0], genre: s.genre, licence: licence || "user-supplied",
+      blocks, raw: s.blocks.map((b) => b.raw).join("\n\n"), registry: s.registry, counts: elementCounts(blocks), use: true, added: nowIso() };
+  },
+  add(entry) {
+    const l = this.list().filter((g) => !(g.title === entry.title && g.raw === entry.raw)); l.unshift(entry);
+    if (!this.saveAll(l)) throw new Error("브라우저 저장 공간이 부족해 정답 데이터를 저장할 수 없습니다. 오래된 항목을 지워 주세요.");
+    return entry;
+  },
+  remove(id) { return this.saveAll(this.list().filter((g) => g.id !== id)); },
+  setUse(id, use) { return this.saveAll(this.list().map((g) => (g.id === id ? { ...g, use: !!use } : g))); },
+  get(id) { return this.list().find((g) => g.id === id) || null; },
+  asExemplar(g) {
+    // start the excerpt at the first block that carries inline markup, so the model sees the conventions
+    let k = g.blocks.findIndex((x) => /<(?!p[\s>]|head[\s>]|\/)[a-zA-Z]/.test(x.replace(/^<[^>]+>/, ""))); if (k < 0) k = 0;
+    const part = g.blocks.slice(k, k + 40);
+    return { id: g.id, user: true, lang: g.lang, genre: g.genre, licence: g.licence, citation: g.title,
+      raw_input: part.map((x) => { try { return sourceText(parseFragment(x)).replace(/\s+/g, " ").trim(); } catch (e) { return ""; } }).join("\n\n"),
+      tei_body: "<body>" + part.join("") + "</body>" };
+  },
+};
+const EVAL_TAGS = ["persName", "placeName", "orgName", "rs", "said", "q", "date", "time", "measure", "foreign", "term", "title", "roleName", "name", "head", "l", "sp", "speaker", "stage"];
+/** Element spans in whitespace-free source-text offsets (mirror of scripts/eval_knote.py). */
+function evalSpans(xmlBlocks) {
+  const out = []; let pos = 0;
+  for (const x of xmlBlocks) {
+    let root; try { root = parseFragment(x); } catch (e) { continue; }
+    (function visit(node, skip) {
+      for (const ch of node.childNodes) {
+        if (ch.nodeType === 3 || ch.nodeType === 4) { if (!skip) pos += norm(ch.nodeValue).length; continue; }
+        if (ch.nodeType !== 1) continue;
+        const n = lname(ch), s = skip || EDITORIAL.has(n) || (n === "expan" && lname(ch.parentNode) === "choice"), start = pos;
+        visit(ch, s);
+        if (!s) out.push({ n, s: start, e: pos, who: (ch.getAttribute("who") || "").replace(/^#/, ""), ref: (ch.getAttribute("ref") || "").replace(/^#/, "") });
+      }
+    })(root, false);
+  }
+  return out;
+}
+const evalText = (xmlBlocks) => xmlBlocks.map((x) => { try { return norm(sourceText(parseFragment(x))); } catch (e) { return ""; } }).join("");
+/** Map offsets of text a onto text b when they differ slightly (greedy resync, linear time). */
+function offsetMap(a, b) {
+  if (a === b) return (i) => i;
+  const m = new Int32Array(a.length + 1).fill(-1); let i = 0, j = 0;
+  while (i < a.length && j < b.length) {
+    if (a[i] === b[j]) { m[i++] = j++; continue; }
+    let found = false;
+    for (let d = 1; d < 400 && !found; d++) {
+      const ka = a.slice(i, i + 6);
+      if (j + d < b.length && b.startsWith(ka, j + d)) { j += d; found = true; }
+      else if (i + d < a.length && a.startsWith(b.slice(j, j + 6), i + d)) { i += d; found = true; }
+    }
+    if (!found) { i++; j++; }
+  }
+  if (i === a.length) m[i] = j;
+  return (x) => (m[x] >= 0 ? m[x] : -1);
+}
+const prf = (tp, np, ng) => { const p = np ? tp / np : 0, r = ng ? tp / ng : 0, f = p + r ? (2 * p * r) / (p + r) : 0; return [+p.toFixed(3), +r.toFixed(3), +f.toFixed(3)]; };
+/** Compare predicted blocks with a gold entry: exact / overlap P-R-F per element, speaker (@who) agreement. */
+function evaluateAgainstGold(predBlocks, gold, predRegistry = null) {
+  const gt = evalText(gold.blocks), pt = evalText(predBlocks), map = offsetMap(pt, gt);
+  const gold_ = evalSpans(gold.blocks), pred = evalSpans(predBlocks).map((x) => ({ ...x, s: map(x.s), e: map(x.e) })).filter((x) => x.s >= 0 && x.e >= 0);
+  const tags = EVAL_TAGS.filter((t) => gold_.some((x) => x.n === t) || pred.some((x) => x.n === t));
+  const rows = tags.map((t) => {
+    const g = gold_.filter((x) => x.n === t && x.e > x.s), p = pred.filter((x) => x.n === t && x.e > x.s);
+    const gk = new Map(); for (const x of g) gk.set(`${x.s}:${x.e}`, (gk.get(`${x.s}:${x.e}`) || 0) + 1);
+    let exact = 0; for (const x of p) { const k = `${x.s}:${x.e}`; if (gk.get(k) > 0) { exact++; gk.set(k, gk.get(k) - 1); } }
+    const used = new Set(); let ov = 0;
+    for (const x of p) { const j = g.findIndex((y, jj) => !used.has(jj) && x.s < y.e && y.s < x.e); if (j >= 0) { used.add(j); ov++; } }
+    return { tag: t, gold: g.length, pred: p.length, exact: prf(exact, p.length, g.length), overlap: prf(ov, p.length, g.length) };
+  });
+  // speaker agreement: same said span, names of @who targets agree (ids may differ between encodings)
+  const names = (reg, id) => { for (const k of ["persons", "places", "orgs"]) for (const e of (reg || {})[k] || []) if (e.id === id) return [e.name, ...(e.variants || [])].filter(Boolean); return [id]; };
+  const gw = new Map(gold_.filter((x) => x.n === "said" && x.who).map((x) => [`${x.s}:${x.e}`, x.who]));
+  let tot = 0, ok = 0;
+  for (const x of pred) if (x.n === "said" && gw.has(`${x.s}:${x.e}`)) {
+    tot++; const a = names(gold.registry, gw.get(`${x.s}:${x.e}`)), b = names(predRegistry, x.who);
+    if (x.who && a.some((u) => b.some((v) => u === v || u.includes(v) || v.includes(u)))) ok++;
+  }
+  const micro = (k) => { const G = rows.reduce((a, r) => a + r.gold, 0), Pn = rows.reduce((a, r) => a + r.pred, 0), T = rows.reduce((a, r) => a + Math.round(r[k][1] * r.gold), 0); return prf(T, Pn, G); };
+  return { gold_title: gold.title, text_identical: gt === pt, text_chars: { gold: gt.length, pred: pt.length }, rows,
+    micro: { exact: micro("exact"), overlap: micro("overlap") }, who: { compared: tot, match: ok, acc: tot ? +(ok / tot).toFixed(3) : null } };
+}
+
+/* ------------------------------------------------------------------ merging several TEI documents */
+const TEI_XMLNS_RX = new RegExp(`\\s+xmlns="${TEI_NS.replace(/[.]/g, "\\.")}"`, "g");
+function parseTeiDoc(text, name) {
+  const doc = domParser.parseFromString(text, "application/xml");
+  if (doc.getElementsByTagName("parsererror")[0]) throw new Error(`${name}: well-formed XML이 아닙니다`);
+  const r = doc.documentElement;
+  if (r.namespaceURI !== TEI_NS || !["TEI", "teiCorpus"].includes(r.localName)) throw new Error(`${name}: TEI 또는 teiCorpus 문서가 아닙니다`);
+  return r;
+}
+/** Rename xml:ids that already occur in earlier documents, and rewrite local #references to them. */
+function dedupeIds(roots) {
+  const seen = new Set(), renamed = [];
+  roots.forEach((root, k) => {
+    const all = [root, ...root.getElementsByTagName("*")], map = new Map();
+    for (const el of all) { const id = el.getAttributeNS(XML_NS, "id"); if (id && seen.has(id)) { let nid = `${id}_${k + 1}`, c = 2; while (seen.has(nid)) nid = `${id}_${k + 1}_${c++}`; map.set(id, nid); } }
+    for (const el of all) {
+      const id = el.getAttributeNS(XML_NS, "id");
+      if (id && map.has(id)) el.setAttributeNS(XML_NS, "xml:id", map.get(id));
+      if (map.size) for (const a of [...el.attributes]) if (a.namespaceURI !== XML_NS && a.value.includes("#"))
+        a.value = a.value.split(/(\s+)/).map((t) => (t.startsWith("#") && map.has(t.slice(1)) ? "#" + map.get(t.slice(1)) : t)).join("");
+    }
+    for (const el of all) { const id = el.getAttributeNS(XML_NS, "id"); if (id) seen.add(id); }
+    for (const [a, b] of map) renamed.push(`${a} → ${b}`);
+  });
+  return renamed;
+}
+/** docs: [{name, xml}] → teiCorpus: every document keeps its own teiHeader; a corpus header lists the sources. */
+function mergeAsCorpus(docs, { title = "", lang = "" } = {}) {
+  if (docs.length < 2) throw new Error("합칠 문서를 2개 이상 고르세요.");
+  const roots = docs.map((d) => parseTeiDoc(d.xml, d.name)), renamed = dedupeIds(roots);
+  const titles = roots.map((r, k) => teiTitle(r) || docs[k].name);
+  const L_ = lang || roots[0].getAttributeNS(XML_NS, "lang") || "";
+  const hdr = ser(N("teiHeader", null, {},
+    N("fileDesc", null, {},
+      N("titleStmt", null, {}, N("title", title || titles.join(" · ").slice(0, 200)), N("respStmt", null, {}, N("resp", "Corpus assembled with"), N("name", `${APP_NAME} ${APP_VERSION}`))),
+      N("publicationStmt", null, {}, N("p", "Unpublished corpus assembled from the documents listed in the source description.")),
+      N("sourceDesc", null, {}, N("listBibl", null, {}, ...titles.map((t, k) => N("bibl", null, {}, N("title", t), N("note", docs[k].name)))))),
+    N("revisionDesc", null, {}, N("change", `Merged ${docs.length} TEI documents into a teiCorpus (${renamed.length} duplicate xml:id renamed).`, { when: today() })))).trimEnd();
+  const parts = roots.map((r) => xmlSer.serializeToString(r).replace(TEI_XMLNS_RX, "").replace(/^<\?xml[^>]*>\s*/, ""));
+  const xml = ['<?xml version="1.0" encoding="UTF-8"?>',
+    `<?xml-model href="https://www.tei-c.org/Vault/P5/${TEI_VERSION}/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>`,
+    `<teiCorpus xmlns="${TEI_NS}"${L_ ? ` xml:lang="${escAttr(L_)}"` : ""}>`, hdr.split("\n").map((l) => "  " + l).join("\n"), ...parts, "</teiCorpus>", ""].join("\n");
+  return { xml, renamed, titles };
+}
+/** docs → one TEI Session: each document becomes a top-level <div>; registries are merged (same id + same name = same entity). */
+function mergeAsSession(docs, { title = "", divType = "chapter", settings = Settings.load() } = {}) {
+  if (docs.length < 2) throw new Error("합칠 문서를 2개 이상 고르세요.");
+  const sessions = [], titles = [], authors = [];
+  for (const d of docs) {
+    const r = parseTeiDoc(d.xml, d.name);
+    const tei = r.localName === "TEI" ? [r] : [...r.getElementsByTagNameNS(TEI_NS, "TEI")];
+    for (const t of tei) {
+      const x = xmlSer.serializeToString(t); sessions.push(Session.fromTei(x, settings)); titles.push(teiTitle(t) || d.name);
+      const st = t.getElementsByTagNameNS(TEI_NS, "titleStmt")[0];
+      for (const a of st ? st.getElementsByTagNameNS(TEI_NS, "author") : []) { const n = a.textContent.replace(/\s+/g, " ").trim(); if (n && !authors.includes(n)) authors.push(n); }
+    }
+  }
+  const m = new Session("", settings), renamed = [];
+  m.genre = sessions[0].genre; m.langs = uniq(sessions.flatMap((s) => s.langs)); m.tagset = uniq(sessions.flatMap((s) => s.tagset));
+  sessions.forEach((s, k) => {
+    const map = new Map();
+    for (const kind of ["persons", "places", "orgs"]) for (const e of s.registry[kind] || []) {
+      const hit = ["persons", "places", "orgs"].flatMap((kk) => m.registry[kk]).find((x) => x.id === e.id);
+      if (!hit) { m.registry[kind].push({ ...e }); continue; }
+      if (hit.name === e.name) continue; // the same entity in two parts of one work
+      let nid = `${e.id}_${k + 1}`, c = 2; const ids = m.allIds(); while (ids.has(nid)) nid = `${e.id}_${k + 1}_${c++}`;
+      map.set(e.id, nid); m.registry[kind].push({ ...e, id: nid }); renamed.push(`${e.id} → ${nid}`);
+    }
+    const rx = map.size ? new RegExp(`#(${[...map.keys()].map((x) => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})(?=["\\s])`, "g") : null;
+    // a document without divisions of its own is wrapped in one <div type=divType n=k>; one that has divisions keeps them as they are
+    const wrap = !s.blocks.some((b) => b.div);
+    s.blocks.forEach((b, j) => m.blocks.push({ ...b, i: m.blocks.length, xml: rx ? b.xml.replace(rx, (_, id) => "#" + map.get(id)) : b.xml,
+      part: wrap && j === 0 ? { type: divType || "chapter", n: String(k + 1), level: 1 } : null }));
+  });
+  m.raw_text = m.blocks.map((b) => b.raw).join("\n\n");
+  m.metadata = { titles: [{ text: title || titles.join(" · ").slice(0, 200), type: "main" }], ...(authors.length ? { authors: authors.map((a) => ({ name: a })) } : {}),
+    sources: titles.map((t) => ({ type: "originalSource", title: t })), genre_label: GENRES[m.genre].en };
+  m.analysis = { imported: true, notes: `Merged from ${sessions.length} TEI documents.` }; m.status = "tagged";
+  m.log("merge_tei", { documents: titles, renamed: renamed.length });
+  return { session: m, renamed, titles };
+}
+
 /* ------------------------------------------------------------------ storage of sessions (browser-local) */
 const Store = {
   list() { try { return JSON.parse(localStorage.getItem("teiagent.index") || "[]"); } catch (e) { return []; } },
@@ -1429,4 +1625,5 @@ const Store = {
 
 window.TEIAgent = { Session, Settings, Store, agentChat, dispatch, lookupAuthority, rngValidate, checkPreservation, quickCheck, stripDisallowed, toArabic,
   buildHeader, elementCounts, signals, guess, TAGS, GENRES, METADATA_FIELDS, TEI_VERSION, APP_VERSION, LLM, PRESETS: D.PRESETS || {},
-  elementNames: () => Object.keys(INDEX.elements).sort(), allowedAttrs: (el) => (INDEX.elements[el] || []).slice(), elementExists };
+  elementNames: () => Object.keys(INDEX.elements).sort(), allowedAttrs: (el) => (INDEX.elements[el] || []).slice(), elementExists,
+  Gold, evaluateAgainstGold, mergeAsCorpus, mergeAsSession, selectExemplars };

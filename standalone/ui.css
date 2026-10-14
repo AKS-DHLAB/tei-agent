@@ -39,3 +39,17 @@ button.danger{color:var(--err);border-color:var(--err)}
 #ed-allowed{flex:1 1 220px!important}
 .chip.on{border-color:var(--accent);color:var(--accent)}
 .ws>*{min-width:0}.ws select{max-width:100%}
+.divmark.part{font-size:13px;color:var(--ink);border-top:1px solid var(--line);padding-top:8px}
+.gold-item{display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:6px 0}
+.gold-item .acts{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.gold-item .acts button{font-size:12px;padding:3px 8px}
+.evtable{border-collapse:collapse;font-size:12.5px;margin-top:6px;width:100%}
+.evtable th,.evtable td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:right}
+.evtable th:first-child,.evtable td:first-child{text-align:left;font-family:var(--mono)}
+.evtable tr.sum td{font-weight:700;border-top:2px solid var(--line)}
+.merge-list{margin:8px 0;padding-left:22px}
+.merge-list li{padding:3px 0}
+.merge-list li .row{gap:4px}
+.merge-list button{font-size:11px;padding:1px 7px}
+.meta-grid input[type=radio],.meta-grid input[type=checkbox]{width:auto}
+#sess-list{max-width:240px}

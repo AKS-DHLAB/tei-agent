@@ -67,5 +67,19 @@ def test_browser_edition_end_to_end():
         assert pg.inner_text("#btn-validate") == "검증 (tei_all)"
         v = pg.evaluate("async () => await window.__teiUI.session.validate()")
         assert v["valid"], v["errors"][:3]
+        # 4) gold data: stored, preferred as few-shot example, perfect score against itself
+        live = Path(__file__).resolve().parents[1] / "examples" / "live" / "heldout"
+        a, c = (live / "13_pred.xml").read_text(encoding="utf-8"), (live / "18_pred.xml").read_text(encoding="utf-8")
+        g = pg.evaluate("""(x) => { const A = window.TEIAgent, g = A.Gold.add(A.Gold.fromTei(x, '13_pred.xml'));
+            const ex = A.selectExemplars('prose_fiction', ['ko'], [], 2);
+            const r = A.evaluateAgainstGold(g.blocks, g, g.registry); A.Gold.remove(g.id);
+            return [ex[0].id === g.id, r.text_identical, r.micro.exact[2], r.who.acc]; }""", a)
+        assert g == [True, True, 1, 1]
+        # 5) merging: teiCorpus (ids deduplicated) and one TEI, both schema-valid
+        m = pg.evaluate("""async ([a, c]) => { const A = window.TEIAgent, docs = [{ name: 'a', xml: a }, { name: 'c', xml: c }, { name: 'a2', xml: a }];
+            const k = A.mergeAsCorpus(docs, { title: 'T' }), vk = await A.rngValidate(k.xml);
+            const s = A.mergeAsSession(docs.slice(0, 2), { title: 'T' }).session, vs = await s.validate();
+            return [vk.valid, k.renamed.length > 0, (k.xml.match(/<TEI[ >]/g) || []).length, vs.valid, vs.dangling_refs.length]; }""", [a, c])
+        assert m == [True, True, 3, True, 0]
         b.close()
     assert not errors

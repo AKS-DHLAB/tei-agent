@@ -17,7 +17,7 @@ DATA_DIR = PACKAGE_DIR / "data"
 TEI_VERSION = "4.12.0"
 TEI_NS = "http://www.tei-c.org/ns/1.0"
 APP_NAME = "TEI-Agent"
-APP_VERSION = "0.1.0"
+APP_VERSION = "0.1.2"
 
 
 def _load_dotenv(path: Path = Path(".env")) -> None:
