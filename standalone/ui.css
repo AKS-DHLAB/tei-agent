@@ -53,3 +53,4 @@ button.danger{color:var(--err);border-color:var(--err)}
 .merge-list button{font-size:11px;padding:1px 7px}
 .meta-grid input[type=radio],.meta-grid input[type=checkbox]{width:auto}
 #sess-list{max-width:240px}
+.credit{margin:8px 16px 20px;padding-top:10px;border-top:1px solid var(--line);text-align:center;font-size:12px;color:var(--muted)}.credit details{display:inline}.credit summary{display:inline;cursor:pointer;text-decoration:underline}.credit .lic{max-width:720px;margin:10px auto 0;text-align:left;white-space:pre-wrap;font:11px/1.5 var(--mono, monospace);background:var(--code);border:1px solid var(--line);border-radius:8px;padding:10px 12px}

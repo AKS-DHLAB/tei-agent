@@ -147,6 +147,9 @@
   $("#sess-list").onchange = (e) => { const id = e.target.value; if (!id) return; const s = A.Store.load(id); if (s) openSession(s); else toast(L("작업을 불러올 수 없습니다.", "Cannot open this work.")); e.target.value = ""; };
   $("#btn-new").onclick = () => { S = null; hideDone(); $("#ws").classList.add("hidden"); $("#start").classList.remove("hidden"); };
 
+  $("#credit-ver").textContent = "v" + A.APP_VERSION;
+  // plain close buttons (type="button"), so Enter in a dialog field never triggers "Close" or "Delete key"
+  $$("dialog [data-close]").forEach((b) => b.addEventListener("click", () => b.closest("dialog").close()));
   /* ---------- settings dialog */
   $("#btn-settings").onclick = () => {
     const st = settings();
@@ -279,7 +282,9 @@
     S.validation = {}; save(); render(); flashBlock(i);
     toast(msg + (r.problems.length ? L(" (스키마 경고 있음)", " (with schema warnings)") : "") + L(" · 되돌리기로 취소 가능", " · Undo to revert"));
   }
-  $("#ed-apply").onclick = () => {
+  // Enter in a field submits the form: apply the edit instead of closing the dialog (the old default button was "Cancel")
+  $("#edit-form").addEventListener("submit", (e) => { e.preventDefault(); applyEdit(); });
+  function applyEdit() {
     const i = ED.i, opts = { force: ED.force }; let r;
     try {
       if (ED.mode === "xml") r = S.setBlockXml(i, $("#ed-xml").value, L("XML 직접 수정", "manual XML edit"), opts);
@@ -290,7 +295,7 @@
       }
     } catch (e) { r = { ok: false, fatal: true, problems: [e.message] }; }
     afterEdit(r, i, L(`블록 ${i}을(를) 수정했습니다`, `Block ${i} updated`));
-  };
+  }
   $("#ed-unwrap").onclick = () => { let r; try { r = S.editElement(ED.i, ED.ei, { unwrap: true }, { force: true }); } catch (e) { r = { ok: false, fatal: true, problems: [e.message] }; } afterEdit(r, ED.i, L("태그를 제거했습니다", "Tag removed")); };
   // invalidate the 'apply anyway' state once the user changes something
   $("#edit-form").addEventListener("input", () => { if (ED.force) { ED.force = false; $("#ed-apply").textContent = L("적용", "Apply"); } });

@@ -1,5 +1,7 @@
 # 함께 배포하는 제3자 자료
 
+TEI Agent 코드 자체는 MIT License(© 2026 지해인·김병준, `LICENSE`)입니다. 아래 자료는 각자의 라이선스를 따릅니다.
+
 | 자료 | 위치 | 라이선스 |
 |---|---|---|
 | TEI P5 4.12.0 `tei_all.rng` (TEI Consortium) | `tei_agent/data/schema/tei_all.rng` · `dist/TEI_Agent.html` 안 | CC BY 3.0 및 BSD-2-Clause 이중 라이선스 (TEI Guidelines 라이선스) |

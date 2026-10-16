@@ -65,6 +65,17 @@ def test_browser_edition_end_to_end():
         assert pg.inner_text("#btn-validate") == "Validate (tei_all)"
         pg.evaluate("() => window.__teiUI.setLang('ko')")
         assert pg.inner_text("#btn-validate") == "검증 (tei_all)"
+        # 3b) the edit dialog (the language switch re-rendered the reading view): Enter in a field applies the edit (it used to hit "Cancel"); Cancel discards
+        is_open = "() => document.querySelector('#dlg-edit').open"
+        n = pg.locator("#doc .t-persName").count()
+        pg.locator("#doc .t-persName").first.click(); pg.fill("#ed-name", "rs"); pg.press("#ed-name", "Enter")
+        assert not pg.evaluate(is_open) and pg.locator("#doc .t-persName").count() == n - 1
+        m = pg.locator("#doc .t-placeName").count()
+        pg.locator("#doc .t-placeName").first.click(); pg.fill("#ed-name", "rs"); pg.click("#dlg-edit [data-close]")
+        assert not pg.evaluate(is_open) and pg.locator("#doc .t-placeName").count() == m > 0
+        # settings: Enter saves (and never presses "Delete key")
+        pg.click("#btn-settings"); pg.fill("#s-chunk", "2400"); pg.press("#s-chunk", "Enter")
+        assert pg.evaluate("() => { const s = window.TEIAgent.Settings.load(); return [s.chunkChars, !!s.apiKey]; }") == [2400, True]
         v = pg.evaluate("async () => await window.__teiUI.session.validate()")
         assert v["valid"], v["errors"][:3]
         # 0.1.3: exemplar selection and language-filtered rules match the Python edition

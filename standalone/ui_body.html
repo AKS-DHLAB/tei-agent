@@ -145,8 +145,8 @@
     <div class="row" style="margin-top:10px">
       <button type="button" id="ed-unwrap" class="danger" data-en="Remove tag (keep text)">태그 제거 (글자는 유지)</button>
       <span class="spacer"></span>
-      <button value="cancel" data-en="Cancel">취소</button>
-      <button type="button" class="primary" id="ed-apply" data-en="Apply">적용</button>
+      <button type="button" data-close data-en="Cancel">취소</button>
+      <button type="submit" class="primary" id="ed-apply" data-en="Apply">적용</button>
     </div>
   </form>
 </dialog>
@@ -180,7 +180,7 @@
       </div>
     </div>
     <div class="ed-problems warn hidden" id="merge-msg"></div>
-    <div class="row" style="margin-top:10px"><span class="spacer"></span><button value="cancel" data-en="Close">닫기</button><button type="button" class="primary" id="merge-run" data-en="Merge">합치기</button></div>
+    <div class="row" style="margin-top:10px"><span class="spacer"></span><button type="button" data-close data-en="Close">닫기</button><button type="button" class="primary" id="merge-run" data-en="Merge">합치기</button></div>
   </form>
 </dialog>
 
@@ -196,7 +196,34 @@
       <label for="s-think">thinking</label><label class="hint"><input type="checkbox" id="s-think"> <span data-en="Use thinking mode (slower, more expensive)">사고(thinking) 모드 사용 (느리고 비쌈)</span></label>
     </div>
     <p class="hint" data-en="The key is stored only in this browser (localStorage). Model name for DeepSeek-V4.1-Flash = <code>deepseek-flash</code>.">키는 이 브라우저(localStorage)에만 저장됩니다. 모델명은 DeepSeek-V4.1-Flash = <code>deepseek-flash</code>.</p>
-    <div class="row"><button value="cancel" data-en="Close">닫기</button><button id="s-clear" value="cancel" data-en="Delete key">키 삭제</button><span class="spacer"></span><button class="primary" id="s-save" value="default" data-en="Save">저장</button></div>
+    <div class="row"><button type="button" data-close data-en="Close">닫기</button><button type="button" id="s-clear" data-close data-en="Delete key">키 삭제</button><span class="spacer"></span><button class="primary" id="s-save" value="default" data-en="Save">저장</button></div>
   </form>
 </dialog>
+<footer class="credit" id="credit">TEI Agent <span id="credit-ver"></span> · © 2026 지해인·김병준 (Ji, Haein &amp; Kim, Byungjun) · <a href="https://opensource.org/license/mit" target="_blank" rel="noopener">MIT License</a> ·
+  <details><summary data-en="Licence and notices">라이선스·고지</summary><div class="lic">MIT License
+
+Copyright (c) 2026 Haein Ji (지해인) and Byungjun Kim (김병준)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the &quot;Software&quot;), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Third-party material (each keeps its own licence; details in NOTICE.md):
+- TEI P5 4.12.0 tei_all.rng, TEI Consortium: CC BY 3.0 / BSD-2-Clause
+- xmllint-wasm 5.3.0 and libxml2: MIT
+- Few-shot exemplars: KNoTE (AKS DH LAB, CC BY 4.0, doi:10.5281/zenodo.21218299), ELTeC, GerDraCor, RusDraCor, EEBO-TCP, I.Sicily, ParlaMint, DISCO, Arthur Schnitzler Briefe, 校異源氏物語テキストDB: CC0 / CC BY 4.0 / public domain, as stated in each file</div></details></footer>
 <div class="toast" id="toast"></div>

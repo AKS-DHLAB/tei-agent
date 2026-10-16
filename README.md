@@ -138,6 +138,11 @@ tests/           mock DeepSeek 기반 종단 테스트 (pytest)
 - Schematron 규칙은 검증하지 않습니다(RELAX NG만). 최종 납품본은 jing이나 oXygen으로 한 번 더 검증할 것을 권합니다.
 - 실제 `dsh` 환경에서 Harness overlay를 로드해 보지는 않았습니다.
 - 다음 단계 후보:
-  - 0.1.3 벤치마크(`bench/`)의 실측(DeepSeek API)과 33편 전체로 넓힌 평가
+  - 벤치마크 변별력 높이기: 여러 언어의 개체 정답 추가, 더 긴 발췌, 버전당 3회 이상 실행(0.1.3 실측 결과는 `docs/generality_0.1.3.md`), KNoTE 33편 전체 평가
   - 한문·한국어 비문학·역사기록 예시(개방 TEI가 없어 직접 제작 필요)
   - 프로젝트 전용 ODD 생성
+
+## 만든 사람과 라이선스
+- 만든 사람: 지해인·김병준 (Ji, Haein & Kim, Byungjun)
+- 코드: MIT License, © 2026 지해인·김병준. 전문은 `LICENSE`에 있으며, 웹 화면(브라우저판·Python 웹앱) 맨 아래에도 저작권 고지와 라이선스 전문이 표시됩니다.
+- 함께 배포하는 TEI 스키마, xmllint-wasm, few-shot 예시는 각자의 라이선스를 따릅니다(`NOTICE.md`).
