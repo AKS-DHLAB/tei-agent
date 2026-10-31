@@ -4,7 +4,7 @@ Everything the Python package knows (tag catalog, genre profiles, language rules
 heuristic patterns, TEI 4.12.0 attribute allow-list, few-shot exemplars) is exported as JSON so the
 browser version applies exactly the same rules. The tei_all.rng grammar and xmllint (libxml2 → wasm,
 MIT) are embedded, so full RELAX NG validation runs locally in the browser. The only network calls
-are to the DeepSeek API (and, on request, Wikidata).
+are to the AI service the user picks (DeepSeek, OpenAI, Anthropic or Google) and, on request, Wikidata.
 
   python scripts/build_standalone.py
 """
@@ -112,7 +112,7 @@ def main():
         "<!doctype html>", '<html lang="ko">', "<head>", '<meta charset="utf-8">',
         '<meta name="viewport" content="width=device-width, initial-scale=1">',
         f"<title>TEI Agent {APP_VERSION}</title>",
-        '<meta name="description" content="Interactive multilingual TEI P5 tagging with DeepSeek (browser edition)">',
+        '<meta name="description" content="Interactive multilingual TEI P5 tagging with DeepSeek, ChatGPT, Claude or Gemini (browser edition)">',
         style, extra_css, "</head>", "<body>", body,
         f'<script type="application/json" id="tei-data">{data_json}</script>',
         f'<script type="text/plain" id="tei-all-rng">{rng}</script>',

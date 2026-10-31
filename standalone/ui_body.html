@@ -1,3 +1,4 @@
+<script>try{var t=localStorage.getItem("teiagent.theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <header>
   <h1>TEI Agent</h1>
   <span class="badge" id="b-tei">TEI P5</span>
@@ -8,7 +9,8 @@
   <button id="btn-new" data-en="New document">새 문서</button>
   <button id="btn-gold" title="정답 TEI를 추가해 태깅 예시로 쓰고, 결과를 정답과 비교합니다" data-en-title="Add gold-standard TEI: use it as tagging examples and score results against it" data-en="📚 Gold data">📚 정답 데이터</button>
   <button id="btn-merge" title="여러 TEI 파일을 하나로 합칩니다" data-en-title="Combine several TEI files into one" data-en="⧉ Merge TEI">⧉ TEI 합치기</button>
-  <select id="ui-lang" title="UI language / 화면 언어" aria-label="UI language"><option value="ko">한국어</option><option value="en">English</option></select>
+  <label class="lang-pick" title="Language / 언어 — 화면 언어 바꾸기"><svg class="ico" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M2.5 12h19M12 2.5c2.6 2.8 3.9 6 3.9 9.5S14.6 18.7 12 21.5M12 2.5C9.4 5.3 8.1 8.5 8.1 12s1.3 6.7 3.9 9.5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><select id="ui-lang" aria-label="Language / 언어"><option value="ko">한국어 · Korean</option><option value="en">English · 영어</option></select></label>
+  <button id="btn-theme" class="icon-btn" type="button" title="다크 모드 / 라이트 모드" data-en-title="Dark / light mode" aria-label="Dark / light mode"><svg class="ico i-moon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="currentColor"/></svg><svg class="ico i-sun" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
   <button id="btn-settings" title="API 키·모델 설정" data-en-title="API key and model settings" data-en="⚙ Settings">⚙ 설정</button>
 </header>
 <div class="done-banner hidden" id="done-banner" role="status" aria-live="assertive">
@@ -19,8 +21,9 @@
 <main>
   <section class="start" id="start">
     <div class="card" id="key-card">
-      <h2 data-en="1. DeepSeek API key">1. DeepSeek API 키</h2>
-      <p class="hint" data-en="The key is stored <b>only in this browser</b> and sent only to the DeepSeek API. On a shared PC, delete it under ⚙ Settings after class.">키는 <b>이 브라우저에만</b> 저장되고, DeepSeek API로만 전송됩니다. 공용 PC라면 실습 후 ⚙ 설정에서 키를 지우세요.</p>
+      <h2 data-en="1. AI service and API key">1. AI 서비스와 API 키</h2>
+      <div class="row"><label for="key-provider" data-en="AI service">AI 서비스</label><select id="key-provider" class="provider-select"></select><a id="key-link" class="hint" href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener" data-en="Get a key ↗">키 발급 ↗</a></div>
+      <p class="hint" data-en="The key is stored <b>only in this browser</b> and sent only to the AI service you chose. On a shared PC, delete it under ⚙ Settings after class.">키는 <b>이 브라우저에만</b> 저장되고, 고른 AI 서비스로만 전송됩니다. 공용 PC라면 실습 후 ⚙ 설정에서 키를 지우세요.</p>
       <div class="row"><input type="password" id="key-inline" class="grow" placeholder="sk-..." autocomplete="off"><button id="btn-key-save" data-en="Save">저장</button><button id="btn-key-test" data-en="Test connection">연결 테스트</button></div>
       <p class="hint" id="key-status"></p>
     </div>
@@ -188,14 +191,15 @@
   <form method="dialog" class="card" style="margin:0;min-width:min(520px,90vw)">
     <h2 data-en="Settings">설정</h2>
     <div class="meta-grid">
+      <label for="s-provider" data-en="AI service">AI 서비스</label><select id="s-provider" class="provider-select"></select>
       <label for="s-key" data-en="API key">API 키</label><input type="password" id="s-key" autocomplete="off" placeholder="sk-...">
-      <label for="s-model" data-en="Model">모델</label><input type="text" id="s-model">
+      <label for="s-model" data-en="Model">모델</label><input type="text" id="s-model" list="s-models"><datalist id="s-models"></datalist>
       <label for="s-base" data-en="API URL">API 주소</label><input type="text" id="s-base">
       <label for="s-chunk" data-en="Chunk size">청크 크기</label><input type="text" id="s-chunk">
       <label for="s-workers" data-en="Parallel requests">동시 요청</label><input type="text" id="s-workers">
       <label for="s-think">thinking</label><label class="hint"><input type="checkbox" id="s-think"> <span data-en="Use thinking mode (slower, more expensive)">사고(thinking) 모드 사용 (느리고 비쌈)</span></label>
     </div>
-    <p class="hint" data-en="The key is stored only in this browser (localStorage). Model name for DeepSeek-V4.1-Flash = <code>deepseek-flash</code>.">키는 이 브라우저(localStorage)에만 저장됩니다. 모델명은 DeepSeek-V4.1-Flash = <code>deepseek-flash</code>.</p>
+    <p class="hint" data-en="Keys are stored only in this browser (localStorage), one per AI service. Model names are suggestions: check the service’s documentation for current names. Thinking mode applies to DeepSeek only.">키는 이 브라우저(localStorage)에만, AI 서비스마다 따로 저장됩니다. 모델명은 기본값일 뿐이니 각 서비스 문서에서 현재 이름을 확인하세요. thinking 모드는 DeepSeek에만 적용됩니다.</p>
     <div class="row"><button type="button" data-close data-en="Close">닫기</button><button type="button" id="s-clear" data-close data-en="Delete key">키 삭제</button><span class="spacer"></span><button class="primary" id="s-save" value="default" data-en="Save">저장</button></div>
   </form>
 </dialog>

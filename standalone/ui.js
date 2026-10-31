@@ -35,10 +35,11 @@
   function refreshBadges() {
     const st = settings();
     $("#b-tei").textContent = `TEI P5 ${A.TEI_VERSION}`;
-    $("#b-model").textContent = `${st.model}${st.thinking ? " · thinking" : ""}${st.apiKey ? "" : L(" · 키 없음", " · no key")}`;
+    $("#b-model").textContent = `${A.PROVIDERS[st.provider].label.split(" ")[0]} · ${st.model}${st.thinking && st.provider === "deepseek" ? " · thinking" : ""}${st.apiKey ? "" : L(" · 키 없음", " · no key")}`;
+    $("#key-provider").value = st.provider; $("#key-link").href = A.PROVIDERS[st.provider].keyUrl; $("#key-inline").placeholder = A.PROVIDERS[st.provider].keyHint;
     $("#b-model").classList.toggle("bad", !st.apiKey);
     $("#key-card").classList.toggle("hidden", !!st.apiKey);
-    if (S) { S.s = st; S.llm.s = st; const u = S.llm.usageDict(); $("#b-model").title = L(`호출 ${u.calls}회, 입력 ${u.prompt_tokens}, 출력 ${u.completion_tokens} 토큰, ≈$${u.est_cost_usd_peak} (피크 단가)`, `${u.calls} calls, ${u.prompt_tokens} input / ${u.completion_tokens} output tokens, ≈$${u.est_cost_usd_peak} (peak price)`); }
+    if (S) { S.s = st; S.llm.s = st; const u = S.llm.usageDict(); $("#b-model").title = L(`호출 ${u.calls}회, 입력 ${u.prompt_tokens}, 출력 ${u.completion_tokens} 토큰`, `${u.calls} calls, ${u.prompt_tokens} input / ${u.completion_tokens} output tokens`) + (u.est_cost_usd_peak === null ? "" : L(`, ≈$${u.est_cost_usd_peak} (피크 단가)`, `, ≈$${u.est_cost_usd_peak} (peak price)`)); }
   }
   function tabs(group) {
     $$(`[data-tabs=${group}] button`).forEach((b) => (b.onclick = () => showTab(group, b.dataset.t)));
@@ -120,7 +121,7 @@
     if (!st.apiKey) { $("#key-status").textContent = L("✗ 키가 없습니다. 이 주소에서는 키를 처음부터 다시 넣어야 합니다(파일로 열었을 때 저장한 키는 넘어오지 않음).", "✗ No key. Enter it again for this address (a key saved while opening the file locally does not carry over)."); return; }
     $("#key-status").textContent = L("연결 확인 중…", "Checking connection…");
     try { const l = new A.LLM(st); await l.chat([{ role: "system", content: 'Reply in json like {"ok":true}' }, { role: "user", content: "ping" }], { json: true, maxTokens: 50, retries: 1 });
-      $("#key-status").textContent = L("✓ DeepSeek 연결 성공", "✓ Connected to DeepSeek") + (k ? L(" — 이제 ‘저장’을 누르세요.", " — now press ‘Save’.") : ""); }
+      $("#key-status").textContent = L(`✓ ${l.label} 연결 성공`, `✓ Connected to ${l.label}`) + (k ? L(" — 이제 ‘저장’을 누르세요.", " — now press ‘Save’.") : ""); }
     catch (e) { $("#key-status").textContent = "✗ " + e.message; }
   };
   $("#in-file").onchange = async (e) => { const f = e.target.files[0]; if (f) $("#in-text").value = await f.text(); };
@@ -148,21 +149,45 @@
   $("#btn-new").onclick = () => { S = null; hideDone(); $("#ws").classList.add("hidden"); $("#start").classList.remove("hidden"); };
 
   $("#credit-ver").textContent = "v" + A.APP_VERSION;
+  /* ---------- light / dark theme: the button overrides the system setting and is remembered in this browser */
+  (function themeToggle() {
+    const root = document.documentElement, btn = document.getElementById("btn-theme"), key = "teiagent.theme";
+    const current = () => root.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    btn.onclick = () => { root.dataset.theme = current() === "dark" ? "light" : "dark"; try { localStorage.setItem(key, root.dataset.theme); } catch (e) { /* storage blocked */ } };
+  })();
   // plain close buttons (type="button"), so Enter in a dialog field never triggers "Close" or "Delete key"
   $$("dialog [data-close]").forEach((b) => b.addEventListener("click", () => b.closest("dialog").close()));
+  /* ---------- AI service (provider) choice: start screen and settings */
+  const providerOptions = () => Object.entries(A.PROVIDERS).map(([k, p]) => `<option value="${k}">${esc(p.label)}</option>`).join("");
+  $$(".provider-select").forEach((el) => (el.innerHTML = providerOptions()));
+  function fillProviderForm(st) {
+    const P = A.PROVIDERS[st.provider];
+    $("#s-provider").value = st.provider; $("#s-key").value = st.apiKey; $("#s-key").placeholder = P.keyHint;
+    $("#s-model").value = st.model; $("#s-base").value = st.baseUrl;
+    $("#s-models").innerHTML = P.models.map((m) => `<option value="${esc(m)}">`).join("");
+    $("#s-think").disabled = st.provider !== "deepseek";
+  }
+  // switching in the dialog shows that service's saved key/model; nothing is stored until 저장
+  $("#s-provider").onchange = (e) => { const st = settings(); fillProviderForm(A.Settings.select(st, e.target.value)); };
+  $("#key-provider").onchange = (e) => {
+    const st = settings(); A.Settings.select(A.Settings.sync(st), e.target.value); A.Settings.save(st);
+    $("#key-status").textContent = st.apiKey ? L(`${A.PROVIDERS[st.provider].label}: 저장된 키가 있습니다.`, `${A.PROVIDERS[st.provider].label}: a saved key exists.`) : "";
+    refreshBadges();
+  };
   /* ---------- settings dialog */
   $("#btn-settings").onclick = () => {
     const st = settings();
-    $("#s-key").value = st.apiKey; $("#s-model").value = st.model; $("#s-base").value = st.baseUrl; $("#s-chunk").value = st.chunkChars;
+    fillProviderForm(st); $("#s-chunk").value = st.chunkChars;
     $("#s-workers").value = st.maxWorkers; $("#s-think").checked = st.thinking; $("#dlg-settings").showModal();
   };
   $("#s-save").onclick = () => {
     const st = settings();
-    Object.assign(st, { apiKey: $("#s-key").value.trim(), model: $("#s-model").value.trim() || "deepseek-flash", baseUrl: $("#s-base").value.trim() || "https://api.deepseek.com",
+    A.Settings.select(A.Settings.sync(st), $("#s-provider").value); const P = A.PROVIDERS[st.provider];
+    Object.assign(st, { apiKey: $("#s-key").value.trim(), model: $("#s-model").value.trim() || P.model, baseUrl: $("#s-base").value.trim() || P.baseUrl,
       chunkChars: parseInt($("#s-chunk").value, 10) || 2500, maxWorkers: parseInt($("#s-workers").value, 10) || 4, thinking: $("#s-think").checked });
     toast(A.Settings.save(st) ? L("설정을 저장했습니다.", "Settings saved.") : L("이 브라우저는 저장을 막고 있어 이번 창에서만 유지됩니다.", "This browser blocks storage; settings last for this window only.")); refreshBadges();
   };
-  $("#s-clear").onclick = () => { const st = settings(); st.apiKey = ""; A.Settings.save(st); refreshBadges(); toast(L("키를 삭제했습니다.", "Key deleted.")); };
+  $("#s-clear").onclick = () => { const st = A.Settings.select(settings(), $("#s-provider").value); st.apiKey = ""; A.Settings.save(st); refreshBadges(); toast(L(`${A.PROVIDERS[st.provider].label} 키를 삭제했습니다.`, `${A.PROVIDERS[st.provider].label} key deleted.`)); };
 
   /* ---------- render */
   function render() {
@@ -173,7 +198,7 @@
     const counts = Object.entries(s.tag_counts).filter(([k]) => k !== "p"), max = Math.max(1, ...counts.map((c) => c[1]));
     $("#counts").innerHTML = counts.slice(0, 18).map(([k, v]) => `<div class="bar"><span class="lbl">${esc(k)}</span><span class="track"><span class="fill" style="display:block;width:${(100 * v) / max}%"></span></span><span class="c">${v}</span></div>`).join("") || `<span class="hint">${L("아직 태그가 없습니다.", "No tags yet.")}</span>`;
     $("#bstat").textContent = Object.entries(s.block_status).map(([k, v]) => `${k}: ${v}`).join(" · ") + L(" · 언어: ", " · languages: ") + (S.langs || []).join(", ")
-      + (() => { const u = S.llm.usageDict(); return u.calls ? L(` · 이번 세션 호출 ${u.calls}회, 입력 ${u.prompt_tokens}(캐시 ${u.cached_tokens}) · 출력 ${u.completion_tokens} 토큰 ≈ $${u.est_cost_usd_peak} (피크 단가 어림)`, ` · ${u.calls} calls this session, input ${u.prompt_tokens} (cached ${u.cached_tokens}) · output ${u.completion_tokens} tokens ≈ $${u.est_cost_usd_peak} (peak price estimate)`) : ""; })();
+      + (() => { const u = S.llm.usageDict(); return u.calls ? L(` · 이번 세션 호출 ${u.calls}회, 입력 ${u.prompt_tokens}(캐시 ${u.cached_tokens}) · 출력 ${u.completion_tokens} 토큰`, ` · ${u.calls} calls this session, input ${u.prompt_tokens} (cached ${u.cached_tokens}) · output ${u.completion_tokens} tokens`) + (u.est_cost_usd_peak === null ? "" : L(` ≈ $${u.est_cost_usd_peak} (피크 단가 어림)`, ` ≈ $${u.est_cost_usd_peak} (peak price estimate)`)) : ""; })();
     $("#hist").innerHTML = S.history.slice(-12).reverse().map((h) => `<div>${esc(h.when.slice(11, 16))} ${esc(h.action)}</div>`).join("");
     renderDoc(); renderRecs(); renderQs(); renderChat(); renderRegistry(); renderMetaForm(); renderMetaRecs(); showValidation(true);
     if (!$("[data-pane=xml]").classList.contains("hidden")) renderXml();

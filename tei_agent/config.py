@@ -1,5 +1,9 @@
 """Runtime settings. Values come from environment variables or a `.env` file in the working dir.
 
+AI provider: TEI_AGENT_PROVIDER = deepseek (default) | openai | anthropic | gemini, each with its own key variable
+(DEEPSEEK_API_KEY, OPENAI_API_KEY, ANTHROPIC_API_KEY, GEMINI_API_KEY). TEI_AGENT_MODEL and TEI_AGENT_BASE_URL override
+the provider's defaults (model names are defaults only; check each provider's documentation).
+
 DeepSeek facts (checked 2026-10-12 at api-docs.deepseek.com):
   - model string for DeepSeek-V4.1-Flash: `deepseek-flash`
   - OpenAI-compatible base URL: https://api.deepseek.com
@@ -17,7 +21,16 @@ DATA_DIR = PACKAGE_DIR / "data"
 TEI_VERSION = "4.12.0"
 TEI_NS = "http://www.tei-c.org/ns/1.0"
 APP_NAME = "TEI-Agent"
-APP_VERSION = "0.1.3"
+APP_VERSION = "0.1.4"
+
+
+PROVIDERS: dict[str, dict] = {
+    "deepseek": {"label": "DeepSeek", "key_env": "DEEPSEEK_API_KEY", "base_url": "https://api.deepseek.com", "model": "deepseek-flash"},
+    "openai": {"label": "ChatGPT (OpenAI)", "key_env": "OPENAI_API_KEY", "base_url": "https://api.openai.com/v1", "model": "gpt-5-mini"},
+    "anthropic": {"label": "Claude (Anthropic)", "key_env": "ANTHROPIC_API_KEY", "base_url": "", "model": "claude-opus-5-5"},
+    "gemini": {"label": "Gemini (Google)", "key_env": "GEMINI_API_KEY",
+               "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/", "model": "gemini-2.5-flash"},
+}
 
 
 def _load_dotenv(path: Path = Path(".env")) -> None:
@@ -39,6 +52,7 @@ def _bool(v: str | None, default: bool) -> bool:
 
 @dataclass
 class Settings:
+    provider: str = "deepseek"  # key of PROVIDERS
     api_key: str = ""
     base_url: str = "https://api.deepseek.com"
     model: str = "deepseek-flash"
@@ -52,13 +66,22 @@ class Settings:
     ui_lang: str = "ko"  # language for explanations/questions shown to the user
     sessions_dir: Path = field(default_factory=lambda: Path("sessions"))
 
+    @property
+    def provider_label(self) -> str:
+        return PROVIDERS.get(self.provider, PROVIDERS["deepseek"])["label"]
+
     @classmethod
     def from_env(cls) -> "Settings":
         _load_dotenv()
         s = cls()
-        s.api_key = os.environ.get("DEEPSEEK_API_KEY", "")
-        s.base_url = os.environ.get("DEEPSEEK_BASE_URL", s.base_url)
-        s.model = os.environ.get("TEI_AGENT_MODEL", s.model)
+        s.provider = os.environ.get("TEI_AGENT_PROVIDER", s.provider).strip().lower()
+        if s.provider not in PROVIDERS:
+            raise ValueError(f"TEI_AGENT_PROVIDER must be one of {', '.join(PROVIDERS)}, not {s.provider!r}")
+        p = PROVIDERS[s.provider]
+        s.api_key = os.environ.get(p["key_env"], "")
+        legacy_url = os.environ.get("DEEPSEEK_BASE_URL") if s.provider == "deepseek" else None
+        s.base_url = os.environ.get("TEI_AGENT_BASE_URL") or legacy_url or p["base_url"]
+        s.model = os.environ.get("TEI_AGENT_MODEL") or p["model"]
         s.thinking = _bool(os.environ.get("TEI_AGENT_THINKING"), s.thinking)
         s.reasoning_effort = os.environ.get("TEI_AGENT_REASONING_EFFORT", s.reasoning_effort)
         s.chunk_chars = int(os.environ.get("TEI_AGENT_CHUNK_CHARS", s.chunk_chars))

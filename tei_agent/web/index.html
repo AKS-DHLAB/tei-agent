@@ -6,6 +6,7 @@
 <title>TEI Agent</title>
 <style>
 :root{
+  color-scheme:light dark;
   --bg:#f6f4ef; --panel:#fffdf8; --ink:#1f1d1a; --muted:#6b665d; --line:#e2ddd2; --accent:#7a2e1f; --accent-ink:#fff;
   --ok:#2f6b3a; --warn:#9a6a00; --err:#a3261b; --code:#f1ede4;
   --persName:#d9e8ff; --placeName:#dff3df; --orgName:#f3e3ff; --rs:#eef2f7; --date:#ffeccc; --time:#fff4d6; --measure:#e6f7f5;
@@ -14,8 +15,13 @@
   --serif: "Noto Serif KR", "Nanum Myeongjo", "Iowan Old Style", Georgia, serif;
   --sans: "Pretendard", "Noto Sans KR", -apple-system, "Segoe UI", system-ui, sans-serif;
 }
+/* dark theme: follows the system unless the ◐ button chose one (html[data-theme]) */
+:root[data-theme="light"]{ color-scheme:light; }
+:root[data-theme="dark"]{ color-scheme:dark; --bg:#16150f; --panel:#1f1d17; --ink:#ece7dc; --muted:#a39d90; --line:#36332b; --accent:#e08a6d; --accent-ink:#1a1712; --code:#26231c;
+    --persName:#24364f; --placeName:#233b26; --orgName:#3a2a47; --rs:#2a2e35; --date:#463517; --time:#42391c; --measure:#1f3c39;
+    --said:#3a3220; --q:#352f26; --foreign:#4a2626; --term:#323b22; --title:#3d3226; --roleName:#2b3150; --other:#30302e; }
 @media (prefers-color-scheme: dark){
-  :root{ --bg:#16150f; --panel:#1f1d17; --ink:#ece7dc; --muted:#a39d90; --line:#36332b; --accent:#e08a6d; --accent-ink:#1a1712; --code:#26231c;
+  :root:not([data-theme="light"]){ color-scheme:dark; --bg:#16150f; --panel:#1f1d17; --ink:#ece7dc; --muted:#a39d90; --line:#36332b; --accent:#e08a6d; --accent-ink:#1a1712; --code:#26231c;
     --persName:#24364f; --placeName:#233b26; --orgName:#3a2a47; --rs:#2a2e35; --date:#463517; --time:#42391c; --measure:#1f3c39;
     --said:#3a3220; --q:#352f26; --foreign:#4a2626; --term:#323b22; --title:#3d3226; --roleName:#2b3150; --other:#30302e; }
 }
@@ -31,7 +37,7 @@ button{background:var(--panel);border:1px solid var(--line);border-radius:6px;pa
 button:hover{border-color:var(--accent)}
 button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 button:disabled{opacity:.5;cursor:default}
-select,input[type=text],textarea{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+select,input[type=text],input[type=password],textarea{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
 textarea{width:100%;resize:vertical}
 main{padding:16px}
 .start{max-width:880px;margin:0 auto}
@@ -75,7 +81,8 @@ main{padding:16px}
 .legend span{font:11px var(--mono);padding:1px 6px;border-radius:4px}
 pre.xml{font:12px/1.5 var(--mono);background:var(--code);border-radius:8px;padding:10px;overflow:auto;max-height:calc(100vh - 190px);white-space:pre-wrap;word-break:break-word;margin:0}
 .x-tag{color:#8a3b12}.x-att{color:#2b5a8a}.x-val{color:#2f6b3a}.x-com{color:var(--muted)}
-@media (prefers-color-scheme: dark){.x-tag{color:#f0a37f}.x-att{color:#8ab4e8}.x-val{color:#9fd39a}}
+:root[data-theme="dark"] .x-tag{color:#f0a37f}:root[data-theme="dark"] .x-att{color:#8ab4e8}:root[data-theme="dark"] .x-val{color:#9fd39a}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .x-tag{color:#f0a37f}:root:not([data-theme="light"]) .x-att{color:#8ab4e8}:root:not([data-theme="light"]) .x-val{color:#9fd39a}}
 .bar{display:flex;align-items:center;gap:6px;font-size:12px;margin:2px 0}
 .bar .lbl{width:92px;font-family:var(--mono);overflow:hidden;text-overflow:ellipsis}
 .bar .track{flex:1;height:8px;background:var(--code);border-radius:4px;overflow:hidden}
@@ -107,10 +114,18 @@ pre.xml{font:12px/1.5 var(--mono);background:var(--code);border-radius:8px;paddi
 .toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw}
 .toast.on{opacity:1}
 .hidden{display:none!important}
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;min-width:34px}
+.ico{flex:none;vertical-align:middle}
+.icon-btn .i-sun{display:none}
+:root[data-theme="dark"] .icon-btn .i-moon{display:none}:root[data-theme="dark"] .icon-btn .i-sun{display:inline}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .icon-btn .i-moon{display:none}:root:not([data-theme="light"]) .icon-btn .i-sun{display:inline}}
+.lang-pick{display:inline-flex;align-items:center;gap:6px;padding:0 4px 0 9px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink)}
+.lang-pick select{border:0;background:transparent;padding-left:0}
 .credit{margin:8px 16px 20px;padding-top:10px;border-top:1px solid var(--line);text-align:center;font-size:12px;color:var(--muted)}.credit details{display:inline}.credit summary{display:inline;cursor:pointer;text-decoration:underline}.credit .lic{max-width:720px;margin:10px auto 0;text-align:left;white-space:pre-wrap;font:11px/1.5 var(--mono, monospace);background:var(--code);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
 </style>
 </head>
 <body>
+<script>try{var t=localStorage.getItem("teiagent.theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <header>
   <h1>TEI Agent</h1>
   <span class="badge" id="b-tei">TEI P5</span>
@@ -119,6 +134,7 @@ pre.xml{font:12px/1.5 var(--mono);background:var(--code);border-radius:8px;paddi
   <div class="job hidden" id="job"><span id="job-msg"></span><div class="prog"><div id="job-bar" style="width:0"></div></div></div>
   <select id="sess-list"><option value="">세션 열기…</option></select>
   <button id="btn-new">새 문서</button>
+  <button id="btn-theme" class="icon-btn" type="button" title="다크 모드 / 라이트 모드" aria-label="Dark / light mode"><svg class="ico i-moon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="currentColor"/></svg><svg class="ico i-sun" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
 </header>
 <main>
   <!-- start -->
@@ -262,9 +278,9 @@ function tabs(group){$$(`[data-tabs=${group}] button`).forEach(b=>b.onclick=()=>
 async function init(){
   CFG=await api("/api/config");
   $("#b-tei").textContent=`TEI P5 ${CFG.tei_version}`;
-  $("#b-model").textContent=`${CFG.model}${CFG.thinking?" · thinking":""}`;
+  $("#b-model").textContent=`${(CFG.provider_label||"").split(" ")[0]} · ${CFG.model}${CFG.thinking&&CFG.provider==="deepseek"?" · thinking":""}`;
   $("#credit-ver").textContent="v"+CFG.version;
-  if(!CFG.has_key){$("#b-model").classList.add("bad");$("#key-warn").textContent="⚠ DEEPSEEK_API_KEY가 설정되지 않았습니다. .env 파일에 키를 넣고 서버를 다시 시작하세요. (키 없이도 휴리스틱 분석·헤더 생성·검증은 동작합니다.)"}
+  if(!CFG.has_key){$("#b-model").classList.add("bad");$("#key-warn").textContent=`⚠ ${CFG.provider_label||"AI"} API 키가 설정되지 않았습니다. .env 파일에 키(DEEPSEEK_API_KEY, OPENAI_API_KEY, ANTHROPIC_API_KEY, GEMINI_API_KEY 중 TEI_AGENT_PROVIDER에 맞는 것)를 넣고 서버를 다시 시작하세요. (키 없이도 휴리스틱 분석·헤더 생성·검증은 동작합니다.)`}
   for(const [k,g] of Object.entries(CFG.genres)){$("#in-genre").add(new Option(`${g.ko}`,k));$("#genre").add(new Option(`${g.ko} (${k})`,k))}
   tabs("left");tabs("view");
   const sl=await api("/api/sessions");sl.forEach(s=>$("#sess-list").add(new Option(`${s.title||s.id} · ${s.genre||""}`,s.id)));
@@ -311,7 +327,7 @@ function render(){
   $("#hist").innerHTML=ST.history.slice(-12).reverse().map(h=>`<div>${esc(h.when.slice(11,16))} ${esc(h.action)}</div>`).join("");
   renderDoc();renderRecs();renderQs();renderChat();renderRegistry();renderMetaForm();renderMetaRecs();
   if(ST.validation&&ST.validation.wellformed!==undefined)showValidation(true);
-  const u=ST.usage||{};$("#b-model").title=`calls ${u.calls}, in ${u.prompt_tokens}, out ${u.completion_tokens}, ≈$${u.est_cost_usd_peak}`;
+  const u=ST.usage||{};$("#b-model").title=`calls ${u.calls}, in ${u.prompt_tokens}, out ${u.completion_tokens}`+(u.est_cost_usd_peak==null?"":`, ≈$${u.est_cost_usd_peak}`);
 }
 // ---------- reading view
 function xmlToHtml(node){
@@ -439,6 +455,12 @@ async function wd(lang){const q=$("#wd-q").value.trim();if(!q)return;$("#wd-res"
 }
 $("#btn-wd").onclick=()=>wd();
 $("#genre").onchange=async e=>{ST=await api(`/api/sessions/${SID}/genre`,{method:"POST",body:{genre:e.target.value}});render();toast("장르 프로필을 바꿨습니다. 필요하면 추천을 다시 받으세요.")};
+/* ---------- light / dark theme: the button overrides the system setting and is remembered in this browser */
+(function themeToggle() {
+  const root = document.documentElement, btn = document.getElementById("btn-theme"), key = "teiagent.theme";
+  const current = () => root.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  btn.onclick = () => { root.dataset.theme = current() === "dark" ? "light" : "dark"; try { localStorage.setItem(key, root.dataset.theme); } catch (e) { /* storage blocked */ } };
+})();
 init();
 </script>
 </body>

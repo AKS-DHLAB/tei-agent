@@ -135,6 +135,7 @@ def create_app(settings: Settings | None = None, llm_factory: Callable[[], LLM] 
     @app.get("/api/config")
     def config():
         return {"version": APP_VERSION, "tei_version": TEI_VERSION, "model": settings.model, "has_key": bool(settings.api_key),
+                "provider": settings.provider, "provider_label": settings.provider_label,
                 "thinking": settings.thinking, "ui_lang": settings.ui_lang,
                 "genres": {k: {"ko": v["ko"], "en": v["en"]} for k, v in GENRES.items()},
                 "tags": {k: {"ko": v["ko"], "elements": v["elements"], "cat": v["cat"], "rule": v["rule"]} for k, v in TAGS.items()},

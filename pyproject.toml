@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tei-agent"
-version = "0.1.3"
-description = "Interactive, multilingual TEI P5 (4.12.0) tagging agent powered by DeepSeek-V4.1-Flash"
+version = "0.1.4"
+description = "Interactive, multilingual TEI P5 (4.12.0) tagging agent (DeepSeek, ChatGPT, Claude or Gemini)"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT (code, see LICENSE); bundled TEI schema CC BY / BSD-2; exemplars per data/exemplars/index.json" }
@@ -15,6 +15,7 @@ dependencies = ["openai>=1.40", "lxml>=5.0", "fastapi>=0.110", "uvicorn>=0.29", 
 [project.optional-dependencies]
 dev = ["pytest>=8", "httpx>=0.27"]
 mcp = ["mcp>=1.10"]
+claude = ["anthropic>=2.0"]
 
 [project.scripts]
 tei-agent = "tei_agent.cli:main"

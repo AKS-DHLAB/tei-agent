@@ -1,6 +1,6 @@
 # TEI Agent — 다국어 인문 텍스트 대화형 TEI 태깅 에이전트
 
-원문 텍스트를 넣으면 **TEI P5 4.12.0**(2026-07-28 공개, `tei_all`) 규칙에 맞춰 1차 자동 태깅을 합니다. 그다음 연구자와 묻고 답하며 태그와 헤더 메타데이터를 다듬어 갑니다. LLM은 **DeepSeek-V4.1-Flash**(API 모델명 `deepseek-flash`)를 씁니다. 한국 근현대소설 TEI 데이터셋 **KNoTE**와 유럽·영미권의 개방 라이선스 TEI 코퍼스를 few-shot 예시로 사용합니다.
+원문 텍스트를 넣으면 **TEI P5 4.12.0**(2026-07-28 공개, `tei_all`) 규칙에 맞춰 1차 자동 태깅을 합니다. 그다음 연구자와 묻고 답하며 태그와 헤더 메타데이터를 다듬어 갑니다. LLM은 기본값 **DeepSeek-V4.1-Flash**(API 모델명 `deepseek-flash`)이고, 0.1.4부터 **ChatGPT(OpenAI)·Claude(Anthropic)·Gemini(Google)**로 바꿔 연결할 수 있습니다. 한국 근현대소설 TEI 데이터셋 **KNoTE**와 유럽·영미권의 개방 라이선스 TEI 코퍼스를 few-shot 예시로 사용합니다.
 
 | 요청 기능 | 구현 |
 |---|---|
@@ -10,10 +10,10 @@
 | 4. 풍부한 teiHeader와 메타데이터 추천 | 메타데이터 카탈로그 31항목(장르별 권장 수준 포함)을 둡니다. LLM은 값과 근거를 제안하고, Wikidata 검색으로 전거를 확인합니다. 헤더 XML은 코드가 결정론적으로 생성합니다. |
 
 ## 브라우저판 (설치 없이 실습용) — `dist/TEI_Agent.html`
-- **실행:** 파일 하나(2.4 MB)를 Chrome이나 Edge에서 열면 바로 씁니다. 각자 DeepSeek API 키를 넣으며, 키는 그 브라우저에만 저장됩니다.
+- **실행:** 파일 하나(2.4 MB)를 Chrome이나 Edge에서 열면 바로 씁니다. 각자 쓸 AI 서비스(DeepSeek·ChatGPT·Claude·Gemini)를 고르고 그 API 키를 넣으며, 키는 그 브라우저에만, 서비스마다 따로 저장됩니다.
 - **동작 방식:** Python판과 같은 규칙(태그·메타데이터 카탈로그, 언어 규칙, TEI 4.12 속성 허용 목록, few-shot 예시)과 같은 파이프라인을 JavaScript로 옮겼습니다.
 - **검증:** tei_all 4.12.0 전체 검증도 브라우저 안에서 합니다. libxml2를 웹어셈블리로 옮긴 xmllint-wasm(MIT)을 써서 Python판과 같은 엔진입니다.
-- **외부 통신:** DeepSeek API와, 요청할 때만 Wikidata로 나갑니다.
+- **외부 통신:** 고른 AI 서비스의 API와, 요청할 때만 Wikidata로 나갑니다.
 - **화면 기능:** 작업이 끝나면 결과 요약이 담긴 완료 막대(실패 시 빨간 막대)가 *확인*을 누를 때까지 남습니다. 읽기 보기에서 태그를 클릭해 요소·속성을 바꾸거나 지우고, 글자를 드래그해 태그를 붙이고, 블록별 ✎ XML로 직접 고칠 수 있습니다(원문 보존·스키마 검사 동일 적용, 되돌리기 가능). 오른쪽 패널은 대화로 수정하기가 맨 위(💬 탭)이고 질문·추천 태그는 옆 탭입니다. 헤더의 언어 선택으로 UI를 한국어/English로 바꿉니다(모델의 질문·설명 언어도 함께 바뀜).
 - **정답 데이터 (0.1.2):** 헤더의 *📚 정답 데이터*에 프로젝트 방식으로 태깅된 TEI XML을 추가합니다(현재 문서도 추가 가능). *예시로 사용*한 항목은 같은 언어일 때 내장 예시보다 먼저 few-shot 예시로 들어갑니다. *현재 문서와 비교*는 `scripts/eval_knote.py`와 같은 방식(공백 제외 문자 위치)으로 요소별 정확 일치·겹침 P/R/F1, micro 평균, 화자(`@who`) 일치율을 계산하고 JSON으로 저장할 수 있습니다. 데이터는 그 브라우저에만 저장됩니다.
 - **TEI 합치기 (0.1.2):** 헤더의 *⧉ TEI 합치기*로 TEI 파일 여러 개(현재 문서 포함)를 순서대로 합칩니다. ① **teiCorpus**: 문서마다 헤더를 유지하고 코퍼스 헤더(출처 목록·변경 기록)를 붙여 내려받습니다. ② **하나의 TEI**: 본문을 이어 붙이고(자체 div가 없는 문서는 지정한 유형의 div로 감쌈) 인물·장소 목록을 통합한 뒤 바로 열어 이어서 작업합니다. 두 방식 모두 겹치는 `xml:id`는 이름을 바꾸고 그 id를 가리키는 `#참조`도 고치며, 합친 결과를 tei_all로 검증합니다.
@@ -24,13 +24,18 @@
 - **프로젝트 지침**: 팀·반의 규칙(마크다운)을 모든 태깅 지시에 '9. PROJECT RULES'로 덧붙입니다. 일반 규칙과 충돌하면 지침이 우선하지만 원문 보존·스키마 검사는 바꿀 수 없습니다. `<!-- -->`는 메모로 보내지 않습니다. 작업 파일에 저장되고 TEI 헤더 `editorialDecl/interpretation`에 기록됩니다. 예시: `tei_agent/data/presets/mujeong_class.md`. CLI: `tei-agent tag 원문.txt -o out.xml --rules 지침.md`.
 - **대화 루프**: 에이전트는 수정 요청마다 *측정(find_markup) → 일반 규칙이면 지침에 추가(set_project_rules) → 적용(apply_instruction, 검색어로 범위 제한) → 재측정·보고*를 따릅니다. 도구 19개.
 
+## 0.1.4에서 바뀐 것
+- **AI 서비스 선택:** DeepSeek 외에 ChatGPT·Claude·Gemini로 연결(위 표).
+- **다크 모드 버튼:** 화면 위쪽 달/해 버튼. 처음에는 운영체제 설정을 따르고, 누르면 그 선택을 브라우저에 기억합니다(브라우저판·Python 웹앱).
+- **언어 선택:** 지구본 아이콘과 "한국어 · Korean / English · 영어" 표기로 언어 바꾸는 곳을 찾기 쉽게 했습니다.
+
 ## 범용성 (0.1.3)
 - **규칙의 층:** ① TEI 공통 규칙(언어 중립, 예문은 문서 언어의 것만 삽입) ② 언어 규칙(ko·ja·zh/lzh·en·de·fr·es·it·pt·ru·la·grc) ③ 장르 프로필 ④ 관행 프리셋·프로젝트 지침. KNoTE의 태깅 관행은 프리셋 `knote_conventions`(브라우저판: *예시 지침 불러오기*, CLI: `--preset knote_conventions`)로 분리했습니다. KNoTE와 맞춰 태깅하거나 KNoTE 정답과 비교할 때 켭니다.
 - **예시 선택:** 같은 장르 1편 + 문서 언어 1편. 장르도 언어도 다른 예시는 넣지 않습니다(예: 독일어 소설에 한국 소설 예시를 넣지 않음).
 - **벤치마크:** `bench/manifest.json`(12편, 예시·튜닝에 쓰지 않은 파일), `scripts/fetch_bench.py` → `scripts/eval_gold.py` → `scripts/compare_runs.py`. API 없이 두 버전의 지시·예시를 비교하는 `scripts/probe_prompts.py`. v0.1.2와의 비교 결과는 `docs/generality_0.1.3.md`.
 
 ## 수업에서 쓰기 · GitHub로 관리하기
-- **학생:** `dist/TEI_Agent.html`을 **내려받아** Chrome/Edge로 열고 본인 DeepSeek 키를 넣습니다. 드라이브·메일의 '미리보기'로 열면 동작하지 않습니다.
+- **학생:** `dist/TEI_Agent.html`을 **내려받아** Chrome/Edge로 열고 본인 API 키(DeepSeek·ChatGPT·Claude·Gemini 중 하나)를 넣습니다. 드라이브·메일의 '미리보기'로 열면 동작하지 않습니다.
 - **GitHub Pages(선택):** 저장소 Settings → Pages → Source를 *GitHub Actions*로 두면 `.github/workflows/pages.yml`이 `dist/`를 `https://<owner>.github.io/<repo>/`에 올립니다. 학생은 주소만 열면 됩니다(DeepSeek API는 Pages 출처의 브라우저 호출도 허용 — 2026-10-13 preflight 확인). 키는 그 주소의 브라우저 저장소에만 남습니다.
 - **고치는 순서:** `standalone/`(브라우저판 원본)과 `tei_agent/`(파이썬판)를 함께 고친 뒤 `python scripts/build_standalone.py`로 `dist/TEI_Agent.html`을 다시 만들고 `pytest`를 돌려 커밋합니다. CI(`tests.yml`)가 테스트와 dist 최신 여부를 검사합니다.
 - **스키마 갱신:** 새 TEI 판이 나오면 `tei_all.rng`를 교체하고 `python scripts/build_schema_index.py` → `build_standalone.py`.
@@ -118,8 +123,22 @@ tei_agent/
   data/exemplars few-shot 예시 JSON
 harness/         DeepSeek Harness overlay + 설명
 docs/            KNoTE 4.12 검증 보고서, 참고문헌
-tests/           mock DeepSeek 기반 종단 테스트 (pytest)
+tests/           mock LLM 기반 종단 테스트 (pytest)
 ```
+
+## AI 서비스 (0.1.4)
+| 서비스 | 브라우저판: ⚙ 설정 / 시작 화면 | Python판: `.env` | 기본 모델 | 호출 방식 |
+|---|---|---|---|---|
+| DeepSeek (기본) | AI 서비스 → DeepSeek | `TEI_AGENT_PROVIDER=deepseek`, `DEEPSEEK_API_KEY` | `deepseek-flash` | OpenAI 호환 `/chat/completions` |
+| ChatGPT (OpenAI) | → ChatGPT (OpenAI) | `TEI_AGENT_PROVIDER=openai`, `OPENAI_API_KEY` | `gpt-5-mini` | `/chat/completions` (`max_completion_tokens`) |
+| Claude (Anthropic) | → Claude (Anthropic) | `TEI_AGENT_PROVIDER=anthropic`, `ANTHROPIC_API_KEY` (+ `pip install anthropic`) | `claude-opus-5-5` | Messages API (`/v1/messages`) |
+| Gemini (Google) | → Gemini (Google) | `TEI_AGENT_PROVIDER=gemini`, `GEMINI_API_KEY` | `gemini-2.5-flash` | Gemini의 OpenAI 호환 엔드포인트 |
+
+- 모델명과 주소는 기본값일 뿐이며 ⚙ 설정(또는 `TEI_AGENT_MODEL`, `TEI_AGENT_BASE_URL`)에서 바꿀 수 있습니다. 서비스마다 모델 이름이 자주 바뀌니 각 서비스 문서에서 확인하세요.
+- 내부 형식은 OpenAI 스타일 메시지이고, Claude는 어댑터가 Messages API로 바꿉니다(시스템 프롬프트 분리, `tool_use`/`tool_result` 블록, Claude의 응답 블록은 도구 대화에서 그대로 되돌려 보냄). JSON 모드가 없는 Claude에는 "JSON 한 개만 답하라"는 지시를 덧붙이고, 응답은 기존처럼 느슨하게 파싱합니다. 현재 Opus·Sonnet·Fable 모델에는 서버 측 거절 대체(`fallbacks: "default"`)를 켭니다.
+- 어떤 모델이 선택 매개변수(예: `temperature`)를 거부하면(400) 그 매개변수를 빼고 한 번 다시 보냅니다.
+- 비용 추정치($)는 DeepSeek에서만 표시합니다. 다른 서비스는 토큰 수만 보여 줍니다.
+- 0.1.4의 다른 서비스 연결은 모의 응답으로만 시험했습니다. 실제 키로 확인한 것은 DeepSeek뿐입니다.
 
 ## DeepSeek 설정 (2026-10-12 공식 문서 확인)
 - `model="deepseek-flash"`, `base_url="https://api.deepseek.com"` (OpenAI 호환), 컨텍스트 1M, 최대 출력 384K

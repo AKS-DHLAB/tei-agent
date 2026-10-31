@@ -26,15 +26,22 @@ def _handler(responder):
     return handle
 
 
+def _launch(p):
+    try:
+        return p.chromium.launch(args=["--no-proxy-server"])
+    except Exception as e:  # no browser for this Playwright version: a preinstalled Chromium, else skip
+        exe = Path("/opt/pw-browsers/chromium")
+        if exe.exists():
+            return p.chromium.launch(executable_path=str(exe), args=["--no-proxy-server"])
+        pytest.skip(f"chromium not available: {e}")
+
+
 @pytest.mark.skipif(not HTML.exists(), reason="dist/TEI_Agent.html not built")
 def test_browser_edition_end_to_end():
     responder, _ = responder_factory()
     errors = []
     with pw.sync_playwright() as p:
-        try:
-            b = p.chromium.launch(args=["--no-proxy-server"])
-        except Exception as e:  # no browser installed
-            pytest.skip(f"chromium not available: {e}")
+        b = _launch(p)
         pg = b.new_page()
         pg.on("pageerror", lambda e: errors.append(str(e)))
         pg.route("https://api.deepseek.com/**", _handler(responder))
@@ -102,3 +109,102 @@ def test_browser_edition_end_to_end():
         assert m == [True, True, 3, True, 0]
         b.close()
     assert not errors
+
+
+def _anthropic_handler(responder, log):
+    """Messages API mock: translate to the OpenAI-style messages the responder knows, and the answer back."""
+    def handle(route):
+        if route.request.method == "OPTIONS":
+            return route.fulfill(status=204, headers={"access-control-allow-origin": "*", "access-control-allow-headers": "*"})
+        body = json.loads(route.request.post_data)
+        log.append({"headers": route.request.headers, "body": body, "url": route.request.url})
+        msgs = [{"role": "system", "content": body.get("system", "")}]
+        for m in body["messages"]:
+            blocks = m["content"]
+            if any(b.get("type") == "tool_result" for b in blocks):
+                msgs.append({"role": "tool", "content": blocks[-1]["content"]})
+            else:
+                msgs.append({"role": m["role"], "content": "".join(b.get("text", "") for b in blocks)})
+        out = responder(msgs, "JSON object only" in body.get("system", ""), body.get("tools"))
+        if isinstance(out, (dict, list)) and not (isinstance(out, dict) and out.get("role") == "assistant"):
+            out = {"role": "assistant", "content": json.dumps(out, ensure_ascii=False)}
+        if isinstance(out, str):
+            out = {"role": "assistant", "content": out}
+        content = [{"type": "thinking", "thinking": "", "signature": "sig"}]
+        if out.get("content"):
+            content.append({"type": "text", "text": out["content"]})
+        for tc in out.get("tool_calls") or []:
+            content.append({"type": "tool_use", "id": tc["id"], "name": tc["function"]["name"], "input": json.loads(tc["function"]["arguments"])})
+        route.fulfill(status=200, headers={"access-control-allow-origin": "*", "content-type": "application/json"},
+                      body=json.dumps({"content": content, "stop_reason": "end_turn",
+                                       "usage": {"input_tokens": 10, "output_tokens": 5, "cache_read_input_tokens": 2}}))
+    return handle
+
+
+@pytest.mark.skipif(not HTML.exists(), reason="dist/TEI_Agent.html not built")
+def test_browser_providers_theme_and_language_picker():
+    """0.1.4: ChatGPT / Claude / Gemini through the settings dialog; dark-mode button; globe language picker."""
+    errors = []
+    with pw.sync_playwright() as p:
+        b = _launch(p)
+        pg = b.new_page()
+        pg.on("pageerror", lambda e: errors.append(str(e)))
+        logs = {"openai": [], "anthropic": [], "gemini": []}
+
+        def logged(name, responder):
+            inner = _handler(responder)
+            def handle(route):
+                if route.request.method != "OPTIONS":
+                    logs[name].append({"headers": route.request.headers, "body": json.loads(route.request.post_data), "url": route.request.url})
+                inner(route)
+            return handle
+        # settings saved by 0.1.3 (one DeepSeek key) must survive the upgrade
+        pg.add_init_script("""if (!sessionStorage.getItem('seeded')) { sessionStorage.setItem('seeded', '1');
+            localStorage.setItem('teiagent.settings', JSON.stringify({apiKey: 'sk-old-deepseek', model: 'deepseek-flash', baseUrl: 'https://api.deepseek.com'})); }""")
+        pg.goto(HTML.as_uri())
+        st = pg.evaluate("() => { const s = window.TEIAgent.Settings.load(); return [s.provider, s.apiKey, s.keys.deepseek]; }")
+        assert st == ["deepseek", "sk-old-deepseek", "sk-old-deepseek"]
+        # language picker: a globe icon and both language names
+        assert pg.locator(".lang-pick svg").count() == 1 and "Korean" in pg.inner_text(".lang-pick")
+        # theme button toggles and is remembered
+        before = pg.evaluate("() => getComputedStyle(document.body).backgroundColor")
+        pg.click("#btn-theme")
+        theme = pg.evaluate("() => document.documentElement.dataset.theme")
+        assert theme in ("dark", "light") and pg.evaluate("() => localStorage.getItem('teiagent.theme')") == theme
+        assert pg.evaluate("() => getComputedStyle(document.body).backgroundColor") != before
+        pg.reload()
+        assert pg.evaluate("() => document.documentElement.dataset.theme") == theme
+
+        for name, host in (("openai", "https://api.openai.com/**"), ("anthropic", "https://api.anthropic.com/**"),
+                           ("gemini", "https://generativelanguage.googleapis.com/**")):
+            responder, _ = responder_factory()
+            pg.route(host, _anthropic_handler(responder, logs[name]) if name == "anthropic" else logged(name, responder))
+            pg.click("#btn-settings"); pg.select_option("#s-provider", name)
+            assert pg.input_value("#s-model") == pg.evaluate(f"() => window.TEIAgent.PROVIDERS['{name}'].model")
+            pg.fill("#s-key", f"key-{name}"); pg.click("#s-save")
+            pg.evaluate("() => window.__teiUI && document.querySelector('#btn-new').click()")
+            pg.fill("#in-text", KO_TEXT); pg.click("#btn-start")
+            pg.wait_for_function("() => window.__teiUI.session && window.__teiUI.session.status === 'tagged'", timeout=60000)
+            pg.wait_for_selector("#job.hidden", state="attached")
+            assert pg.evaluate("() => window.__teiUI.session.summary().tag_counts.persName") >= 2, name
+            assert logs[name], name
+            req = logs[name][0]
+            if name == "anthropic":
+                assert req["url"].endswith("/v1/messages") and req["headers"]["x-api-key"] == "key-anthropic"
+                assert req["headers"]["anthropic-version"] == "2023-06-01" and req["headers"]["anthropic-dangerous-direct-browser-access"] == "true"
+                assert "response_format" not in req["body"] and "temperature" not in req["body"] and req["body"]["fallbacks"] == "default"
+                # agent chat: tool call, tool result, Claude's blocks sent back unchanged
+                out = pg.evaluate("async () => await window.TEIAgent.agentChat(window.__teiUI.session, '지금 상태 알려줘', () => {})")
+                assert out["actions"][0]["tool"] == "get_status"
+                last = logs[name][-1]["body"]["messages"]
+                assert last[-1]["content"][0]["type"] == "tool_result" and last[-2]["content"][0]["signature"] == "sig"
+            else:
+                assert req["headers"]["authorization"] == f"Bearer key-{name}" and req["url"].endswith("/chat/completions")
+                assert "thinking" not in req["body"]
+                assert ("max_completion_tokens" in req["body"]) == (name == "openai")
+            pg.unroute(host)
+        # each service keeps its own key; the old DeepSeek key is still there
+        keys = pg.evaluate("() => window.TEIAgent.Settings.load().keys")
+        assert keys["deepseek"] == "sk-old-deepseek" and keys["anthropic"] == "key-anthropic" and keys["gemini"] == "key-gemini"
+        b.close()
+    assert not errors, errors

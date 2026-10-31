@@ -1,6 +1,7 @@
 /* TEI Agent — browser edition. Port of the Python package (tei_agent/*) to a single HTML file.
  * Same rules (exported from Python at build time), same pipeline, same safeguards.
- * Network: DeepSeek API (user's own key, kept in this browser only) and Wikidata (on request). */
+ * Network: the chosen AI provider's API — DeepSeek, OpenAI (ChatGPT), Anthropic (Claude) or Google (Gemini) — with the
+ * user's own key, kept in this browser only, and Wikidata (on request). */
 "use strict";
 const D = JSON.parse(document.getElementById("tei-data").textContent);
 const TEI_NS = "http://www.tei-c.org/ns/1.0";
@@ -14,16 +15,50 @@ function tagRule(k, langs = []) {
 }
 const APP_NAME = "TEI-Agent";
 
+/* ------------------------------------------------------------------ AI providers */
+// api: "openai" = OpenAI-style /chat/completions (DeepSeek, OpenAI, Gemini's OpenAI-compatible endpoint);
+//      "anthropic" = Anthropic Messages API. Model names are defaults only: every field stays editable in ⚙ Settings.
+const PROVIDERS = {
+  deepseek: { label: "DeepSeek", api: "openai", baseUrl: "https://api.deepseek.com", model: "deepseek-flash",
+              models: ["deepseek-flash", "deepseek-v4-pro"], keyUrl: "https://platform.deepseek.com/api_keys", keyHint: "sk-..." },
+  openai: { label: "ChatGPT (OpenAI)", api: "openai", baseUrl: "https://api.openai.com/v1", model: "gpt-5-mini",
+            models: ["gpt-5-mini", "gpt-5"], keyUrl: "https://platform.openai.com/api-keys", keyHint: "sk-..." },
+  anthropic: { label: "Claude (Anthropic)", api: "anthropic", baseUrl: "https://api.anthropic.com", model: "claude-opus-5-5",
+               models: ["claude-opus-5-5", "claude-sonnet-5-5", "claude-haiku-5-5"], keyUrl: "https://console.anthropic.com/settings/keys", keyHint: "sk-ant-..." },
+  gemini: { label: "Gemini (Google)", api: "openai", baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai", model: "gemini-2.5-flash",
+            models: ["gemini-2.5-flash", "gemini-2.5-pro"], keyUrl: "https://aistudio.google.com/apikey", keyHint: "AIza..." },
+};
+
 /* ------------------------------------------------------------------ settings */
+// apiKey / model / baseUrl always describe the selected provider; keys, models and bases keep each provider's own values.
 const Settings = {
-  defaults: { apiKey: "", baseUrl: "https://api.deepseek.com", model: "deepseek-flash", thinking: false,
+  defaults: { provider: "deepseek", apiKey: "", baseUrl: "https://api.deepseek.com", model: "deepseek-flash", thinking: false,
               reasoningEffort: "high", temperature: 0.1, chunkChars: 2500, maxWorkers: 4, maxTokens: 32000, uiLang: "ko" },
   load() {
-    let s = {};
-    try { s = JSON.parse(localStorage.getItem("teiagent.settings") || "{}"); } catch (e) { /* storage blocked */ }
-    return Object.assign({}, this.defaults, s);
+    let stored = {};
+    try { stored = JSON.parse(localStorage.getItem("teiagent.settings") || "{}"); } catch (e) { /* storage blocked */ }
+    const s = Object.assign({}, this.defaults, stored);
+    s.keys = { ...(stored.keys || {}) }; s.models = { ...(stored.models || {}) }; s.bases = { ...(stored.bases || {}) };
+    if (!stored.keys) { // settings saved before 0.1.4 held a single DeepSeek key
+      if (stored.apiKey) s.keys.deepseek = stored.apiKey;
+      if (stored.model) s.models.deepseek = stored.model;
+      if (stored.baseUrl) s.bases.deepseek = stored.baseUrl;
+    }
+    return this.select(s, PROVIDERS[s.provider] ? s.provider : "deepseek");
   },
-  save(s) { try { localStorage.setItem("teiagent.settings", JSON.stringify(s)); return true; } catch (e) { return false; } },
+  /** Switch provider: remember the current provider's key/model/URL, then load the new one's. */
+  select(s, provider) {
+    const p = PROVIDERS[provider] ? provider : "deepseek";
+    s.provider = p; s.apiKey = s.keys[p] || ""; s.model = s.models[p] || PROVIDERS[p].model; s.baseUrl = s.bases[p] || PROVIDERS[p].baseUrl;
+    return s;
+  },
+  sync(s) {
+    const p = s.provider;
+    s.keys = { ...(s.keys || {}), [p]: s.apiKey || "" }; s.models = { ...(s.models || {}), [p]: s.model || PROVIDERS[p].model };
+    s.bases = { ...(s.bases || {}), [p]: s.baseUrl || PROVIDERS[p].baseUrl };
+    return s;
+  },
+  save(s) { try { localStorage.setItem("teiagent.settings", JSON.stringify(this.sync(s))); return true; } catch (e) { return false; } },
 };
 
 /* ------------------------------------------------------------------ small utils */
@@ -53,50 +88,131 @@ function parseJsonLoose(text) {
   throw new LLMError("could not parse JSON: " + t.slice(0, 200));
 }
 
-/* ------------------------------------------------------------------ LLM (DeepSeek, OpenAI-compatible) */
+/* ------------------------------------------------------------------ LLM client: DeepSeek, OpenAI, Gemini (OpenAI-style) and Claude */
+// The rest of the program speaks OpenAI-style messages ({role, content, tool_calls}, role "tool" results);
+// the Anthropic adapter translates both ways and keeps Claude's own content blocks for replay.
+const toAnthropicTools = (tools) => tools.map((t) => ({ name: t.function.name, description: t.function.description || "", input_schema: t.function.parameters || { type: "object", properties: {} } }));
+function toAnthropicMessages(messages) {
+  const system = [], out = [];
+  const push = (role, blocks) => { const last = out[out.length - 1]; if (last && last.role === role) last.content.push(...blocks); else out.push({ role, content: blocks }); };
+  for (const m of messages) {
+    if (m.role === "system") { system.push(m.content || ""); continue; }
+    if (m.role === "tool") { push("user", [{ type: "tool_result", tool_use_id: m.tool_call_id, content: String(m.content ?? "") }]); continue; }
+    if (m.role === "assistant") {
+      if (m.anthropic_content) { push("assistant", clone(m.anthropic_content)); continue; } // Claude's own blocks, thinking included, unchanged
+      const blocks = m.content ? [{ type: "text", text: m.content }] : [];
+      for (const tc of m.tool_calls || []) { let input = {}; try { input = JSON.parse(tc.function.arguments || "{}"); } catch (e) { /* keep {} */ } blocks.push({ type: "tool_use", id: tc.id, name: tc.function.name, input }); }
+      if (blocks.length) push("assistant", blocks); continue;
+    }
+    push("user", [{ type: "text", text: String(m.content ?? "") }]);
+  }
+  return { system: system.join("\n\n"), messages: out };
+}
+// Fields an OpenAI-style endpoint other than DeepSeek accepts in a message (history may hold DeepSeek or Claude extras).
+const plainMessage = (m) => { const o = { role: m.role, content: m.content ?? "" }; if (m.tool_calls) o.tool_calls = m.tool_calls; if (m.tool_call_id) o.tool_call_id = m.tool_call_id; return o; };
+
 class LLM {
   constructor(settings) { this.s = settings; this.usage = { calls: 0, prompt_tokens: 0, completion_tokens: 0, cached_tokens: 0 }; }
+  get provider() { return PROVIDERS[this.s.provider] ? this.s.provider : "deepseek"; }
+  get label() { return PROVIDERS[this.provider].label; }
   usageDict() {
     const u = this.usage, miss = Math.max(u.prompt_tokens - u.cached_tokens, 0);
-    // peak-hour list prices for deepseek-flash, USD / 1M tokens (2026-10-12)
-    return { ...u, est_cost_usd_peak: Math.round(((u.cached_tokens * 0.006 + miss * 0.3 + u.completion_tokens * 1.2) / 1e6) * 1e4) / 1e4 };
+    // a price estimate only for DeepSeek: peak-hour list prices for deepseek-flash, USD / 1M tokens (2026-10-12)
+    const est = this.provider === "deepseek" ? Math.round(((u.cached_tokens * 0.006 + miss * 0.3 + u.completion_tokens * 1.2) / 1e6) * 1e4) / 1e4 : null;
+    return { ...u, provider: this.provider, est_cost_usd_peak: est };
   }
   async chat(messages, { json = false, tools = null, maxTokens = null, thinking = null, retries = 3 } = {}) {
-    if (!this.s.apiKey) throw new LLMError("DeepSeek API 키가 설정되지 않았습니다 (⚙ 설정).");
-    thinking = thinking ?? this.s.thinking;
-    const body = { model: this.s.model, messages, max_tokens: maxTokens || this.s.maxTokens,
-                   thinking: { type: thinking ? "enabled" : "disabled" } };
-    if (thinking) body.reasoning_effort = this.s.reasoningEffort; else body.temperature = this.s.temperature;
-    if (json) body.response_format = { type: "json_object" };
-    if (tools) body.tools = tools;
+    if (!this.s.apiKey) throw new LLMError(`${this.label} API 키가 설정되지 않았습니다 (⚙ 설정).`);
+    const anthropic = PROVIDERS[this.provider].api === "anthropic";
+    const req = anthropic ? this.anthropicRequest(messages, { json, tools, maxTokens }) : this.openaiRequest(messages, { json, tools, maxTokens, thinking });
+    const host = (() => { try { return new URL(req.url).host; } catch (e) { return req.url; } })();
     let last;
     for (let a = 0; a < retries; a++) {
       try {
-        const r = await fetch(this.s.baseUrl.replace(/\/$/, "") + "/chat/completions", {
-          method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + this.s.apiKey },
-          body: JSON.stringify(body) });
-        if (r.status === 401) throw new LLMError("API 키가 올바르지 않습니다 (401).");
-        if (r.status === 402) throw new LLMError("DeepSeek 계정 잔액이 부족합니다 (402). platform.deepseek.com에서 충전한 뒤 다시 시도하세요.");
-        if (!r.ok) throw new Error(`HTTP ${r.status}: ${(await r.text()).slice(0, 200)}`);
+        const r = await fetch(req.url, { method: "POST", headers: req.headers, body: JSON.stringify(req.body) });
+        if (r.status === 401 || r.status === 403) throw new LLMError(`${this.label} API 키가 올바르지 않거나 권한이 없습니다 (${r.status}).`);
+        if (r.status === 402) throw new LLMError(`${this.label} 계정 잔액이 부족합니다 (402). 충전한 뒤 다시 시도하세요.`);
+        if (!r.ok) {
+          const text = await r.text();
+          // a model that rejects one optional parameter (e.g. temperature on reasoning models): drop it and retry at once
+          if (r.status === 400 && this.relax(req, text)) { a--; continue; }
+          if (r.status === 400 || r.status === 404) throw new LLMError(`${this.label} 요청 오류 (${r.status}): ${text.slice(0, 300)}`);
+          throw new Error(`HTTP ${r.status}: ${text.slice(0, 200)}`);
+        }
         const d = await r.json();
-        const u = d.usage || {};
-        this.usage.calls++; this.usage.prompt_tokens += u.prompt_tokens || 0;
-        this.usage.completion_tokens += u.completion_tokens || 0; this.usage.cached_tokens += u.prompt_cache_hit_tokens || 0;
-        const m = d.choices[0].message;
-        const out = { role: "assistant", content: m.content || "" };
-        if (m.reasoning_content) out.reasoning_content = m.reasoning_content;
-        if (m.tool_calls && m.tool_calls.length) out.tool_calls = m.tool_calls.map((tc) => ({ id: tc.id, type: "function",
-          function: { name: tc.function.name, arguments: tc.function.arguments } }));
+        const out = anthropic ? this.fromAnthropic(d) : this.fromOpenai(d);
         if (json && !out.content.trim()) throw new Error("empty JSON content");
         return out;
       } catch (e) {
         last = e;
         if (e instanceof LLMError) throw e;
-        if (e instanceof TypeError) last = new Error("네트워크 오류 — 브라우저가 api.deepseek.com에 닿지 못했습니다. 인터넷 연결, 학교·기관 방화벽, 광고 차단 확장 프로그램, VPN을 확인하세요");
+        if (e instanceof TypeError) last = new Error(`네트워크 오류 — 브라우저가 ${host}에 닿지 못했습니다. 인터넷 연결, 학교·기관 방화벽, 광고 차단 확장 프로그램, VPN을 확인하세요`);
         await sleep(1500 * (a + 1));
       }
     }
-    throw new LLMError(`DeepSeek 호출 실패 (${retries}회): ${last && last.message ? last.message : last}`);
+    throw new LLMError(`${this.label} 호출 실패 (${retries}회): ${last && last.message ? last.message : last}`);
+  }
+  /** Remove (or rename) the optional parameter a 400 error names; true if something changed. */
+  relax(req, text) {
+    const body = req.body; if ((req.relaxed = (req.relaxed || 0) + 1) > 4) return false;
+    const t = String(text).toLowerCase();
+    for (const k of ["temperature", "response_format", "reasoning_effort", "thinking"]) {
+      if (k in body && t.includes(k)) { delete body[k]; return true; }
+    }
+    if ("max_tokens" in body && t.includes("max_tokens") && t.includes("max_completion_tokens")) { body.max_completion_tokens = body.max_tokens; delete body.max_tokens; return true; }
+    return false;
+  }
+  openaiRequest(messages, { json, tools, maxTokens, thinking }) {
+    const p = this.provider, s = this.s, max = maxTokens || s.maxTokens;
+    const body = { model: s.model, messages: p === "deepseek" ? messages : messages.map(plainMessage) };
+    if (p === "deepseek") {
+      thinking = thinking ?? s.thinking;
+      body.max_tokens = max; body.thinking = { type: thinking ? "enabled" : "disabled" };
+      if (thinking) body.reasoning_effort = s.reasoningEffort; else body.temperature = s.temperature;
+    } else if (p === "openai") {
+      body.max_completion_tokens = max; // current OpenAI models: max_completion_tokens; temperature left at the model default
+    } else {
+      body.max_tokens = max; body.temperature = s.temperature;
+    }
+    if (json) body.response_format = { type: "json_object" };
+    if (tools) body.tools = tools;
+    return { url: s.baseUrl.replace(/\/$/, "") + "/chat/completions", headers: { "Content-Type": "application/json", Authorization: "Bearer " + s.apiKey }, body };
+  }
+  fromOpenai(d) {
+    const u = d.usage || {};
+    this.usage.calls++; this.usage.prompt_tokens += u.prompt_tokens || 0; this.usage.completion_tokens += u.completion_tokens || 0;
+    this.usage.cached_tokens += u.prompt_cache_hit_tokens || (u.prompt_tokens_details && u.prompt_tokens_details.cached_tokens) || 0;
+    const m = d.choices[0].message;
+    const out = { role: "assistant", content: m.content || "" };
+    if (m.reasoning_content && this.provider === "deepseek") out.reasoning_content = m.reasoning_content;
+    if (m.tool_calls && m.tool_calls.length) out.tool_calls = m.tool_calls.map((tc) => ({ id: tc.id, type: "function",
+      function: { name: tc.function.name, arguments: typeof tc.function.arguments === "string" ? tc.function.arguments : JSON.stringify(tc.function.arguments || {}) } }));
+    return out;
+  }
+  anthropicRequest(messages, { json, tools, maxTokens }) {
+    const s = this.s, conv = toAnthropicMessages(messages);
+    // no response_format on the Messages API: ask for JSON in the system prompt (parseJsonLoose also strips fences)
+    const system = conv.system + (json ? "\n\nReply with one JSON object only, no other text." : "");
+    const body = { model: s.model, max_tokens: Math.min(maxTokens || s.maxTokens, 32000), messages: conv.messages };
+    if (system.trim()) body.system = system;
+    if (tools) body.tools = toAnthropicTools(tools);
+    const headers = { "Content-Type": "application/json", "x-api-key": s.apiKey, "anthropic-version": "2023-06-01",
+      "anthropic-dangerous-direct-browser-access": "true" }; // required for calls straight from a browser page
+    // current Opus / Sonnet / Fable models: on a policy decline the API re-runs the request on a fallback model
+    if (/^claude-(opus-5|sonnet-5-5|fable-5)/.test(s.model)) { headers["anthropic-beta"] = "server-side-fallback-2026-07-01"; body.fallbacks = "default"; }
+    return { url: s.baseUrl.replace(/\/$/, "") + "/v1/messages", headers, body };
+  }
+  fromAnthropic(d) {
+    const u = d.usage || {};
+    this.usage.calls++;
+    this.usage.prompt_tokens += (u.input_tokens || 0) + (u.cache_read_input_tokens || 0) + (u.cache_creation_input_tokens || 0);
+    this.usage.completion_tokens += u.output_tokens || 0; this.usage.cached_tokens += u.cache_read_input_tokens || 0;
+    if (d.stop_reason === "refusal") throw new LLMError(`${this.label}가 이 요청을 거절했습니다${d.stop_details && d.stop_details.category ? ` (${d.stop_details.category})` : ""}.`);
+    const blocks = d.content || [];
+    const out = { role: "assistant", content: blocks.filter((b) => b.type === "text").map((b) => b.text).join(""), anthropic_content: blocks };
+    const calls = blocks.filter((b) => b.type === "tool_use");
+    if (calls.length) out.tool_calls = calls.map((b) => ({ id: b.id, type: "function", function: { name: b.name, arguments: JSON.stringify(b.input || {}) } }));
+    return out;
   }
   async json(system, user, maxTokens) {
     let last;
@@ -1421,7 +1537,7 @@ async function agentChat(s, message, progress, maxSteps = 14) {
   const actions = [];
   for (let step = 0; step < maxSteps; step++) {
     const msg = await s.llm.chat(s.chat, { tools: TOOLS, maxTokens: 4000 });
-    s.chat.push(msg); // full message incl. reasoning_content (DeepSeek thinking + tools requirement)
+    s.chat.push(msg); // full message incl. reasoning_content (DeepSeek) or anthropic_content (Claude): both must be sent back with tool results
     const calls = msg.tool_calls || [];
     if (!calls.length) return { reply: msg.content || "", actions };
     for (const c of calls) {
@@ -1636,7 +1752,7 @@ const Store = {
   remove(id) { try { localStorage.removeItem("teiagent.s." + id); localStorage.setItem("teiagent.index", JSON.stringify(this.list().filter((x) => x.id !== id))); } catch (e) { /* ignore */ } },
 };
 
-window.TEIAgent = { Session, Settings, Store, agentChat, dispatch, lookupAuthority, rngValidate, checkPreservation, quickCheck, stripDisallowed, toArabic,
+window.TEIAgent = { Session, Settings, Store, PROVIDERS, toAnthropicMessages, agentChat, dispatch, lookupAuthority, rngValidate, checkPreservation, quickCheck, stripDisallowed, toArabic,
   buildHeader, elementCounts, signals, guess, TAGS, GENRES, METADATA_FIELDS, TEI_VERSION, APP_VERSION, LLM, PRESETS: D.PRESETS || {},
   elementNames: () => Object.keys(INDEX.elements).sort(), allowedAttrs: (el) => (INDEX.elements[el] || []).slice(), elementExists,
   Gold, evaluateAgainstGold, mergeAsCorpus, mergeAsSession, selectExemplars, tagRule };
