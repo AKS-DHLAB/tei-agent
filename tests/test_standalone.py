@@ -154,6 +154,11 @@ def test_browser_providers_theme_and_language_picker():
         def logged(name, responder):
             inner = _handler(responder)
             def handle(route):
+                if route.request.method == "GET" and route.request.url.endswith("/models"):
+                    logs[name + "_models"] = route.request.headers
+                    return route.fulfill(status=200, headers={"access-control-allow-origin": "*", "content-type": "application/json"},
+                                         body=json.dumps({"object": "list", "data": [{"id": "models/gemini-3.8-flash"}, {"id": "models/gemini-9-new"},
+                                                                                      {"id": "models/text-embedding-9"}, {"id": "gpt-9-new"}, {"id": "whisper-9"}]}))
                 if route.request.method != "OPTIONS":
                     logs[name].append({"headers": route.request.headers, "body": json.loads(route.request.post_data), "url": route.request.url})
                 inner(route)
@@ -181,7 +186,15 @@ def test_browser_providers_theme_and_language_picker():
             pg.route(host, _anthropic_handler(responder, logs[name]) if name == "anthropic" else logged(name, responder))
             pg.click("#btn-settings"); pg.select_option("#s-provider", name)
             assert pg.input_value("#s-model") == pg.evaluate(f"() => window.TEIAgent.PROVIDERS['{name}'].model")
-            pg.fill("#s-key", f"key-{name}"); pg.click("#s-save")
+            pg.fill("#s-key", f"key-{name}")
+            if name in ("openai", "gemini"):  # the service's own model list joins the suggestions
+                pg.click("#s-model-fetch"); pg.wait_for_function("() => document.querySelector('#s-model-pick optgroup')")
+                opts = pg.eval_on_selector_all("#s-model-pick option", "els => els.map(e => e.value)")
+                want = "gemini-9-new" if name == "gemini" else "gpt-9-new"
+                assert want in opts and not any("embed" in o or "whisper" in o for o in opts), opts
+                assert logs[name + "_models"]["authorization"] == f"Bearer key-{name}"
+                pg.select_option("#s-model-pick", want); assert pg.input_value("#s-model") == want
+            pg.click("#s-save")
             pg.evaluate("() => window.__teiUI && document.querySelector('#btn-new').click()")
             pg.fill("#in-text", KO_TEXT); pg.click("#btn-start")
             pg.wait_for_function("() => window.__teiUI.session && window.__teiUI.session.status === 'tagged'", timeout=60000)
@@ -202,8 +215,11 @@ def test_browser_providers_theme_and_language_picker():
                 assert req["headers"]["authorization"] == f"Bearer key-{name}" and req["url"].endswith("/chat/completions")
                 assert "thinking" not in req["body"]
                 assert ("max_completion_tokens" in req["body"]) == (name == "openai")
+                assert req["body"]["model"] == ("gemini-9-new" if name == "gemini" else "gpt-9-new")
             pg.unroute(host)
         # each service keeps its own key; the old DeepSeek key is still there
+        models = pg.evaluate("() => window.TEIAgent.Settings.load().models")
+        assert models["gemini"] == "gemini-9-new" and models["openai"] == "gpt-9-new"
         keys = pg.evaluate("() => window.TEIAgent.Settings.load().keys")
         assert keys["deepseek"] == "sk-old-deepseek" and keys["anthropic"] == "key-anthropic" and keys["gemini"] == "key-gemini"
         b.close()

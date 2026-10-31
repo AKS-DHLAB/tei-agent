@@ -32,11 +32,12 @@
 
   function toast(m) { const t = $("#toast"); t.textContent = m; t.classList.add("on"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("on"), 4000); }
   function settings() { return A.Settings.load(); }
+  const fetchedModels = {}; // provider -> ids the service reported this session
   function refreshBadges() {
     const st = settings();
     $("#b-tei").textContent = `TEI P5 ${A.TEI_VERSION}`;
     $("#b-model").textContent = `${A.PROVIDERS[st.provider].label.split(" ")[0]} · ${st.model}${st.thinking && st.provider === "deepseek" ? " · thinking" : ""}${st.apiKey ? "" : L(" · 키 없음", " · no key")}`;
-    $("#key-provider").value = st.provider; $("#key-link").href = A.PROVIDERS[st.provider].keyUrl; $("#key-inline").placeholder = A.PROVIDERS[st.provider].keyHint;
+    $("#key-provider").value = st.provider; $("#key-model").innerHTML = modelOptions(st); $("#key-model").value = st.model; $("#key-link").href = A.PROVIDERS[st.provider].keyUrl; $("#key-inline").placeholder = A.PROVIDERS[st.provider].keyHint;
     $("#b-model").classList.toggle("bad", !st.apiKey);
     $("#key-card").classList.toggle("hidden", !!st.apiKey);
     if (S) { S.s = st; S.llm.s = st; const u = S.llm.usageDict(); $("#b-model").title = L(`호출 ${u.calls}회, 입력 ${u.prompt_tokens}, 출력 ${u.completion_tokens} 토큰`, `${u.calls} calls, ${u.prompt_tokens} input / ${u.completion_tokens} output tokens`) + (u.est_cost_usd_peak === null ? "" : L(`, ≈$${u.est_cost_usd_peak} (피크 단가)`, `, ≈$${u.est_cost_usd_peak} (peak price)`)); }
@@ -160,13 +161,36 @@
   /* ---------- AI service (provider) choice: start screen and settings */
   const providerOptions = () => Object.entries(A.PROVIDERS).map(([k, p]) => `<option value="${k}">${esc(p.label)}</option>`).join("");
   $$(".provider-select").forEach((el) => (el.innerHTML = providerOptions()));
+  function modelOptions(st) {
+    const P = A.PROVIDERS[st.provider], seen = new Set(), opts = [];
+    for (const [id, ko, en] of P.models) { seen.add(id); opts.push(`<option value="${esc(id)}">${esc(id)} — ${esc(L(ko, en))}</option>`); }
+    const extra = (fetchedModels[st.provider] || []).filter((id) => !seen.has(id));
+    if (extra.length) opts.push(`<optgroup label="${esc(L("서비스가 알려 준 모델", "Models reported by the service"))}">` + extra.map((id) => { seen.add(id); return `<option value="${esc(id)}">${esc(id)}</option>`; }).join("") + "</optgroup>");
+    if (st.model && !seen.has(st.model)) opts.unshift(`<option value="${esc(st.model)}">${esc(st.model)} — ${esc(L("직접 입력", "custom"))}</option>`);
+    return opts.join("");
+  }
   function fillProviderForm(st) {
     const P = A.PROVIDERS[st.provider];
     $("#s-provider").value = st.provider; $("#s-key").value = st.apiKey; $("#s-key").placeholder = P.keyHint;
+    $("#s-model-pick").innerHTML = modelOptions(st); $("#s-model-pick").value = st.model;
     $("#s-model").value = st.model; $("#s-base").value = st.baseUrl;
-    $("#s-models").innerHTML = P.models.map((m) => `<option value="${esc(m)}">`).join("");
     $("#s-think").disabled = st.provider !== "deepseek";
   }
+  $("#s-model-pick").onchange = (e) => { $("#s-model").value = e.target.value; };
+  $("#s-model-fetch").onclick = async () => {
+    const st = A.Settings.select(settings(), $("#s-provider").value);
+    const k = $("#s-key").value.trim(); if (k) st.apiKey = k;
+    st.baseUrl = $("#s-base").value.trim() || st.baseUrl;
+    if (!st.apiKey) return toast(L("먼저 API 키를 넣으세요.", "Enter an API key first."));
+    const btn = $("#s-model-fetch"); btn.disabled = true;
+    try {
+      fetchedModels[st.provider] = await A.listModels(st);
+      st.model = $("#s-model").value.trim() || st.model;
+      $("#s-model-pick").innerHTML = modelOptions(st); $("#s-model-pick").value = st.model;
+      toast(L(`모델 ${fetchedModels[st.provider].length}개를 받아 왔습니다.`, `${fetchedModels[st.provider].length} models loaded.`));
+    } catch (e) { toast("✗ " + e.message); } finally { btn.disabled = false; }
+  };
+  $("#key-model").onchange = (e) => { const st = settings(); st.model = e.target.value; A.Settings.save(st); refreshBadges(); };
   // switching in the dialog shows that service's saved key/model; nothing is stored until 저장
   $("#s-provider").onchange = (e) => { const st = settings(); fillProviderForm(A.Settings.select(st, e.target.value)); };
   $("#key-provider").onchange = (e) => {

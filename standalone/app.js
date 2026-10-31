@@ -19,15 +19,37 @@ const APP_NAME = "TEI-Agent";
 // api: "openai" = OpenAI-style /chat/completions (DeepSeek, OpenAI, Gemini's OpenAI-compatible endpoint);
 //      "anthropic" = Anthropic Messages API. Model names are defaults only: every field stays editable in ⚙ Settings.
 const PROVIDERS = {
-  deepseek: { label: "DeepSeek", api: "openai", baseUrl: "https://api.deepseek.com", model: "deepseek-flash",
-              models: ["deepseek-flash", "deepseek-v4-pro"], keyUrl: "https://platform.deepseek.com/api_keys", keyHint: "sk-..." },
-  openai: { label: "ChatGPT (OpenAI)", api: "openai", baseUrl: "https://api.openai.com/v1", model: "gpt-5-mini",
-            models: ["gpt-5-mini", "gpt-5"], keyUrl: "https://platform.openai.com/api-keys", keyHint: "sk-..." },
-  anthropic: { label: "Claude (Anthropic)", api: "anthropic", baseUrl: "https://api.anthropic.com", model: "claude-opus-5-5",
-               models: ["claude-opus-5-5", "claude-sonnet-5-5", "claude-haiku-5-5"], keyUrl: "https://console.anthropic.com/settings/keys", keyHint: "sk-ant-..." },
-  gemini: { label: "Gemini (Google)", api: "openai", baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai", model: "gemini-2.5-flash",
-            models: ["gemini-2.5-flash", "gemini-2.5-pro"], keyUrl: "https://aistudio.google.com/apikey", keyHint: "AIza..." },
+  deepseek: { label: "DeepSeek", api: "openai", baseUrl: "https://api.deepseek.com", model: "deepseek-flash", keyUrl: "https://platform.deepseek.com/api_keys", keyHint: "sk-...",
+              models: [["deepseek-flash", "V4.1 Flash · 기본, 저렴", "V4.1 Flash · default, low cost"], ["deepseek-v4-pro", "V4 Pro · 상위 모델", "V4 Pro · stronger"]] },
+  openai: { label: "ChatGPT (OpenAI)", api: "openai", baseUrl: "https://api.openai.com/v1", model: "gpt-6.1-terra", keyUrl: "https://platform.openai.com/api-keys", keyHint: "sk-...",
+            models: [["gpt-6.1-terra", "가성비 · 기본", "value · default"], ["gpt-6.1-sol", "최신 주력", "latest mainline"], ["gpt-6-astra", "최상위 · 비쌈", "top tier · expensive"],
+                     ["gpt-6-luna", "가장 저렴", "cheapest"], ["gpt-5-mini", "이전 세대 · 저렴", "previous generation · low cost"]] },
+  anthropic: { label: "Claude (Anthropic)", api: "anthropic", baseUrl: "https://api.anthropic.com", model: "claude-opus-5-5", keyUrl: "https://console.anthropic.com/settings/keys", keyHint: "sk-ant-...",
+               models: [["claude-opus-5-5", "Opus 5.5 · 기본, 최신", "Opus 5.5 · default, latest"], ["claude-sonnet-5-5", "Sonnet 5.5 · 가성비", "Sonnet 5.5 · value"],
+                        ["claude-haiku-5-5", "Haiku 5.5 · 가장 저렴", "Haiku 5.5 · cheapest"], ["claude-fable-5-1", "Fable 5.1 · 최상위, 비쌈", "Fable 5.1 · top tier, expensive"]] },
+  gemini: { label: "Gemini (Google)", api: "openai", baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai", model: "gemini-3.5-flash", keyUrl: "https://aistudio.google.com/apikey", keyHint: "AIza...",
+            models: [["gemini-3.5-flash", "3.5 Flash · 기본, 가성비", "3.5 Flash · default, value"], ["gemini-3.8-flash", "3.8 Flash · 최신 Flash", "3.8 Flash · latest Flash"],
+                     ["gemini-3.6-flash", "3.6 Flash", "3.6 Flash"], ["gemini-3.1-pro-preview", "3.1 Pro (preview) · 상위", "3.1 Pro (preview) · stronger"],
+                     ["gemini-3.1-flash-lite", "3.1 Flash-Lite · 가장 저렴", "3.1 Flash-Lite · cheapest"], ["gemini-3.5-flash-lite", "3.5 Flash-Lite · 저렴", "3.5 Flash-Lite · low cost"]] },
 };
+// Model names change often: the lists above are suggestions. listModels() asks the service which models the key can use.
+async function listModels(settings) {
+  const P = PROVIDERS[settings.provider], base = settings.baseUrl.replace(/\/$/, "");
+  const anthropic = P.api === "anthropic";
+  const url = anthropic ? base + "/v1/models?limit=100" : base + "/models";
+  const headers = anthropic ? { "x-api-key": settings.apiKey, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" }
+    : { Authorization: "Bearer " + settings.apiKey };
+  let r;
+  try { r = await fetch(url, { headers }); } catch (e) { throw new LLMError(`네트워크 오류 — ${new URL(url).host}에 닿지 못했습니다.`); }
+  if (r.status === 401 || r.status === 403) throw new LLMError(`${P.label} API 키가 올바르지 않거나 권한이 없습니다 (${r.status}).`);
+  if (!r.ok) throw new LLMError(`${P.label} 모델 목록을 받지 못했습니다 (HTTP ${r.status}).`);
+  const d = await r.json();
+  let ids = (d.data || d.models || []).map((m) => String(m.id || m.name || "").replace(/^models\//, "")).filter(Boolean);
+  const skip = /embed|tts|whisper|audio|realtime|transcribe|dall-e|image|moderation|search|aqa|imagen|veo|computer-use|live/i;
+  if (settings.provider === "openai") ids = ids.filter((id) => /^(gpt|o\d|chatgpt)/i.test(id) && !skip.test(id));
+  if (settings.provider === "gemini") ids = ids.filter((id) => /^gemini/i.test(id) && !skip.test(id));
+  return [...new Set(ids)].sort().reverse();
+}
 
 /* ------------------------------------------------------------------ settings */
 // apiKey / model / baseUrl always describe the selected provider; keys, models and bases keep each provider's own values.
@@ -1752,7 +1774,7 @@ const Store = {
   remove(id) { try { localStorage.removeItem("teiagent.s." + id); localStorage.setItem("teiagent.index", JSON.stringify(this.list().filter((x) => x.id !== id))); } catch (e) { /* ignore */ } },
 };
 
-window.TEIAgent = { Session, Settings, Store, PROVIDERS, toAnthropicMessages, agentChat, dispatch, lookupAuthority, rngValidate, checkPreservation, quickCheck, stripDisallowed, toArabic,
+window.TEIAgent = { Session, Settings, Store, PROVIDERS, listModels, toAnthropicMessages, agentChat, dispatch, lookupAuthority, rngValidate, checkPreservation, quickCheck, stripDisallowed, toArabic,
   buildHeader, elementCounts, signals, guess, TAGS, GENRES, METADATA_FIELDS, TEI_VERSION, APP_VERSION, LLM, PRESETS: D.PRESETS || {},
   elementNames: () => Object.keys(INDEX.elements).sort(), allowedAttrs: (el) => (INDEX.elements[el] || []).slice(), elementExists,
   Gold, evaluateAgainstGold, mergeAsCorpus, mergeAsSession, selectExemplars, tagRule };

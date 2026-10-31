@@ -207,7 +207,7 @@ button.danger{color:var(--err);border-color:var(--err)}
   <section class="start" id="start">
     <div class="card" id="key-card">
       <h2 data-en="1. AI service and API key">1. AI 서비스와 API 키</h2>
-      <div class="row"><label for="key-provider" data-en="AI service">AI 서비스</label><select id="key-provider" class="provider-select"></select><a id="key-link" class="hint" href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener" data-en="Get a key ↗">키 발급 ↗</a></div>
+      <div class="row"><label for="key-provider" data-en="AI service">AI 서비스</label><select id="key-provider" class="provider-select"></select><label for="key-model" data-en="Model">모델</label><select id="key-model" class="model-pick"></select><a id="key-link" class="hint" href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener" data-en="Get a key ↗">키 발급 ↗</a></div>
       <p class="hint" data-en="The key is stored <b>only in this browser</b> and sent only to the AI service you chose. On a shared PC, delete it under ⚙ Settings after class.">키는 <b>이 브라우저에만</b> 저장되고, 고른 AI 서비스로만 전송됩니다. 공용 PC라면 실습 후 ⚙ 설정에서 키를 지우세요.</p>
       <div class="row"><input type="password" id="key-inline" class="grow" placeholder="sk-..." autocomplete="off"><button id="btn-key-save" data-en="Save">저장</button><button id="btn-key-test" data-en="Test connection">연결 테스트</button></div>
       <p class="hint" id="key-status"></p>
@@ -378,13 +378,14 @@ button.danger{color:var(--err);border-color:var(--err)}
     <div class="meta-grid">
       <label for="s-provider" data-en="AI service">AI 서비스</label><select id="s-provider" class="provider-select"></select>
       <label for="s-key" data-en="API key">API 키</label><input type="password" id="s-key" autocomplete="off" placeholder="sk-...">
-      <label for="s-model" data-en="Model">모델</label><input type="text" id="s-model" list="s-models"><datalist id="s-models"></datalist>
+      <label for="s-model-pick" data-en="Model">모델</label><div class="row" style="flex-wrap:nowrap;gap:6px"><select id="s-model-pick" class="grow model-pick"></select><button type="button" id="s-model-fetch" title="이 키로 쓸 수 있는 모델 목록을 서비스에서 받아옵니다" data-en-title="Ask the service which models this key can use" data-en="↻ Load list">↻ 목록 불러오기</button></div>
+      <span></span><input type="text" id="s-model" placeholder="모델 이름 (직접 입력 가능)" data-en-ph="Model name (you can type one)">
       <label for="s-base" data-en="API URL">API 주소</label><input type="text" id="s-base">
       <label for="s-chunk" data-en="Chunk size">청크 크기</label><input type="text" id="s-chunk">
       <label for="s-workers" data-en="Parallel requests">동시 요청</label><input type="text" id="s-workers">
       <label for="s-think">thinking</label><label class="hint"><input type="checkbox" id="s-think"> <span data-en="Use thinking mode (slower, more expensive)">사고(thinking) 모드 사용 (느리고 비쌈)</span></label>
     </div>
-    <p class="hint" data-en="Keys are stored only in this browser (localStorage), one per AI service. Model names are suggestions: check the service’s documentation for current names. Thinking mode applies to DeepSeek only.">키는 이 브라우저(localStorage)에만, AI 서비스마다 따로 저장됩니다. 모델명은 기본값일 뿐이니 각 서비스 문서에서 현재 이름을 확인하세요. thinking 모드는 DeepSeek에만 적용됩니다.</p>
+    <p class="hint" data-en="Keys are stored only in this browser (localStorage), one per AI service. The model list is a suggestion: <b>↻ Load list</b> asks the service which models this key can use, and you can also type a name. Thinking mode applies to DeepSeek only.">키는 이 브라우저(localStorage)에만, AI 서비스마다 따로 저장됩니다. 모델 목록은 추천일 뿐입니다. <b>↻ 목록 불러오기</b>를 누르면 이 키로 실제 쓸 수 있는 모델을 서비스에서 받아 오고, 이름을 직접 적을 수도 있습니다. thinking 모드는 DeepSeek에만 적용됩니다.</p>
     <div class="row"><button type="button" data-close data-en="Close">닫기</button><button type="button" id="s-clear" data-close data-en="Delete key">키 삭제</button><span class="spacer"></span><button class="primary" id="s-save" value="default" data-en="Save">저장</button></div>
   </form>
 </dialog>
@@ -23798,15 +23799,37 @@ const APP_NAME = "TEI-Agent";
 // api: "openai" = OpenAI-style /chat/completions (DeepSeek, OpenAI, Gemini's OpenAI-compatible endpoint);
 //      "anthropic" = Anthropic Messages API. Model names are defaults only: every field stays editable in ⚙ Settings.
 const PROVIDERS = {
-  deepseek: { label: "DeepSeek", api: "openai", baseUrl: "https://api.deepseek.com", model: "deepseek-flash",
-              models: ["deepseek-flash", "deepseek-v4-pro"], keyUrl: "https://platform.deepseek.com/api_keys", keyHint: "sk-..." },
-  openai: { label: "ChatGPT (OpenAI)", api: "openai", baseUrl: "https://api.openai.com/v1", model: "gpt-5-mini",
-            models: ["gpt-5-mini", "gpt-5"], keyUrl: "https://platform.openai.com/api-keys", keyHint: "sk-..." },
-  anthropic: { label: "Claude (Anthropic)", api: "anthropic", baseUrl: "https://api.anthropic.com", model: "claude-opus-5-5",
-               models: ["claude-opus-5-5", "claude-sonnet-5-5", "claude-haiku-5-5"], keyUrl: "https://console.anthropic.com/settings/keys", keyHint: "sk-ant-..." },
-  gemini: { label: "Gemini (Google)", api: "openai", baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai", model: "gemini-2.5-flash",
-            models: ["gemini-2.5-flash", "gemini-2.5-pro"], keyUrl: "https://aistudio.google.com/apikey", keyHint: "AIza..." },
+  deepseek: { label: "DeepSeek", api: "openai", baseUrl: "https://api.deepseek.com", model: "deepseek-flash", keyUrl: "https://platform.deepseek.com/api_keys", keyHint: "sk-...",
+              models: [["deepseek-flash", "V4.1 Flash · 기본, 저렴", "V4.1 Flash · default, low cost"], ["deepseek-v4-pro", "V4 Pro · 상위 모델", "V4 Pro · stronger"]] },
+  openai: { label: "ChatGPT (OpenAI)", api: "openai", baseUrl: "https://api.openai.com/v1", model: "gpt-6.1-terra", keyUrl: "https://platform.openai.com/api-keys", keyHint: "sk-...",
+            models: [["gpt-6.1-terra", "가성비 · 기본", "value · default"], ["gpt-6.1-sol", "최신 주력", "latest mainline"], ["gpt-6-astra", "최상위 · 비쌈", "top tier · expensive"],
+                     ["gpt-6-luna", "가장 저렴", "cheapest"], ["gpt-5-mini", "이전 세대 · 저렴", "previous generation · low cost"]] },
+  anthropic: { label: "Claude (Anthropic)", api: "anthropic", baseUrl: "https://api.anthropic.com", model: "claude-opus-5-5", keyUrl: "https://console.anthropic.com/settings/keys", keyHint: "sk-ant-...",
+               models: [["claude-opus-5-5", "Opus 5.5 · 기본, 최신", "Opus 5.5 · default, latest"], ["claude-sonnet-5-5", "Sonnet 5.5 · 가성비", "Sonnet 5.5 · value"],
+                        ["claude-haiku-5-5", "Haiku 5.5 · 가장 저렴", "Haiku 5.5 · cheapest"], ["claude-fable-5-1", "Fable 5.1 · 최상위, 비쌈", "Fable 5.1 · top tier, expensive"]] },
+  gemini: { label: "Gemini (Google)", api: "openai", baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai", model: "gemini-3.5-flash", keyUrl: "https://aistudio.google.com/apikey", keyHint: "AIza...",
+            models: [["gemini-3.5-flash", "3.5 Flash · 기본, 가성비", "3.5 Flash · default, value"], ["gemini-3.8-flash", "3.8 Flash · 최신 Flash", "3.8 Flash · latest Flash"],
+                     ["gemini-3.6-flash", "3.6 Flash", "3.6 Flash"], ["gemini-3.1-pro-preview", "3.1 Pro (preview) · 상위", "3.1 Pro (preview) · stronger"],
+                     ["gemini-3.1-flash-lite", "3.1 Flash-Lite · 가장 저렴", "3.1 Flash-Lite · cheapest"], ["gemini-3.5-flash-lite", "3.5 Flash-Lite · 저렴", "3.5 Flash-Lite · low cost"]] },
 };
+// Model names change often: the lists above are suggestions. listModels() asks the service which models the key can use.
+async function listModels(settings) {
+  const P = PROVIDERS[settings.provider], base = settings.baseUrl.replace(/\/$/, "");
+  const anthropic = P.api === "anthropic";
+  const url = anthropic ? base + "/v1/models?limit=100" : base + "/models";
+  const headers = anthropic ? { "x-api-key": settings.apiKey, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" }
+    : { Authorization: "Bearer " + settings.apiKey };
+  let r;
+  try { r = await fetch(url, { headers }); } catch (e) { throw new LLMError(`네트워크 오류 — ${new URL(url).host}에 닿지 못했습니다.`); }
+  if (r.status === 401 || r.status === 403) throw new LLMError(`${P.label} API 키가 올바르지 않거나 권한이 없습니다 (${r.status}).`);
+  if (!r.ok) throw new LLMError(`${P.label} 모델 목록을 받지 못했습니다 (HTTP ${r.status}).`);
+  const d = await r.json();
+  let ids = (d.data || d.models || []).map((m) => String(m.id || m.name || "").replace(/^models\//, "")).filter(Boolean);
+  const skip = /embed|tts|whisper|audio|realtime|transcribe|dall-e|image|moderation|search|aqa|imagen|veo|computer-use|live/i;
+  if (settings.provider === "openai") ids = ids.filter((id) => /^(gpt|o\d|chatgpt)/i.test(id) && !skip.test(id));
+  if (settings.provider === "gemini") ids = ids.filter((id) => /^gemini/i.test(id) && !skip.test(id));
+  return [...new Set(ids)].sort().reverse();
+}
 
 /* ------------------------------------------------------------------ settings */
 // apiKey / model / baseUrl always describe the selected provider; keys, models and bases keep each provider's own values.
@@ -25531,7 +25554,7 @@ const Store = {
   remove(id) { try { localStorage.removeItem("teiagent.s." + id); localStorage.setItem("teiagent.index", JSON.stringify(this.list().filter((x) => x.id !== id))); } catch (e) { /* ignore */ } },
 };
 
-window.TEIAgent = { Session, Settings, Store, PROVIDERS, toAnthropicMessages, agentChat, dispatch, lookupAuthority, rngValidate, checkPreservation, quickCheck, stripDisallowed, toArabic,
+window.TEIAgent = { Session, Settings, Store, PROVIDERS, listModels, toAnthropicMessages, agentChat, dispatch, lookupAuthority, rngValidate, checkPreservation, quickCheck, stripDisallowed, toArabic,
   buildHeader, elementCounts, signals, guess, TAGS, GENRES, METADATA_FIELDS, TEI_VERSION, APP_VERSION, LLM, PRESETS: D.PRESETS || {},
   elementNames: () => Object.keys(INDEX.elements).sort(), allowedAttrs: (el) => (INDEX.elements[el] || []).slice(), elementExists,
   Gold, evaluateAgainstGold, mergeAsCorpus, mergeAsSession, selectExemplars, tagRule };
@@ -25570,11 +25593,12 @@ window.TEIAgent = { Session, Settings, Store, PROVIDERS, toAnthropicMessages, ag
 
   function toast(m) { const t = $("#toast"); t.textContent = m; t.classList.add("on"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("on"), 4000); }
   function settings() { return A.Settings.load(); }
+  const fetchedModels = {}; // provider -> ids the service reported this session
   function refreshBadges() {
     const st = settings();
     $("#b-tei").textContent = `TEI P5 ${A.TEI_VERSION}`;
     $("#b-model").textContent = `${A.PROVIDERS[st.provider].label.split(" ")[0]} · ${st.model}${st.thinking && st.provider === "deepseek" ? " · thinking" : ""}${st.apiKey ? "" : L(" · 키 없음", " · no key")}`;
-    $("#key-provider").value = st.provider; $("#key-link").href = A.PROVIDERS[st.provider].keyUrl; $("#key-inline").placeholder = A.PROVIDERS[st.provider].keyHint;
+    $("#key-provider").value = st.provider; $("#key-model").innerHTML = modelOptions(st); $("#key-model").value = st.model; $("#key-link").href = A.PROVIDERS[st.provider].keyUrl; $("#key-inline").placeholder = A.PROVIDERS[st.provider].keyHint;
     $("#b-model").classList.toggle("bad", !st.apiKey);
     $("#key-card").classList.toggle("hidden", !!st.apiKey);
     if (S) { S.s = st; S.llm.s = st; const u = S.llm.usageDict(); $("#b-model").title = L(`호출 ${u.calls}회, 입력 ${u.prompt_tokens}, 출력 ${u.completion_tokens} 토큰`, `${u.calls} calls, ${u.prompt_tokens} input / ${u.completion_tokens} output tokens`) + (u.est_cost_usd_peak === null ? "" : L(`, ≈$${u.est_cost_usd_peak} (피크 단가)`, `, ≈$${u.est_cost_usd_peak} (peak price)`)); }
@@ -25698,13 +25722,36 @@ window.TEIAgent = { Session, Settings, Store, PROVIDERS, toAnthropicMessages, ag
   /* ---------- AI service (provider) choice: start screen and settings */
   const providerOptions = () => Object.entries(A.PROVIDERS).map(([k, p]) => `<option value="${k}">${esc(p.label)}</option>`).join("");
   $$(".provider-select").forEach((el) => (el.innerHTML = providerOptions()));
+  function modelOptions(st) {
+    const P = A.PROVIDERS[st.provider], seen = new Set(), opts = [];
+    for (const [id, ko, en] of P.models) { seen.add(id); opts.push(`<option value="${esc(id)}">${esc(id)} — ${esc(L(ko, en))}</option>`); }
+    const extra = (fetchedModels[st.provider] || []).filter((id) => !seen.has(id));
+    if (extra.length) opts.push(`<optgroup label="${esc(L("서비스가 알려 준 모델", "Models reported by the service"))}">` + extra.map((id) => { seen.add(id); return `<option value="${esc(id)}">${esc(id)}</option>`; }).join("") + "</optgroup>");
+    if (st.model && !seen.has(st.model)) opts.unshift(`<option value="${esc(st.model)}">${esc(st.model)} — ${esc(L("직접 입력", "custom"))}</option>`);
+    return opts.join("");
+  }
   function fillProviderForm(st) {
     const P = A.PROVIDERS[st.provider];
     $("#s-provider").value = st.provider; $("#s-key").value = st.apiKey; $("#s-key").placeholder = P.keyHint;
+    $("#s-model-pick").innerHTML = modelOptions(st); $("#s-model-pick").value = st.model;
     $("#s-model").value = st.model; $("#s-base").value = st.baseUrl;
-    $("#s-models").innerHTML = P.models.map((m) => `<option value="${esc(m)}">`).join("");
     $("#s-think").disabled = st.provider !== "deepseek";
   }
+  $("#s-model-pick").onchange = (e) => { $("#s-model").value = e.target.value; };
+  $("#s-model-fetch").onclick = async () => {
+    const st = A.Settings.select(settings(), $("#s-provider").value);
+    const k = $("#s-key").value.trim(); if (k) st.apiKey = k;
+    st.baseUrl = $("#s-base").value.trim() || st.baseUrl;
+    if (!st.apiKey) return toast(L("먼저 API 키를 넣으세요.", "Enter an API key first."));
+    const btn = $("#s-model-fetch"); btn.disabled = true;
+    try {
+      fetchedModels[st.provider] = await A.listModels(st);
+      st.model = $("#s-model").value.trim() || st.model;
+      $("#s-model-pick").innerHTML = modelOptions(st); $("#s-model-pick").value = st.model;
+      toast(L(`모델 ${fetchedModels[st.provider].length}개를 받아 왔습니다.`, `${fetchedModels[st.provider].length} models loaded.`));
+    } catch (e) { toast("✗ " + e.message); } finally { btn.disabled = false; }
+  };
+  $("#key-model").onchange = (e) => { const st = settings(); st.model = e.target.value; A.Settings.save(st); refreshBadges(); };
   // switching in the dialog shows that service's saved key/model; nothing is stored until 저장
   $("#s-provider").onchange = (e) => { const st = settings(); fillProviderForm(A.Settings.select(st, e.target.value)); };
   $("#key-provider").onchange = (e) => {

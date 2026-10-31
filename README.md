@@ -130,11 +130,16 @@ tests/           mock LLM 기반 종단 테스트 (pytest)
 | 서비스 | 브라우저판: ⚙ 설정 / 시작 화면 | Python판: `.env` | 기본 모델 | 호출 방식 |
 |---|---|---|---|---|
 | DeepSeek (기본) | AI 서비스 → DeepSeek | `TEI_AGENT_PROVIDER=deepseek`, `DEEPSEEK_API_KEY` | `deepseek-flash` | OpenAI 호환 `/chat/completions` |
-| ChatGPT (OpenAI) | → ChatGPT (OpenAI) | `TEI_AGENT_PROVIDER=openai`, `OPENAI_API_KEY` | `gpt-5-mini` | `/chat/completions` (`max_completion_tokens`) |
+| ChatGPT (OpenAI) | → ChatGPT (OpenAI) | `TEI_AGENT_PROVIDER=openai`, `OPENAI_API_KEY` | `gpt-6.1-terra` | `/chat/completions` (`max_completion_tokens`) |
 | Claude (Anthropic) | → Claude (Anthropic) | `TEI_AGENT_PROVIDER=anthropic`, `ANTHROPIC_API_KEY` (+ `pip install anthropic`) | `claude-opus-5-5` | Messages API (`/v1/messages`) |
-| Gemini (Google) | → Gemini (Google) | `TEI_AGENT_PROVIDER=gemini`, `GEMINI_API_KEY` | `gemini-2.5-flash` | Gemini의 OpenAI 호환 엔드포인트 |
+| Gemini (Google) | → Gemini (Google) | `TEI_AGENT_PROVIDER=gemini`, `GEMINI_API_KEY` | `gemini-3.5-flash` | Gemini의 OpenAI 호환 엔드포인트 |
 
-- 모델명과 주소는 기본값일 뿐이며 ⚙ 설정(또는 `TEI_AGENT_MODEL`, `TEI_AGENT_BASE_URL`)에서 바꿀 수 있습니다. 서비스마다 모델 이름이 자주 바뀌니 각 서비스 문서에서 확인하세요.
+- **모델 고르기:** 시작 화면과 ⚙ 설정의 모델 목록에서 고릅니다. 서비스마다 최신·상위 모델과 값이 싼 모델을 함께 넣었습니다.
+  - DeepSeek: `deepseek-flash`(기본), `deepseek-v4-pro`
+  - ChatGPT: `gpt-6.1-terra`(기본), `gpt-6.1-sol`, `gpt-6-astra`, `gpt-6-luna`, `gpt-5-mini`
+  - Claude: `claude-opus-5-5`(기본), `claude-sonnet-5-5`, `claude-haiku-5-5`, `claude-fable-5-1`
+  - Gemini: `gemini-3.5-flash`(기본), `gemini-3.8-flash`, `gemini-3.6-flash`, `gemini-3.1-pro-preview`, `gemini-3.1-flash-lite`, `gemini-3.5-flash-lite`
+- 이 목록은 추천입니다(2026-10 기준, Claude 외에는 공식 문서로 확인하지 못함). ⚙ 설정의 **↻ 목록 불러오기**는 입력한 키로 그 서비스의 모델 목록 API를 불러, 실제로 쓸 수 있는 모델을 목록에 더합니다. 이름을 직접 적을 수도 있습니다. Python판은 `TEI_AGENT_MODEL`, `TEI_AGENT_BASE_URL`로 바꿉니다.
 - 내부 형식은 OpenAI 스타일 메시지이고, Claude는 어댑터가 Messages API로 바꿉니다(시스템 프롬프트 분리, `tool_use`/`tool_result` 블록, Claude의 응답 블록은 도구 대화에서 그대로 되돌려 보냄). JSON 모드가 없는 Claude에는 "JSON 한 개만 답하라"는 지시를 덧붙이고, 응답은 기존처럼 느슨하게 파싱합니다. 현재 Opus·Sonnet·Fable 모델에는 서버 측 거절 대체(`fallbacks: "default"`)를 켭니다.
 - 어떤 모델이 선택 매개변수(예: `temperature`)를 거부하면(400) 그 매개변수를 빼고 한 번 다시 보냅니다.
 - 비용 추정치($)는 DeepSeek에서만 표시합니다. 다른 서비스는 토큰 수만 보여 줍니다.

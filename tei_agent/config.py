@@ -26,10 +26,10 @@ APP_VERSION = "0.1.4"
 
 PROVIDERS: dict[str, dict] = {
     "deepseek": {"label": "DeepSeek", "key_env": "DEEPSEEK_API_KEY", "base_url": "https://api.deepseek.com", "model": "deepseek-flash"},
-    "openai": {"label": "ChatGPT (OpenAI)", "key_env": "OPENAI_API_KEY", "base_url": "https://api.openai.com/v1", "model": "gpt-5-mini"},
+    "openai": {"label": "ChatGPT (OpenAI)", "key_env": "OPENAI_API_KEY", "base_url": "https://api.openai.com/v1", "model": "gpt-6.1-terra"},
     "anthropic": {"label": "Claude (Anthropic)", "key_env": "ANTHROPIC_API_KEY", "base_url": "", "model": "claude-opus-5-5"},
     "gemini": {"label": "Gemini (Google)", "key_env": "GEMINI_API_KEY",
-               "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/", "model": "gemini-2.5-flash"},
+               "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/", "model": "gemini-3.5-flash"},
 }
 
 
