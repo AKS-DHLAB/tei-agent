@@ -194,7 +194,7 @@ LANG_RULES: dict[str, str] = {
            "Place names include an attached locative noun only when it is part of the name (칠성문 밖 as a district name). "
            "Honorific/address suffixes (군, 씨, 양, 님, 선생) stay OUTSIDE <persName>: <persName>우영</persName> 군. Hanja glosses in parentheses after Hangul → "
            "이형식(<foreign xml:lang=\"ko-Hani\">李亨植</foreign>); whole Literary-Chinese passages → xml:lang=\"lzh\". "
-           "Keep archaic spellings (아래아, 옛한글) exactly. Quotation marks “ ” 「 」 『 』 stay outside <said>/<q>."),
+           "Keep archaic spellings (아래아, 옛한글) exactly, character for character: Old Hangul syllables are sequences of conjoining jamo (initial + vowel + final, e.g. ᄒᆞᆫ) and must never be split by a tag or rewritten as compatibility jamo (ㅎㆍㄴ) or modern letters; a tone mark (〮 〯) belongs to the syllable before it. Quotation marks “ ” 「 」 『 』 stay outside <said>/<q>."),
     "ja": ("Japanese: keep kana/kanji exactly; furigana given in parentheses or brackets → <ruby><rb>…</rb><rt>…</rt></ruby>; "
            "do not include particles (は/が/を/に/の…) inside entity tags; 「」 stay outside <said>."),
     "zh": ("Chinese: do not segment or add spaces; for Literary Chinese (xml:lang=\"lzh\") keep original punctuation or its absence; "

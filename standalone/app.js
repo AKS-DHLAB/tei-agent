@@ -291,11 +291,64 @@ function innerXml(el) {
 const plainP = (raw, tag = "p") => `<${tag}>${escXml(raw.trim())}</${tag}>`;
 
 /** Text preservation: only tag insertion allowed; optional tolerated removal of page-number-like snippets. */
+/* ------------------------------------------------------------------ Old Hangul (mirror of tei_agent/hangul.py) */
+// Conjoining jamo (initial + vowel + final) form one syllable only when nothing splits them; compatibility jamo never join.
+const J_L = /[\u1100-\u115F\uA960-\uA97C]/, J_V = /[\u1160-\u11A7\uD7B0-\uD7C6]/, J_T = /[\u11A8-\u11FF\uD7CB-\uD7FB]/,
+  J_S = /[\uAC00-\uD7A3]/, J_TONE = /[\u302E\u302F]/, J_COMPAT_RUN = /[\u3131-\u318E]+/g, J_ARCHAIC = /[\u3164-\u318E]/,
+  J_CVOWEL = /[\u314F-\u3163\u3187-\u318E]/, J_PUA = /[\uE000-\uF8FF]/g;
+const JAMO_FINAL = D.JAMO_FINAL || {};
+function splitsSyllable(prev, next) {
+  if (!prev || !next) return false;
+  if (J_V.test(next) && (J_L.test(prev) || J_V.test(prev) || J_S.test(prev))) return true;
+  if (J_T.test(next) && (J_V.test(prev) || J_T.test(prev) || J_S.test(prev))) return true;
+  return J_TONE.test(next) && (J_L.test(prev) || J_V.test(prev) || J_T.test(prev) || J_S.test(prev));
+}
+function jamoSplits(frag) {
+  let text = ""; const marks = new Set();
+  (function walk(node, top) {
+    if (!top) marks.add(text.length);
+    for (const ch of node.childNodes) { if (ch.nodeType === 3 || ch.nodeType === 4) text += ch.nodeValue; else if (ch.nodeType === 1) walk(ch, false); }
+    if (!top) marks.add(text.length);
+  })(frag, true);
+  const out = [];
+  for (const p of [...marks].sort((x, y) => x - y)) if (p > 0 && p < text.length && splitsSyllable(text[p - 1], text[p]))
+    out.push(`a tag boundary splits an Old Hangul syllable: '${text.slice(Math.max(0, p - 6), p)}|${text.slice(p, p + 6)}' — keep initial, vowel, final consonant and tone mark of one syllable inside the same tag`);
+  return out;
+}
+function compatToConjoining(text) {
+  let built = 0;
+  const out = text.replace(J_COMPAT_RUN, (run) => {
+    if (!(J_ARCHAIC.test(run) && J_CVOWEL.test(run))) return run;
+    const chars = [...run], toks = chars.map((c) => c.normalize("NFKD")), res = [];
+    let i = 0;
+    while (i < toks.length) {
+      const t = toks[i];
+      if (t.length === 1 && J_L.test(t) && i + 1 < toks.length && J_V.test(toks[i + 1][0])) {
+        let syl = t; i++;
+        while (i < toks.length && [...toks[i]].every((c) => J_V.test(c))) syl += toks[i++];
+        if (i < toks.length) {
+          const nxt = toks[i], vowelNext = i + 1 < toks.length && J_V.test(toks[i + 1][0]);
+          if (nxt.length === 1 && J_L.test(nxt) && !vowelNext && JAMO_FINAL[nxt]) { syl += JAMO_FINAL[nxt]; i++; }
+          else if ([...nxt].every((c) => J_T.test(c))) { syl += nxt; i++; }
+        }
+        res.push(syl); built++;
+      } else res.push(chars[i++]);
+    }
+    return res.join("");
+  });
+  return [out, built];
+}
+function inspectHangul(text) {
+  const runs = (text.match(J_COMPAT_RUN) || []).filter((r) => J_ARCHAIC.test(r) && J_CVOWEL.test(r));
+  return { compat_runs: runs.length, compat_examples: runs.slice(0, 3), pua: (text.match(J_PUA) || []).length, conjoining: J_L.test(text) || J_V.test(text) };
+}
+
 function checkPreservation(raw, xml, allowRemovals = false) {
   let frag;
   try { frag = parseFragment(xml); } catch (e) { return { ok: false, problems: [e.message], removed: [] }; }
   const a = norm(raw), b = norm(sourceText(frag));
-  if (a === b) return { ok: true, problems: [], removed: [] };
+  const splits = jamoSplits(frag); // a tag inside an Old Hangul syllable breaks the letter as surely as a changed one
+  if (a === b) return { ok: !splits.length, problems: splits, removed: [] };
   const removed = [];
   if (allowRemovals) {
     let i = 0, j = 0, ok = true;
@@ -306,13 +359,13 @@ function checkPreservation(raw, xml, allowRemovals = false) {
       if (k > i && (j >= b.length ? k === a.length : a[k] === b[j])) { removed.push(a.slice(i, k)); i = k; continue; }
       ok = false; break;
     }
-    if (ok) return { ok: true, problems: [], removed };
+    if (ok) return { ok: !splits.length, problems: splits, removed };
   }
   let p = 0; while (p < a.length && p < b.length && a[p] === b[p]) p++;
   let s = 0; while (s < a.length - p && s < b.length - p && a[a.length - 1 - s] === b[b.length - 1 - s]) s++;
   const src = a.slice(p, a.length - s), out = b.slice(p, b.length - s);
   const op = !out ? "delete" : !src ? "insert" : "replace";
-  return { ok: false, removed, problems: [`${op}: source '${src.slice(0, 60)}' -> output '${out.slice(0, 60)}' (context: …${a.slice(Math.max(0, p - 12), p + 24)}…)`] };
+  return { ok: false, removed, problems: [`${op}: source '${src.slice(0, 60)}' -> output '${out.slice(0, 60)}' (context: …${a.slice(Math.max(0, p - 12), p + 24)}…)`, ...splits] };
 }
 function elementCounts(xmls) {
   const c = {};
@@ -1774,7 +1827,7 @@ const Store = {
   remove(id) { try { localStorage.removeItem("teiagent.s." + id); localStorage.setItem("teiagent.index", JSON.stringify(this.list().filter((x) => x.id !== id))); } catch (e) { /* ignore */ } },
 };
 
-window.TEIAgent = { Session, Settings, Store, PROVIDERS, listModels, toAnthropicMessages, agentChat, dispatch, lookupAuthority, rngValidate, checkPreservation, quickCheck, stripDisallowed, toArabic,
+window.TEIAgent = { Session, Settings, Store, PROVIDERS, listModels, compatToConjoining, inspectHangul, jamoSplits, toAnthropicMessages, agentChat, dispatch, lookupAuthority, rngValidate, checkPreservation, quickCheck, stripDisallowed, toArabic,
   buildHeader, elementCounts, signals, guess, TAGS, GENRES, METADATA_FIELDS, TEI_VERSION, APP_VERSION, LLM, PRESETS: D.PRESETS || {},
   elementNames: () => Object.keys(INDEX.elements).sort(), allowedAttrs: (el) => (INDEX.elements[el] || []).slice(), elementExists,
   Gold, evaluateAgainstGold, mergeAsCorpus, mergeAsSession, selectExemplars, tagRule };

@@ -125,7 +125,24 @@
       $("#key-status").textContent = L(`✓ ${l.label} 연결 성공`, `✓ Connected to ${l.label}`) + (k ? L(" — 이제 ‘저장’을 누르세요.", " — now press ‘Save’.") : ""); }
     catch (e) { $("#key-status").textContent = "✗ " + e.message; }
   };
-  $("#in-file").onchange = async (e) => { const f = e.target.files[0]; if (f) $("#in-text").value = await f.text(); };
+  $("#in-file").onchange = async (e) => { const f = e.target.files[0]; if (f) { $("#in-text").value = await f.text(); checkHangul(); } };
+  /* Old Hangul input check: compatibility jamo never join into syllables; Private Use Area codes only show in old HWP fonts */
+  function checkHangul() {
+    const r = A.inspectHangul($("#in-text").value), msgs = [];
+    if (r.compat_runs) msgs.push(L(`옛한글이 호환용 자모(예: ${r.compat_examples[0]})로 입력되어 한 글자로 합쳐지지 않습니다. 단추를 누르면 조합형 자모(첫가끝)로 바꿉니다. 원문 글자가 바뀌니 결과를 확인하세요.`,
+      `Old Hangul is typed with compatibility jamo (e.g. ${r.compat_examples[0]}), which never join into one syllable. The button rewrites them as conjoining jamo; this changes the source text, so check the result.`));
+    if (r.pua) msgs.push(L(`사설 영역(PUA) 문자 ${r.pua}개가 있습니다. 오래된 한글(HWP) 문서의 옛한글 코드로 보이며, 다른 프로그램에서는 깨집니다. 최신 한글 프로그램에서 다시 저장하거나 변환 도구로 유니코드 옛한글로 바꾼 뒤 붙여 넣으세요.`,
+      `${r.pua} Private Use Area characters: probably Old Hangul codes from old HWP files, which break elsewhere. Convert them to Unicode Old Hangul (e.g. by re-saving in a current Hangul word processor) and paste again.`));
+    $("#hangul-msg").textContent = msgs.join(" ");
+    $("#hangul-fix").classList.toggle("hidden", !r.compat_runs);
+    $("#hangul-note").classList.toggle("hidden", !msgs.length);
+  }
+  let hangulTimer = null;
+  $("#in-text").addEventListener("input", () => { clearTimeout(hangulTimer); hangulTimer = setTimeout(checkHangul, 300); });
+  $("#hangul-fix").onclick = () => {
+    const [t, n] = A.compatToConjoining($("#in-text").value); $("#in-text").value = t; checkHangul();
+    toast(L(`옛한글 ${n}음절을 합쳤습니다. 원문을 확인하세요.`, `Joined ${n} Old Hangul syllables. Please check the text.`));
+  };
   $("#in-tei").onchange = async (e) => { const f = e.target.files[0]; if (!f) return; try { const s = A.Session.fromTei(await f.text()); openSession(s); save(); toast(L("불러왔습니다. '검증'으로 스키마 오류를 확인하세요.", "Loaded. Use 'Validate' to check for schema errors.")); } catch (err) { toast(err.message); } };
   $("#in-session").onchange = async (e) => { const f = e.target.files[0]; if (!f) return; try { openSession(A.Session.fromState(JSON.parse(await f.text()))); save(); } catch (err) { toast(L("작업 파일을 읽을 수 없습니다: ", "Cannot read the work file: ") + err.message); } };
   $("#btn-start").onclick = () => {

@@ -12,8 +12,9 @@
   --persName:#d9e8ff; --placeName:#dff3df; --orgName:#f3e3ff; --rs:#eef2f7; --date:#ffeccc; --time:#fff4d6; --measure:#e6f7f5;
   --said:#fff7e8; --q:#f7f1e8; --foreign:#fde2e2; --term:#e9f0d8; --title:#f0e6da; --roleName:#e3e8ff; --other:#ececec;
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, "D2Coding", monospace;
-  --serif: "Noto Serif KR", "Nanum Myeongjo", "Iowan Old Style", Georgia, serif;
-  --sans: "Pretendard", "Noto Sans KR", -apple-system, "Segoe UI", system-ui, sans-serif;
+  /* fonts that join Old Hangul jamo into one syllable (함초롬, Noto/Source Han CJK, 맑은 고딕) come before generic fallbacks */
+  --serif: "Noto Serif KR", "Nanum Myeongjo", "함초롬바탕", "HCR Batang", "Noto Serif CJK KR", "Source Han Serif K", "Iowan Old Style", Georgia, serif;
+  --sans: "Pretendard", "Noto Sans KR", "함초롬돋움", "HCR Dotum", "Noto Sans CJK KR", "Source Han Sans K", "Malgun Gothic", -apple-system, "Segoe UI", system-ui, sans-serif;
 }
 /* dark theme: follows the system unless the ◐ button chose one (html[data-theme]) */
 :root[data-theme="light"]{ color-scheme:light; }
@@ -114,6 +115,8 @@ pre.xml{font:12px/1.5 var(--mono);background:var(--code);border-radius:8px;paddi
 .toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw}
 .toast.on{opacity:1}
 .hidden{display:none!important}
+.hangul-note{margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--warn) 14%,transparent);font-size:12.5px}
+.hangul-note button{margin-left:6px}
 .icon-btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;min-width:34px}
 .ico{flex:none;vertical-align:middle}
 .icon-btn .i-sun{display:none}

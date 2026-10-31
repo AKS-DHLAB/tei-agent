@@ -224,3 +224,27 @@ def test_browser_providers_theme_and_language_picker():
         assert keys["deepseek"] == "sk-old-deepseek" and keys["anthropic"] == "key-anthropic" and keys["gemini"] == "key-gemini"
         b.close()
     assert not errors, errors
+
+
+@pytest.mark.skipif(not HTML.exists(), reason="dist/TEI_Agent.html not built")
+def test_browser_old_hangul_matches_python():
+    from tei_agent.hangul import compat_to_conjoining
+    from tei_agent.xmlutils import check_preservation
+    raw = "ᄒᆞᆫ 사ᄅᆞ〮ᆷ이 나랏〮말ᄊᆞ미"
+    xmls = ["<persName>ᄒᆞᆫ 사ᄅᆞ〮ᆷ</persName>이 나랏〮말ᄊᆞ미", "<persName>ᄒᆞ</persName>ᆫ 사ᄅᆞ〮ᆷ이 나랏〮말ᄊᆞ미",
+            "ᄒᆞᆫ <rs>사ᄅᆞ</rs>〮ᆷ이 나랏〮말ᄊᆞ미"]
+    texts = ["ㅅㆍㅁ ㄱㆍㅿ ㄱ, ㄴ ㄱㅏ ㅎㆍㄴ ㆍ", "ㅂㆍㄹㆍㅁ ㆁㆍㆁ", "ㄷㆎ ㅅㅸㆍ"]
+    with pw.sync_playwright() as p:
+        b = _launch(p)
+        pg = b.new_page()
+        pg.goto(HTML.as_uri())
+        js = pg.evaluate("""([raw, xmls, texts]) => [xmls.map((x) => window.TEIAgent.checkPreservation(raw, x).ok),
+            texts.map((t) => window.TEIAgent.compatToConjoining(t))]""", [raw, xmls, texts])
+        # the start screen offers the join button for compatibility jamo
+        pg.fill("#in-text", "ㅎㆍㄴ 사ㄹㆍㅁ"); pg.wait_for_selector("#hangul-note:not(.hidden)")
+        pg.click("#hangul-fix")
+        joined = pg.input_value("#in-text")
+        b.close()
+    assert js[0] == [check_preservation(raw, x)["ok"] for x in xmls] == [True, False, False]
+    assert [tuple(r) for r in js[1]] == [compat_to_conjoining(t) for t in texts]
+    assert joined == compat_to_conjoining("ㅎㆍㄴ 사ㄹㆍㅁ")[0] and "\u119e" in joined

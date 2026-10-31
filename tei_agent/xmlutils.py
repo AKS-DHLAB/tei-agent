@@ -8,6 +8,7 @@ from xml.sax.saxutils import escape
 from lxml import etree
 
 from .config import TEI_NS
+from .hangul import jamo_splits
 
 # Text inside these elements is editorial addition, not source text -> excluded from the preservation check.
 EDITORIAL = {"reg", "corr", "ex", "supplied", "note", "gloss", "rt"}
@@ -59,8 +60,9 @@ def check_preservation(raw: str, xml_fragment: str, allow_removals: bool = False
     except etree.XMLSyntaxError as e:
         return {"ok": False, "problems": [f"XML not well-formed: {e}"], "removed": []}
     a, b = norm(raw), norm(source_text(frag))
+    splits = jamo_splits(frag)  # a tag inside an Old Hangul syllable breaks the letter as surely as a changed one
     if a == b:
-        return {"ok": True, "removed": [], "problems": []}
+        return {"ok": not splits, "removed": [], "problems": splits}
     sm = difflib.SequenceMatcher(None, a, b, autojunk=False)
     removed, problems = [], []
     for op, i1, i2, j1, j2 in sm.get_opcodes():
@@ -73,6 +75,7 @@ def check_preservation(raw: str, xml_fragment: str, allow_removals: bool = False
         problems.append(f"{op}: source '{a[i1:i2]}' -> output '{b[j1:j2]}' (context: …{ctx}…)")
         if len(problems) >= 5:
             break
+    problems += splits
     return {"ok": not problems, "removed": removed, "problems": problems}
 
 
