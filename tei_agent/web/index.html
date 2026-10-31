@@ -11,7 +11,9 @@
   --ok:#2f6b3a; --warn:#9a6a00; --err:#a3261b; --code:#edf1f6;
   --persName:#d9e8ff; --placeName:#dff3df; --orgName:#f3e3ff; --rs:#eef2f7; --date:#ffeccc; --time:#fff4d6; --measure:#e6f7f5;
   --said:#fff7e8; --q:#f7f1e8; --foreign:#fde2e2; --term:#e9f0d8; --title:#f0e6da; --roleName:#e3e8ff; --other:#ececec;
-  --mono: ui-monospace, "SF Mono", Menlo, Consolas, "D2Coding", monospace;
+  /* Latin coding fonts first; Hangul then falls to fonts that compose Old Hangul, before coding fonts (D2Coding)
+     that have the jamo shapes but cannot join them — otherwise ᄒᆞᆫ shows as separate letters in the XML view */
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, "함초롬돋움", "HCR Dotum", "함초롬바탕", "HCR Batang", "Noto Sans CJK KR", "Source Han Sans K", "Malgun Gothic", "D2Coding", monospace;
   /* fonts that join Old Hangul jamo into one syllable (함초롬, Noto/Source Han CJK, 맑은 고딕) come before generic fallbacks */
   --serif: "Noto Serif KR", "Nanum Myeongjo", "함초롬바탕", "HCR Batang", "Noto Serif CJK KR", "Source Han Serif K", "Iowan Old Style", Georgia, serif;
   --sans: "Pretendard", "Noto Sans KR", "함초롬돋움", "HCR Dotum", "Noto Sans CJK KR", "Source Han Sans K", "Malgun Gothic", -apple-system, "Segoe UI", system-ui, sans-serif;
